@@ -4,133 +4,2521 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Salon-Manager · Akquise-Cockpit</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f4f6fb;--card:#fff;--tx:#1b2333;--mu:#6b7690;--bd:#e2e7f0;--ac:#4f46e5;--ac2:#eef0ff;--ok:#16a34a;--wa:#d97706;--er:#dc2626;--sh:0 1px 3px rgba(20,30,60,.08),0 8px 24px rgba(20,30,60,.05)}
-:root[data-theme=dark]{--bg:#0f1420;--card:#171e2d;--tx:#e8ecf5;--mu:#8e9ab3;--bd:#27314a;--ac:#818cf8;--ac2:#222a4a;--sh:0 1px 3px rgba(0,0,0,.4)}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
-.wrap{max-width:1400px;margin:0 auto;padding:24px 16px 60px}
-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
-h1{font-size:22px;margin:0}h1 small{display:block;font-size:13px;font-weight:400;color:var(--mu)}
-h2{font-size:15px;margin:0 0 12px;text-transform:uppercase;letter-spacing:.05em;color:var(--mu)}
-.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:18px;margin-bottom:18px;box-shadow:var(--sh)}
-.row{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end}
-.col{display:flex;flex-direction:column;gap:4px;flex:1;min-width:200px}
-label{font-size:12px;font-weight:600;color:var(--mu)}
-input,select,textarea{font:inherit;color:var(--tx);background:var(--bg);border:1px solid var(--bd);border-radius:9px;padding:9px 11px;width:100%}
-input:focus,select:focus{outline:2px solid var(--ac);outline-offset:-1px}
-.city-input-wrap{display:flex;align-items:stretch;gap:6px;width:100%}
-.city-input-wrap input{min-width:0;flex:1}
-.city-clear{flex:0 0 40px;width:40px;padding:0;font-size:17px;line-height:1;color:var(--mu);background:var(--bg);border:1px solid var(--bd);border-radius:9px}
-.city-clear:hover{color:var(--tx);border-color:var(--ac);background:var(--ac2)}
-.city-input-wrap input::-webkit-calendar-picker-indicator{cursor:pointer}
+/* =========================================================
+   SALON MANAGER — PREMIUM SAAS DESIGN SYSTEM
+   Dark & Light Theme
+   Bestehende HTML-Struktur und JavaScript-Logik bleiben erhalten.
+   Theme-Mechanismus: :root[data-theme="dark"]
+   ========================================================= */
 
-button{font:inherit;cursor:pointer;border-radius:9px;border:1px solid var(--bd);background:var(--card);color:var(--tx);padding:9px 14px;font-weight:600}
-button:hover{border-color:var(--ac)}button:disabled{opacity:.45;cursor:not-allowed}
-button.p{background:var(--ac);border-color:var(--ac);color:#fff}
-.nav{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}.nav .p{flex:1;min-width:180px}
-.cur{margin-top:14px;padding:14px;border:1px dashed var(--bd);border-radius:10px;background:var(--ac2)}
-.cur b{font-size:16px}.cur div{color:var(--mu);font-size:13px}
-.badge{display:inline-block;padding:2px 10px;border-radius:99px;font-size:12px;font-weight:700;background:var(--ac2);color:var(--ac);border:1px solid var(--ac)}
-.b0{color:var(--er);border-color:var(--er)}.b1{color:var(--wa);border-color:var(--wa)}.b2{color:var(--wa);border-color:var(--wa)}.b3{color:var(--mu);border-color:var(--mu)}.b4{color:var(--ok);border-color:var(--ok)}
-.ph{border:2px dashed var(--bd);border-radius:12px;padding:34px 16px;text-align:center;color:var(--mu);font-weight:600}
-.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
-.tab{border-radius:99px;font-size:13px;padding:6px 13px}
-.tab.on{background:var(--ac);border-color:var(--ac);color:#fff}
-.tab i{font-style:normal;margin-left:6px;opacity:.85;background:rgba(127,127,127,.25);padding:0 7px;border-radius:99px}
-.item{border:1px solid var(--bd);border-radius:12px;padding:14px;margin-bottom:12px;display:grid;grid-template-columns:1fr 260px;gap:14px}
-@media(max-width:760px){.item{grid-template-columns:1fr}}
-.item h3{margin:0 0 4px;font-size:16px}.meta{color:var(--mu);font-size:13px}
-.links{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
-.links a{font-size:12px;font-weight:600;text-decoration:none;color:var(--ac);border:1px solid var(--bd);padding:4px 10px;border-radius:7px}
-.links a:hover{border-color:var(--ac)}
-.side{display:flex;flex-direction:column;gap:8px}
-.x{font-size:12px;background:none;border:none;color:var(--mu);padding:0;text-align:left;font-weight:400;text-decoration:underline}
-.empty{text-align:center;color:var(--mu);padding:30px}
-#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--tx);color:var(--bg);padding:10px 18px;border-radius:10px;opacity:0;transition:.25s;pointer-events:none;z-index:9}
-#toast{max-width:min(92vw,760px);word-break:break-all;line-height:1.4}#toast.s{opacity:1}#toast.e{background:var(--er);color:#fff;pointer-events:auto;user-select:text}
-.hint{font-size:12px;color:var(--mu);margin-top:8px}
-.sgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:14px;margin-top:14px}
-.sc{border:1px solid var(--bd);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px}
-.sc h3{margin:0;font-size:15px}.sc textarea{min-height:250px;resize:vertical;line-height:1.55}
-.big{padding:13px;font-size:15px;width:100%}.big.ok{background:var(--ok);border-color:var(--ok);color:#fff}
-details{margin-top:16px;border:1px solid var(--bd);border-radius:12px;padding:12px 14px}
-details summary{cursor:pointer;font-weight:700}
-.obj{margin-top:10px;padding:10px 12px;border-left:3px solid var(--ac);background:var(--ac2);border-radius:6px;white-space:pre-wrap}
-.obj b{display:block;margin-bottom:2px}
+/* ===================== 1. DESIGN TOKENS ===================== */
 
-:root{--c0:#dc2626;--c1:#b45309;--c2:#a16207;--c3:#475569;--c4:#15803d;--c9:#64748b;--s0:#2563eb;--s1:#7c3aed;--s2:#0f766e;--s3:#475569;--s4:#be123c;--mu:#55607a}
-:root[data-theme=dark]{--c0:#f87171;--c1:#fbbf24;--c2:#facc15;--c3:#94a3b8;--c4:#4ade80;--c9:#94a3b8;--s0:#60a5fa;--s1:#a78bfa;--s2:#2dd4bf;--s3:#94a3b8;--s4:#fb7185;--mu:#9aa6c0}
-body{font-size:16px;letter-spacing:.005em}
-h2{font-size:13px;margin-bottom:14px}
-.card{border-radius:16px;padding:22px}
-.badge{border-radius:99px;padding:3px 11px;font-size:12px;font-weight:700;background:color-mix(in srgb,currentColor 13%,transparent);border:1px solid color-mix(in srgb,currentColor 38%,transparent)}
-.b0{color:var(--c0)}.b1{color:var(--c1)}.b2{color:var(--c2)}.b3{color:var(--c3)}.b4{color:var(--c4)}.b9{color:var(--c9)}
-.s0{color:var(--s0)}.s1{color:var(--s1)}.s2{color:var(--s2)}.s3{color:var(--s3)}.s4{color:var(--s4)}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
-@media(max-width:700px){.stats{grid-template-columns:repeat(2,1fr)}}
-.st{background:var(--card);border:1px solid var(--bd);border-left:5px solid var(--ac);border-radius:14px;padding:14px 18px;box-shadow:var(--sh)}
-.st b{display:block;font-size:30px;line-height:1.1}.st span{color:var(--mu);font-size:13px;font-weight:600}
-.st.t1{border-left-color:var(--s0)}.st.t2{border-left-color:var(--s1)}.st.t3{border-left-color:var(--s2)}
-.work{display:grid;grid-template-columns:minmax(360px,440px) 1fr;gap:18px;align-items:start}
-.work .card{margin-bottom:0}.left{position:sticky;top:12px}
-@media(max-width:1000px){.work{grid-template-columns:1fr}.left{position:static}.right{margin-top:0}}
-.cur{background:var(--ac2);border:1px solid var(--bd);border-radius:12px;padding:16px}
-.cur div{color:var(--tx);font-size:14px}.cur .cn{font-size:19px;font-weight:700;line-height:1.3}
-.cur .meta{color:var(--mu);font-size:13px}
-.cn{font-size:19px;font-weight:700;line-height:1.3}
-.dl{display:grid;grid-template-columns:24px 1fr;gap:4px 6px;margin:10px 0}
-.acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-.act{font:inherit;font-size:13px;font-weight:700;text-decoration:none;color:var(--tx);background:var(--card);border:1px solid var(--bd);padding:9px 13px;border-radius:9px;cursor:pointer;display:inline-block}
-.act:hover{border-color:var(--ac)}.act.pr{background:var(--ac);color:#fff;border-color:var(--ac)}
-.act.wa{background:#16a34a;color:#fff;border-color:#16a34a}.act.off{opacity:.4;cursor:not-allowed}
-.shead{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}
-.vars{font-size:12px;color:var(--mu);margin-top:8px}
-.scol{display:flex;flex-direction:column;gap:16px;margin-top:14px}
-.sc{padding:18px}.sc h3{font-size:16px}
-.sc textarea{min-height:0;resize:none;overflow:hidden;font-size:16px;line-height:1.65;padding:14px}
-.item h3{font-size:17px}
-.tones{display:flex;margin-top:14px;border:1px solid var(--bd);border-radius:10px;overflow:hidden}
-.tone{flex:1;border:none;border-radius:0;background:var(--card);padding:11px 8px;font-size:14px}
-.tone+.tone{border-left:1px solid var(--bd)}.tone.on{background:var(--ac);color:#fff}
+:root {
+  color-scheme: light;
 
-.navbar{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 20px;padding:7px;background:var(--card);border:1px solid var(--bd);border-radius:14px;box-shadow:var(--sh)}
-.navbar button{flex:1;min-width:150px;border:0;background:transparent;padding:12px 14px;color:var(--mu);white-space:nowrap}
-.navbar button.active{background:var(--ac);color:#fff}
-.page{display:none}.page.active{display:block}
-.settings-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
-.setting-box{border:1px solid var(--bd);border-radius:12px;padding:16px;background:var(--card)}
-.setting-box h3{font-size:15px;margin:0 0 12px}
-.upload-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:10px}
-.upload-row input[type=file]{max-width:100%;font-size:13px}
-.cat-switch{display:flex;gap:7px;flex-wrap:wrap;margin-top:14px}
-.cat-switch button{font-size:12px;padding:8px 10px}
-.cat-switch button.active{background:var(--ac);border-color:var(--ac);color:#fff}
-#page1 .work{margin-top:0}
-#page2 .stats{margin-bottom:18px}
-.sc textarea{max-height:none;overflow-y:hidden}
-@media(max-width:650px){.navbar button{min-width:calc(50% - 8px)}.wrap{padding:16px 10px 40px}}
+  --bg: #f4f6f9;
+  --card: #ffffff;
+  --card2: #f9fafc;
+  --tx: #202b36;
+  --mu: #778391;
+  --bd: #e3e8ed;
 
+  --ac: #a47755;
+  --ac2: #f5ece5;
+  --ac-hover: #8e6447;
 
-/* Einwand-Navigator */
-.objection-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:18px 0 20px}
-.objection-choice{display:flex;align-items:center;gap:11px;text-align:left;min-height:76px;padding:13px;border:1px solid var(--bd);border-radius:13px;background:var(--card);color:var(--tx);font:inherit;font-weight:650;cursor:pointer;transition:border-color .16s,background .16s,transform .16s}
-.objection-choice:hover{border-color:var(--ac);transform:translateY(-1px)}
-.objection-choice.selected{border-color:var(--ac);background:var(--ac2);box-shadow:inset 0 0 0 1px var(--ac)}
-.objection-number{display:grid;place-items:center;flex:0 0 34px;height:34px;border-radius:10px;background:var(--bg);color:var(--mu);font-size:12px;font-weight:800}
-.objection-choice.selected .objection-number{background:var(--ac);color:white}
-.objection-detail{border:1px solid var(--bd);border-radius:15px;padding:18px;background:var(--card)}
-.objection-detail-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
-.objection-detail-head h3{margin:5px 0 0;font-size:19px}
-.variant-count{font-size:12px;color:var(--mu);white-space:nowrap}
-.objection-step{padding:15px 16px;border:1px solid var(--bd);border-radius:12px;margin:10px 0;background:var(--bg)}
-.objection-step h4{margin:4px 0 8px;font-size:15px}
-.objection-step p{margin:0;line-height:1.65;white-space:normal}
-.step-label{font-size:10px;font-weight:850;letter-spacing:.1em;color:var(--ac)}
-.objection-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:15px}
-.objection-actions button{min-height:46px}
-@media(max-width:950px){.objection-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:560px){.objection-grid{grid-template-columns:1fr}.objection-choice{min-height:60px}.objection-detail{padding:12px}.objection-detail-head{align-items:flex-start}}
+  --ok: #15966b;
+  --wa: #d99435;
+  --er: #dc5c61;
+
+  --c0: #dc5c61;
+  --c1: #d99435;
+  --c2: #c49a42;
+  --c3: #778391;
+  --c4: #15966b;
+  --c9: #778391;
+
+  --s0: #5685c7;
+  --s1: #9675c9;
+  --s2: #299b8b;
+  --s3: #778391;
+  --s4: #c76d86;
+
+  --sh:
+    0 2px 5px rgba(31, 42, 55, .025),
+    0 8px 24px rgba(31, 42, 55, .045);
+
+  --sh-hover:
+    0 5px 12px rgba(31, 42, 55, .055),
+    0 16px 38px rgba(31, 42, 55, .085);
+
+  --sh-accent: 0 5px 18px rgba(164, 119, 85, .19);
+
+  --radius-sm: 10px;
+  --radius-md: 15px;
+  --radius-lg: 20px;
+  --radius-xl: 24px;
+
+  --ease: cubic-bezier(.16, 1, .3, 1);
+  --transition: .3s cubic-bezier(.16, 1, .3, 1);
+}
+
+/* DARK MODE — exakt derselbe Theme-Mechanismus */
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --bg: #11171b;
+  --card: #1a2227;
+  --card2: #202a30;
+  --tx: #e9edef;
+  --mu: #95a2a9;
+  --bd: #303d43;
+
+  --ac: #d1a17e;
+  --ac2: #382d26;
+  --ac-hover: #e0b28f;
+
+  --ok: #4fc69a;
+  --wa: #e5b05e;
+  --er: #f07d83;
+
+  --c0: #f07d83;
+  --c1: #e5b05e;
+  --c2: #e6c46c;
+  --c3: #9ba8b0;
+  --c4: #4fc69a;
+  --c9: #9ba8b0;
+
+  --s0: #80aee8;
+  --s1: #b49ae6;
+  --s2: #5ac9b8;
+  --s3: #9ba8b0;
+  --s4: #ed91a9;
+
+  --sh:
+    0 2px 6px rgba(0, 0, 0, .15),
+    0 10px 30px rgba(0, 0, 0, .16);
+
+  --sh-hover:
+    0 5px 15px rgba(0, 0, 0, .22),
+    0 18px 42px rgba(0, 0, 0, .24);
+
+  --sh-accent: 0 5px 20px rgba(209, 161, 126, .13);
+}
+
+/* ===================== 2. GLOBAL RESET ===================== */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: var(--bd) var(--bg);
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--tx);
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  line-height: 1.65;
+  letter-spacing: -.01em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition:
+    background-color .35s ease,
+    color .35s ease;
+}
+
+::selection {
+  background: var(--ac);
+  color: #fff;
+}
+
+:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--ac) 55%, transparent);
+  outline-offset: 3px;
+}
+
+/* ===================== 3. SCROLLBARS ===================== */
+
+::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg);
+  border-radius: 20px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--bd);
+  border: 2px solid var(--bg);
+  border-radius: 20px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--mu);
+}
+
+/* ===================== 4. MAIN LAYOUT ===================== */
+
+.wrap {
+  max-width: 1540px;
+  margin: 0 auto;
+  padding: 30px 28px 70px;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 24px;
+  padding: 8px 2px;
+}
+
+h1 {
+  margin: 0;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: clamp(23px, 3vw, 29px);
+  font-weight: 800;
+  letter-spacing: -.055em;
+  line-height: 1.3;
+}
+
+h1 small {
+  display: block;
+  margin-top: 5px;
+  color: var(--mu);
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+h2 {
+  margin: 0 0 17px;
+  color: var(--mu);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .075em;
+  text-transform: uppercase;
+}
+
+h3 {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  letter-spacing: -.025em;
+}
+
+p {
+  line-height: 1.7;
+}
+
+.wrap > header {
+  animation: fadeSlideDown .65s var(--ease) both;
+}
+
+/* ===================== 5. CARDS ===================== */
+
+.card {
+  position: relative;
+  margin-bottom: 20px;
+  padding: 24px;
+  overflow: hidden;
+  background: var(--card);
+  border: 1px solid var(--bd);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--sh);
+  transition:
+    background var(--transition),
+    border-color var(--transition),
+    box-shadow var(--transition);
+}
+
+.card:hover {
+  box-shadow: var(--sh-hover);
+}
+
+.card h2 {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.setting-box,
+.sc,
+.objection-detail,
+.chat-history-card,
+.chat-history-message,
+.objection-step,
+.progress-kpi,
+.st,
+.item {
+  background-color: var(--card);
+  border: 1px solid var(--bd);
+  border-radius: var(--radius-md);
+  transition:
+    background var(--transition),
+    border-color var(--transition),
+    box-shadow var(--transition),
+    transform var(--transition);
+}
+
+.setting-box {
+  padding: 19px;
+}
+
+.setting-box h3 {
+  margin: 0 0 14px;
+  font-size: 15px;
+  font-weight: 750;
+}
+
+.setting-box:hover,
+.progress-kpi:hover,
+.st:hover {
+  border-color: color-mix(in srgb, var(--ac) 45%, var(--bd));
+  box-shadow: var(--sh-hover);
+  transform: translateY(-2px);
+}
+
+/* ===================== 6. TYPOGRAPHY & INPUTS ===================== */
+
+label {
+  margin-bottom: 3px;
+  color: var(--mu);
+  font-size: 11px;
+  font-weight: 750;
+  letter-spacing: .035em;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  min-width: 0;
+  padding: 11px 13px;
+  color: var(--tx);
+  background: var(--bg);
+  border: 1px solid var(--bd);
+  border-radius: var(--radius-sm);
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  transition:
+    border-color var(--transition),
+    box-shadow var(--transition),
+    background var(--transition);
+}
+
+input:hover,
+select:hover,
+textarea:hover {
+  border-color: color-mix(in srgb, var(--ac) 55%, var(--bd));
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--ac);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--ac) 13%, transparent);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--mu);
+  opacity: .7;
+  font-weight: 400;
+}
+
+input[type="number"],
+.progress-number,
+.st b,
+.progress-kpi b,
+.progress-day strong {
+  font-family: 'JetBrains Mono', monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+input[type="file"] {
+  padding: 9px;
+  font-size: 12px;
+}
+
+input[type="file"]::file-selector-button {
+  margin-right: 10px;
+  padding: 7px 11px;
+  color: var(--tx);
+  background: var(--ac2);
+  border: 0;
+  border-radius: 7px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+textarea {
+  line-height: 1.75;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+.col {
+  display: flex;
+  min-width: 200px;
+  flex: 1;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.hint,
+.ai-note {
+  color: var(--mu);
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.meta {
+  color: var(--mu);
+  font-size: 12px;
+}
+
+/* ===================== 7. BUTTON SYSTEM ===================== */
+
+button,
+.act {
+  position: relative;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 7px;
+  min-height: 38px;
+  padding: 9px 15px;
+  color: var(--tx);
+  background: var(--card);
+  border: 1px solid var(--bd);
+  border-radius: 10px;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.4;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    color var(--transition),
+    background var(--transition),
+    border-color var(--transition),
+    box-shadow var(--transition),
+    transform .2s var(--ease);
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:hover,
+.act:hover {
+  border-color: var(--ac);
+  box-shadow: 0 3px 12px color-mix(in srgb, var(--ac) 12%, transparent);
+  transform: translateY(-2px);
+}
+
+button:active,
+.act:active {
+  transform: scale(.97);
+  box-shadow: none;
+}
+
+button:disabled {
+  opacity: .4;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+button.p,
+.act.pr {
+  color: #fff;
+  background: var(--ac);
+  border-color: var(--ac);
+  box-shadow: var(--sh-accent);
+}
+
+button.p:hover,
+.act.pr:hover {
+  color: #fff;
+  background: var(--ac-hover);
+  border-color: var(--ac-hover);
+  box-shadow: var(--sh-accent);
+}
+
+button.big {
+  min-height: 46px;
+  width: 100%;
+  padding: 13px 17px;
+  font-size: 13px;
+}
+
+button.big.ok {
+  color: #fff;
+  background: var(--ok);
+  border-color: var(--ok);
+}
+
+.act.wa {
+  color: #fff;
+  background: #15966b;
+  border-color: #15966b;
+}
+
+.act.off {
+  opacity: .4;
+  cursor: not-allowed;
+}
+
+#theme {
+  min-width: 115px;
+  min-height: 42px;
+  border-radius: 12px;
+  font-weight: 750;
+}
+
+.x {
+  min-height: auto;
+  padding: 3px;
+  color: var(--mu);
+  background: transparent;
+  border: none;
+  font-size: 11px;
+  text-decoration: underline;
+}
+
+.x:hover {
+  color: var(--er);
+  background: transparent;
+  box-shadow: none;
+  transform: none;
+}
+
+/* ===================== 8. MAIN NAVIGATION ===================== */
+
+.navbar {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin: 0 0 23px;
+  padding: 7px;
+  background: var(--card);
+  border: 1px solid var(--bd);
+  border-radius: 17px;
+  box-shadow: var(--sh);
+}
+
+.navbar button {
+  min-width: 145px;
+  min-height: 43px;
+  flex: 1;
+  padding: 10px 15px;
+  color: var(--mu);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 11px;
+  font-size: 12px;
+  font-weight: 750;
+  white-space: nowrap;
+}
+
+.navbar button:hover {
+  color: var(--tx);
+  background: var(--bg);
+  border-color: transparent;
+  box-shadow: none;
+  transform: none;
+}
+
+.navbar button.active {
+  color: #fff;
+  background: var(--ac);
+  border-color: var(--ac);
+  box-shadow: var(--sh-accent);
+}
+
+.navbar button.active:hover {
+  color: #fff;
+  background: var(--ac-hover);
+}
+
+.page {
+  display: none;
+}
+
+.page.active {
+  display: block;
+  animation: pageReveal .5s var(--ease) both;
+}
+
+/* ===================== 9. WORKSPACE ===================== */
+
+.work {
+  display: grid;
+  grid-template-columns: minmax(350px, 440px) minmax(0, 1fr);
+  align-items: start;
+  gap: 20px;
+}
+
+.work .card {
+  margin-bottom: 0;
+}
+
+.left {
+  position: sticky;
+  top: 14px;
+}
+
+.right {
+  min-width: 0;
+}
+
+#page1 .work {
+  margin-top: 0;
+}
+
+#page2 .stats {
+  margin-bottom: 20px;
+}
+
+.cur {
+  margin-top: 15px;
+  padding: 18px;
+  background: var(--ac2);
+  border: 1px solid var(--bd);
+  border-radius: 14px;
+}
+
+.cur b {
+  font-size: 16px;
+}
+
+.cur div {
+  color: var(--tx);
+  font-size: 13px;
+}
+
+.cur .cn,
+.cn {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 19px;
+  font-weight: 800;
+  line-height: 1.4;
+}
+
+.cur .meta {
+  color: var(--mu);
+  font-size: 12px;
+}
+
+.dl {
+  display: grid;
+  grid-template-columns: 24px 1fr;
+  gap: 5px 8px;
+  margin: 12px 0;
+}
+
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 15px;
+}
+
+.nav button {
+  flex: 1;
+  min-width: 110px;
+}
+
+.nav .p {
+  flex: 1.5;
+  min-width: 150px;
+}
+
+/* ===================== 10. STATISTICS ===================== */
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 13px;
+  margin-bottom: 20px;
+}
+
+.st {
+  position: relative;
+  padding: 19px;
+  overflow: hidden;
+  border-left: 4px solid var(--ac);
+  box-shadow: var(--sh);
+}
+
+.st::after {
+  position: absolute;
+  top: -24px;
+  right: -20px;
+  width: 85px;
+  height: 85px;
+  background: color-mix(in srgb, var(--ac) 7%, transparent);
+  border-radius: 50%;
+  content: "";
+  pointer-events: none;
+}
+
+.st b {
+  position: relative;
+  display: block;
+  margin-bottom: 7px;
+  font-size: 29px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.st span {
+  position: relative;
+  color: var(--mu);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.st.t1 {
+  border-left-color: var(--s0);
+}
+
+.st.t2 {
+  border-left-color: var(--s1);
+}
+
+.st.t3 {
+  border-left-color: var(--s2);
+}
+
+/* ===================== 11. BADGES & STATUS PILLS ===================== */
+
+.badge,
+.chat-history-city,
+.audit-tag,
+.reminder-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 11px;
+  border-radius: 99px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .015em;
+}
+
+.badge {
+  color: var(--ac);
+  background: var(--ac2);
+  border: 1px solid color-mix(in srgb, var(--ac) 35%, var(--bd));
+}
+
+.b0 {
+  color: var(--c0);
+  border-color: var(--c0);
+}
+
+.b1 {
+  color: var(--c1);
+  border-color: var(--c1);
+}
+
+.b2 {
+  color: var(--c2);
+  border-color: var(--c2);
+}
+
+.b3 {
+  color: var(--c3);
+  border-color: var(--c3);
+}
+
+.b4 {
+  color: var(--c4);
+  border-color: var(--c4);
+}
+
+.b9 {
+  color: var(--c9);
+  border-color: var(--c9);
+}
+
+.s0 { color: var(--s0); }
+.s1 { color: var(--s1); }
+.s2 { color: var(--s2); }
+.s3 { color: var(--s3); }
+.s4 { color: var(--s4); }
+
+/* ===================== 12. SALON LIST & TABS ===================== */
+
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-bottom: 17px;
+}
+
+.tab {
+  min-height: 35px;
+  padding: 7px 14px;
+  border-radius: 99px;
+  font-size: 11px;
+}
+
+.tab.on {
+  color: #fff;
+  background: var(--ac);
+  border-color: var(--ac);
+  box-shadow: var(--sh-accent);
+}
+
+.tab i {
+  margin-left: 5px;
+  padding: 2px 7px;
+  background: rgba(127, 127, 127, .17);
+  border-radius: 99px;
+  font-style: normal;
+}
+
+.item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 260px;
+  gap: 15px;
+  margin-bottom: 13px;
+  padding: 18px;
+}
+
+.item:hover {
+  border-color: color-mix(in srgb, var(--ac) 45%, var(--bd));
+  box-shadow: var(--sh-hover);
+  transform: translateY(-2px);
+}
+
+.item h3 {
+  margin: 0 0 5px;
+  font-size: 16px;
+}
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 11px;
+}
+
+.links a {
+  padding: 6px 10px;
+  color: var(--ac);
+  background: var(--ac2);
+  border: 1px solid var(--bd);
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.links a:hover {
+  border-color: var(--ac);
+  transform: translateY(-1px);
+}
+
+.side {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.empty {
+  padding: 35px;
+  color: var(--mu);
+  text-align: center;
+}
+
+.ph {
+  padding: 38px 18px;
+  color: var(--mu);
+  background: var(--bg);
+  border: 1px dashed var(--bd);
+  border-radius: 15px;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.8;
+  text-align: center;
+}
+
+/* ===================== 13. CITY SEARCH ===================== */
+
+.city-input-wrap,
+.chat-filter-control {
+  display: flex;
+  align-items: stretch;
+  gap: 7px;
+  width: 100%;
+}
+
+.city-input-wrap input,
+.chat-filter-control input {
+  min-width: 0;
+  flex: 1;
+}
+
+.city-clear,
+.chat-filter-clear {
+  flex: 0 0 42px;
+  width: 42px;
+  padding: 0;
+  color: var(--mu);
+  background: var(--bg);
+  font-size: 17px;
+}
+
+.city-clear:hover,
+.chat-filter-clear:hover {
+  color: var(--er);
+  border-color: var(--er);
+}
+
+.city-input-wrap input::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+}
+
+/* ===================== 14. TEMPLATES & SCRIPTS ===================== */
+
+.shead {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.sgrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.scol {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 16px;
+}
+
+.sc {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 19px;
+  box-shadow: var(--sh);
+}
+
+.sc:hover {
+  border-color: color-mix(in srgb, var(--ac) 45%, var(--bd));
+  box-shadow: var(--sh-hover);
+  transform: translateY(-2px);
+}
+
+.sc h3 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.sc textarea {
+  min-height: 0;
+  max-height: none;
+  padding: 15px;
+  overflow-y: hidden;
+  resize: none;
+  background: var(--bg);
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.big {
+  width: 100%;
+  padding: 13px;
+  font-size: 13px;
+}
+
+.big.ok {
+  color: #fff;
+  background: var(--ok);
+  border-color: var(--ok);
+}
+
+.vars {
+  margin-top: 10px;
+  color: var(--mu);
+  font-size: 11px;
+  line-height: 1.8;
+}
+
+.tones {
+  display: flex;
+  margin-top: 15px;
+  overflow: hidden;
+  background: var(--bg);
+  border: 1px solid var(--bd);
+  border-radius: 12px;
+}
+
+.tone {
+  min-height: 42px;
+  flex: 1;
+  padding: 9px 7px;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  font-size: 11px;
+}
+
+.tone + .tone {
+  border-left: 1px solid var(--bd);
+}
+
+.tone.on {
+  color: #fff;
+  background: var(--ac);
+}
+
+.tone:hover {
+  transform: none;
+  box-shadow: none;
+  background: var(--ac2);
+}
+
+.tone.on:hover {
+  background: var(--ac-hover);
+}
+
+details {
+  margin-top: 16px;
+  padding: 14px 16px;
+  background: var(--bg);
+  border: 1px solid var(--bd);
+  border-radius: 13px;
+}
+
+details summary {
+  font-size: 13px;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+.obj {
+  margin-top: 10px;
+  padding: 13px;
+  background: var(--ac2);
+  border-left: 3px solid var(--ac);
+  border-radius: 8px;
+  white-space: pre-wrap;
+}
+
+.obj b {
+  display: block;
+  margin-bottom: 3px;
+}
+
+/* ===================== 15. OBJECTION NAVIGATOR ===================== */
+
+.objection-card {
+  overflow: visible;
+}
+
+.objection-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 11px;
+  margin: 19px 0 21px;
+}
+
+.objection-choice {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  min-height: 75px;
+  padding: 13px;
+  color: var(--tx);
+  background: var(--card);
+  border: 1px solid var(--bd);
+  border-radius: 13px;
+  font-size: 12px;
+  font-weight: 700;
+  text-align: left;
+}
+
+.objection-choice:hover {
+  border-color: var(--ac);
+  transform: translateY(-2px);
+}
+
+.objection-choice.selected {
+  background: var(--ac2);
+  border-color: var(--ac);
+  box-shadow: inset 0 0 0 1px var(--ac);
+}
+
+.objection-number {
+  display: grid;
+  flex: 0 0 35px;
+  height: 35px;
+  place-items: center;
+  color: var(--mu);
+  background: var(--bg);
+  border-radius: 10px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.objection-choice.selected .objection-number {
+  color: #fff;
+  background: var(--ac);
+}
+
+.objection-detail {
+  padding: 20px;
+  box-shadow: var(--sh);
+}
+
+.objection-detail-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 15px;
+}
+
+.objection-detail-head h3 {
+  margin: 5px 0 0;
+  font-size: 19px;
+}
+
+.variant-count {
+  color: var(--mu);
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.objection-step {
+  margin: 11px 0;
+  padding: 16px;
+  background: var(--bg);
+  border-radius: 12px;
+}
+
+.objection-step h4 {
+  margin: 5px 0 9px;
+  font-size: 14px;
+}
+
+.objection-step p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.step-label {
+  color: var(--ac);
+  font-size: 10px;
+  font-weight: 850;
+  letter-spacing: .1em;
+}
+
+.objection-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-top: 16px;
+}
+
+.objection-actions button {
+  min-height: 43px;
+}
+
+/* ===================== 16. AI CHAT ===================== */
+
+.ai-primary {
+  color: #fff;
+  background: linear-gradient(135deg, #b58a6b, #846047);
+  border-color: #a47755;
+  box-shadow: var(--sh-accent);
+}
+
+.ai-primary:hover {
+  color: #fff;
+  background: linear-gradient(135deg, #c49b7d, #926d51);
+}
+
+.ai-status {
+  margin-top: 9px;
+  font-size: 12px;
+  white-space: pre-wrap;
+}
+
+.ai-status.ok {
+  color: var(--ok);
+}
+
+.ai-status.err {
+  color: var(--er);
+}
+
+.ai-chat {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 17px;
+  padding: 18px;
+  background: var(--card);
+  border: 1px solid var(--bd);
+  border-radius: 17px;
+  box-shadow: var(--sh);
+  animation: panelReveal .45s var(--ease) both;
+}
+
+.ai-chat-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 11px;
+}
+
+.ai-chat-head h3 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.ai-quick {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 10px 0;
+}
+
+.ai-quick button,
+.ai-start-actions button {
+  padding: 9px 11px;
+  color: var(--tx);
+  background: var(--ac2);
+  border-color: color-mix(in srgb, var(--ac) 35%, var(--bd));
+  font-size: 11px;
+}
+
+.ai-quick button:hover,
+.ai-start-actions button:hover {
+  color: var(--ac);
+  background: var(--ac2);
+}
+
+.ai-messages {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 360px;
+  max-height: 62vh;
+  padding: 14px;
+  overflow-y: auto;
+  background: var(--bg);
+  border: 1px solid var(--bd);
+  border-radius: 14px;
+  scroll-behavior: smooth;
+}
+
+.ai-msg {
+  max-width: 92%;
+  padding: 12px 15px;
+  border-radius: 15px;
+  font-size: 13px;
+  line-height: 1.75;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  animation: messageReveal .4s var(--ease) both;
+}
+
+.ai-msg.user {
+  align-self: flex-end;
+  color: #fff;
+  background: var(--ac);
+  border-bottom-right-radius: 4px;
+}
+
+.ai-msg.assistant {
+  align-self: flex-start;
+  color: var(--tx);
+  background: var(--card);
+  border: 1px solid var(--bd);
+  border-bottom-left-radius: 4px;
+  box-shadow: var(--sh);
+}
+
+.ai-msg-wrap {
+  max-width: 96%;
+  align-self: flex-start;
+  animation: messageReveal .4s var(--ease) both;
+}
+
+.ai-msg-wrap .ai-msg {
+  max-width: 100%;
+}
+
+.ai-compose {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.ai-compose textarea {
+  min-height: 76px;
+  padding: 13px;
+  resize: vertical;
+}
+
+.ai-compose button {
+  min-height: 48px;
+  padding: 12px 19px;
+}
+
+.ai-message-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 8px;
+}
+
+.ai-message-actions button {
+  min-height: 31px;
+  padding: 6px 10px;
+  font-size: 10px;
+}
+
+.mode-switch {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin: 15px 0 5px;
+}
+
+.mode-switch button {
+  min-width: 190px;
+  min-height: 44px;
+  flex: 1;
+  padding: 12px;
+}
+
+.mode-switch button.active {
+  color: #fff;
+  background: var(--ac);
+  border-color: var(--ac);
+  box-shadow: var(--sh-accent);
+}
+
+.right.chat-mode #scripts .manual-content {
+  display: none !important;
+}
+
+.right:not(.chat-mode):not(.workspace-empty) #aiChatMount {
+  display: none !important;
+}
+
+.right.workspace-empty #scripts .manual-content,
+.right.workspace-empty #aiChatMount {
+  display: none !important;
+}
+
+.right.chat-mode #aiChatMount {
+  display: block;
+  width: 100%;
+  animation: panelReveal .4s var(--ease) both;
+}
+
+.right.chat-mode .ai-chat {
+  min-height: 65vh;
+  margin-top: 8px;
+}
+
+.right.chat-mode .ai-messages {
+  min-height: 48vh;
+  max-height: none;
+  flex: 1;
+}
+
+/* ===================== 17. AI SESSION & PROVIDERS ===================== */
+
+.ai-session-bar {
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) auto auto;
+  align-items: end;
+  gap: 9px;
+  margin: 14px 0 9px;
+}
+
+.ai-session-bar .col,
+.provider-key-row .col {
+  min-width: 0;
+}
+
+.ai-session-bar button {
+  white-space: nowrap;
+}
+
+.ai-delete-chat {
+  padding: 9px 12px;
+  color: var(--er);
+  border-color: color-mix(in srgb, var(--er) 45%, var(--bd));
+}
+
+.ai-start-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  max-width: 100%;
+  margin: 10px 0 6px;
+}
+
+.provider-key-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 9px;
+  margin: 11px 0;
+}
+
+.provider-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-top: 13px;
+}
+
+/* ===================== 18. LIVE TELEPROMPTER ===================== */
+
+.live-phone-help {
+  margin: 15px 0 13px;
+  padding: 16px;
+  color: #493629;
+  background: linear-gradient(135deg, #fff8f0, #f7ede3);
+  border: 1px solid #e4c3a8;
+  border-radius: 15px;
+  box-shadow: 0 5px 20px rgba(146, 92, 10, .07);
+  animation: panelReveal .45s var(--ease) both;
+}
+
+:root[data-theme="dark"] .live-phone-help {
+  color: #f4e4d7;
+  background: linear-gradient(135deg, #382d26, #27221e);
+  border-color: #795b43;
+}
+
+.live-phone-title {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 12px;
+  font-size: 13px;
+  font-weight: 850;
+}
+
+.live-phone-buttons {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.live-phone-buttons button {
+  min-height: 39px;
+  padding: 9px;
+  color: #60442f;
+  background: rgba(255, 255, 255, .75);
+  border-color: #e7c6a9;
+  font-size: 11px;
+  line-height: 1.4;
+  white-space: normal;
+}
+
+:root[data-theme="dark"] .live-phone-buttons button {
+  color: #f2d9c3;
+  background: #29251f;
+  border-color: #765b42;
+}
+
+.live-phone-buttons button:hover,
+.live-phone-buttons button.active {
+  color: #fff;
+  background: #a47755;
+  border-color: #a47755;
+}
+
+.live-phone-card {
+  margin-top: 12px;
+  padding: 20px;
+  color: #403024;
+  background: #fffaf4;
+  border: 2px solid #c49a78;
+  border-radius: 15px;
+  box-shadow: 0 8px 28px rgba(80, 53, 10, .10);
+  animation: messageReveal .4s var(--ease) both;
+}
+
+:root[data-theme="dark"] .live-phone-card {
+  color: #f6e8d9;
+  background: #29241e;
+  border-color: #c49a78;
+}
+
+.live-phone-card[hidden] {
+  display: none !important;
+}
+
+.live-phone-card-label {
+  margin-bottom: 9px;
+  color: #986c45;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+:root[data-theme="dark"] .live-phone-card-label {
+  color: #e5b88d;
+}
+
+.live-phone-card-text {
+  font-size: clamp(17px, 2vw, 22px);
+  font-weight: 650;
+  line-height: 1.7;
+  white-space: normal;
+}
+
+.live-phone-card-actions {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 15px;
+}
+
+.live-phone-card-actions button {
+  padding: 9px 13px;
+  font-size: 11px;
+}
+
+.live-phone-card-actions .live-deepen {
+  color: #fff;
+  background: var(--ac);
+  border-color: var(--ac);
+}
+
+.live-phone-card-actions .live-close {
+  color: inherit;
+  background: transparent;
+}
+
+.live-shared-answer {
+  margin: 12px 0;
+  padding: 15px;
+  background: color-mix(in srgb, var(--ac) 9%, var(--card));
+  border: 1px solid color-mix(in srgb, var(--ac) 35%, var(--bd));
+  border-radius: 12px;
+}
+
+.live-shared-answer strong {
+  display: block;
+  margin-bottom: 7px;
+  color: var(--ac);
+  font-size: 10px;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+}
+
+.live-shared-answer p {
+  margin: 0;
+  line-height: 1.75;
+}
+
+/* ===================== 19. QUICK AUDIT CHIPS ===================== */
+
+.audit-box {
+  margin: 15px 0 13px;
+  padding: 15px;
+  background: var(--bg);
+  border: 1px solid var(--bd);
+  border-radius: 14px;
+}
+
+.audit-title {
+  margin-bottom: 10px;
+  color: var(--mu);
+  font-size: 11px;
+  font-weight: 850;
+}
+
+.audit-chips,
+.audit-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.audit-chip {
+  min-height: 34px;
+  padding: 7px 12px;
+  color: var(--tx);
+  background: var(--card);
+  border: 1px solid var(--bd);
+  border-radius: 99px;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.audit-chip:hover {
+  color: var(--ac);
+  border-color: var(--ac);
+}
+
+.audit-chip.active {
+  color: var(--ac);
+  background: var(--ac2);
+  border-color: var(--ac);
+  box-shadow: inset 0 0 0 1px var(--ac);
+}
+
+.audit-tags {
+  margin-top: 9px;
+}
+
+.audit-tag {
+  padding: 4px 9px;
+  color: var(--ac);
+  background: var(--ac2);
+  border: 1px solid var(--bd);
+  font-size: 10px;
+}
+
+/* ===================== 20. REMINDER SYSTEM ===================== */
+
+.reminder-open {
+  color: #986126 !important;
+  background: #fff5e6 !important;
+  border-color: #e8bd7b !important;
+  font-weight: 800;
+}
+
+:root[data-theme="dark"] .reminder-open {
+  color: #f2c17f !important;
+  background: #382c20 !important;
+  border-color: #76552f !important;
+}
+
+.reminder-panel {
+  display: none;
+  margin: 13px 0 5px;
+  padding: 17px;
+  background: var(--bg);
+  border: 1px solid var(--bd);
+  border-radius: 14px;
+}
+
+.reminder-panel.open {
+  display: block;
+  animation: panelReveal .4s var(--ease) both;
+}
+
+.reminder-quick {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 10px 0 13px;
+}
+
+.reminder-quick button {
+  padding: 8px 11px;
+  font-size: 11px;
+}
+
+.reminder-banner {
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 0 0 17px;
+  padding: 15px 18px;
+  color: #7c431b;
+  background: #fff5e6;
+  border: 1px solid #f1c27e;
+  border-left: 5px solid #e28a39;
+  border-radius: 14px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+:root[data-theme="dark"] .reminder-banner {
+  color: #f4c78d;
+  background: #30271e;
+  border-color: #76552f;
+}
+
+.reminder-banner.show {
+  display: flex;
+  animation: panelReveal .4s var(--ease) both;
+}
+
+.reminder-banner button {
+  color: #fff;
+  background: #a96c34;
+  border-color: #a96c34;
+}
+
+.reminder-badge {
+  margin: 8px 0 4px;
+  padding: 6px 10px;
+  border-radius: 9px;
+  font-size: 10px;
+}
+
+.reminder-due {
+  color: #b53d43;
+  background: #fff0ef;
+  border: 1px solid #f0b1b1;
+}
+
+.reminder-overdue {
+  color: #a65a24;
+  background: #fff1e4;
+  border: 1px solid #efc39d;
+}
+
+.reminder-future {
+  color: #3979a3;
+  background: #eaf5fc;
+  border: 1px solid #b1d7eb;
+}
+
+.reminder-done {
+  color: #17845d;
+  background: #e7f8ef;
+  border: 1px solid #a6dfc1;
+}
+
+:root[data-theme="dark"] .reminder-due {
+  color: #ff999d;
+  background: #3c2528;
+  border-color: #754146;
+}
+
+:root[data-theme="dark"] .reminder-overdue {
+  color: #f2b17e;
+  background: #38291f;
+  border-color: #765039;
+}
+
+:root[data-theme="dark"] .reminder-future {
+  color: #9ac9e8;
+  background: #203440;
+  border-color: #385b70;
+}
+
+:root[data-theme="dark"] .reminder-done {
+  color: #7eddb0;
+  background: #1d382d;
+  border-color: #376c54;
+}
+
+.reminder-task {
+  margin: 6px 0 9px;
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.reminder-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 9px;
+}
+
+.reminder-actions button {
+  padding: 8px 10px;
+  font-size: 11px;
+}
+
+.reminder-followup {
+  display: none;
+  margin-top: 11px;
+  padding: 14px;
+  background: var(--bg);
+  border: 1px solid var(--bd);
+  border-radius: 12px;
+}
+
+.reminder-followup.open {
+  display: block;
+  animation: panelReveal .35s var(--ease) both;
+}
+
+.reminder-followup textarea {
+  min-height: 130px;
+}
+
+.reminder-filter {
+  color: #986126 !important;
+  border-color: #e8bd7b !important;
+}
+
+.reminder-filter.on {
+  color: #fff !important;
+  background: #986126 !important;
+  border-color: #986126 !important;
+}
+
+/* ===================== 21. CHAT HISTORY ===================== */
+
+.chat-history-filters {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(220px, 1fr));
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.chat-history-layout {
+  display: grid;
+  grid-template-columns: minmax(290px, 400px) minmax(0, 1fr);
+  align-items: start;
+  gap: 18px;
+}
+
+.chat-history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 75vh;
+  padding-right: 4px;
+  overflow-y: auto;
+}
+
+.chat-history-card {
+  display: block;
+  width: 100%;
+  padding: 15px;
+  color: var(--tx);
+  background: var(--card);
+  text-align: left;
+}
+
+.chat-history-card:hover {
+  border-color: var(--ac);
+  transform: translateY(-2px);
+}
+
+.chat-history-card.selected {
+  padding: 14px;
+  background: var(--ac2);
+  border: 2px solid var(--ac);
+}
+
+.chat-history-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chat-history-card-head strong {
+  font-size: 13px;
+}
+
+.chat-history-city {
+  color: var(--ac);
+  background: var(--ac2);
+  border: 1px solid var(--bd);
+}
+
+.chat-history-meta {
+  margin-top: 7px;
+  color: var(--mu);
+  font-size: 11px;
+}
+
+.chat-history-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 11px;
+}
+
+.chat-history-actions button {
+  min-height: 32px;
+  padding: 7px 10px;
+  font-size: 10px;
+}
+
+.chat-history-actions .go-chat {
+  color: #fff;
+  background: var(--ac);
+  border-color: var(--ac);
+}
+
+.chat-history-actions .delete-chat {
+  color: var(--er);
+}
+
+.chat-history-detail {
+  min-width: 0;
+}
+
+.chat-history-detail .chat-history-messages {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.chat-history-message {
+  padding: 15px;
+  background: var(--bg);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+.chat-history-message.assistant {
+  border-left: 4px solid var(--ac);
+}
+
+.chat-history-message.user {
+  border-left: 4px solid var(--s2);
+}
+
+.chat-history-message-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+  color: var(--mu);
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.chat-history-message button {
+  min-height: 29px;
+  padding: 5px 8px;
+  font-size: 10px;
+}
+
+/* ===================== 22. PROGRESS DASHBOARD ===================== */
+
+.progress-hero {
+  position: relative;
+  margin-bottom: 20px;
+  padding: 27px;
+  overflow: hidden;
+  background:
+    linear-gradient(
+      135deg,
+      var(--ac2),
+      var(--card) 75%
+    );
+  border: 1px solid var(--bd);
+  border-radius: var(--radius-lg);
+}
+
+.progress-hero::after {
+  position: absolute;
+  top: -80px;
+  right: -45px;
+  width: 230px;
+  height: 230px;
+  background: color-mix(in srgb, var(--ac) 9%, transparent);
+  border-radius: 50%;
+  content: "";
+  pointer-events: none;
+}
+
+.progress-hero-head {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.progress-hero h2 {
+  margin: 0 0 8px;
+  color: var(--tx);
+  font-size: 15px;
+}
+
+.progress-number {
+  margin: 5px 0;
+  font-size: clamp(34px, 5vw, 53px);
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -.065em;
+  font-variant-numeric: tabular-nums;
+}
+
+.progress-goal {
+  width: 130px;
+  max-width: 45vw;
+}
+
+.progress-track {
+  height: 15px;
+  margin: 20px 0 12px;
+  overflow: hidden;
+  background: var(--bd);
+  border-radius: 99px;
+}
+
+.progress-fill {
+  width: 0;
+  height: 100%;
+  background: linear-gradient(90deg, #a47755, #d3aa85, #15966b);
+  border-radius: 99px;
+  transition: width .9s var(--ease);
+  animation: progressGlow 2.5s ease-in-out infinite alternate;
+}
+
+.progress-message {
+  color: var(--ac);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.progress-kpis {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 13px;
+  margin: 20px 0;
+}
+
+.progress-kpi {
+  padding: 19px;
+  box-shadow: var(--sh);
+}
+
+.progress-kpi b {
+  display: block;
+  margin-bottom: 7px;
+  font-size: 27px;
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.progress-kpi span {
+  color: var(--mu);
+  font-size: 11px;
+  font-weight: 750;
+}
+
+.progress-chart {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  align-items: end;
+  gap: 10px;
+  min-height: 225px;
+  padding: 17px 12px 10px;
+  background: var(--bg);
+  border: 1px solid var(--bd);
+  border-radius: 14px;
+}
+
+.progress-day {
+  display: flex;
+  height: 190px;
+  min-width: 0;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+}
+
+.progress-bars {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 4px;
+  width: min(100%, 44px);
+  height: 145px;
+  border-bottom: 1px solid var(--bd);
+}
+
+.progress-bar {
+  width: 45%;
+  min-height: 2px;
+  border-radius: 6px 6px 0 0;
+  transition:
+    height .8s var(--ease),
+    filter .3s ease;
+  animation: barReveal .8s var(--ease) both;
+}
+
+.progress-bar:hover {
+  filter: brightness(1.2);
+}
+
+.progress-bar.contact {
+  background: linear-gradient(180deg, #b18b70, #866348);
+}
+
+.progress-bar.demo {
+  background: linear-gradient(180deg, #39bd8d, #15966b);
+}
+
+.progress-day strong {
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.progress-day small {
+  color: var(--mu);
+  font-size: 9px;
+  text-align: center;
+}
+
+.progress-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 17px;
+  margin-top: 13px;
+  color: var(--mu);
+  font-size: 11px;
+}
+
+.progress-legend span::before {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  margin-right: 7px;
+  background: #a47755;
+  border-radius: 3px;
+  content: "";
+}
+
+.progress-legend .demo-key::before {
+  background: #15966b;
+}
+
+/* ===================== 23. SETTINGS ===================== */
+
+.settings-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 14px;
+}
+
+.upload-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-top: 11px;
+}
+
+.upload-row input[type="file"] {
+  max-width: 100%;
+}
+
+.cat-switch {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 15px;
+}
+
+.cat-switch button {
+  padding: 8px 11px;
+  font-size: 11px;
+}
+
+.cat-switch button.active {
+  color: #fff;
+  background: var(--ac);
+  border-color: var(--ac);
+}
+
+/* ===================== 24. TOAST NOTIFICATIONS ===================== */
+
+#toast {
+  position: fixed;
+  z-index: 9999;
+  bottom: 24px;
+  left: 50%;
+  max-width: min(92vw, 760px);
+  padding: 13px 21px;
+  color: var(--bg);
+  background: var(--tx);
+  border: 1px solid var(--bd);
+  border-radius: 13px;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, .17);
+  font-size: 12px;
+  font-weight: 650;
+  line-height: 1.6;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, 15px);
+  transition:
+    opacity .3s var(--ease),
+    transform .3s var(--ease);
+  word-break: break-word;
+}
+
+#toast.s {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+#toast.e {
+  color: #fff;
+  background: var(--er);
+  border-color: var(--er);
+  pointer-events: auto;
+  user-select: text;
+}
+
+/* ===================== 25. ANIMATIONS ===================== */
+
+@keyframes fadeSlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pageReveal {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes panelReveal {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(.99);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes messageReveal {
+  from {
+    opacity: 0;
+    transform: translateY(9px) scale(.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes barReveal {
+  from {
+    opacity: .3;
+    transform: scaleY(.35);
+    transform-origin: bottom;
+  }
+  to {
+    opacity: 1;
+    transform: scaleY(1);
+    transform-origin: bottom;
+  }
+}
+
+@keyframes progressGlow {
+  from {
+    filter: brightness(1);
+  }
+  to {
+    filter: brightness(1.12);
+  }
+}
+
+/* ===================== 26. GLOBAL TRANSITIONS ===================== */
+
+.card,
+.item,
+.setting-box,
+.sc,
+.progress-kpi,
+.st,
+.chat-history-card,
+.chat-history-message,
+.objection-detail,
+.objection-step,
+.audit-chip,
+.badge,
+button,
+input,
+select,
+textarea {
+  transition-timing-function: cubic-bezier(.16, 1, .3, 1);
+}
+
+/* ===================== 27. RESPONSIVE DESIGN ===================== */
+
+@media (max-width: 1100px) {
+  .work {
+    grid-template-columns: 1fr;
+  }
+
+  .left {
+    position: static;
+  }
+
+  .right {
+    margin-top: 0;
+  }
+
+  .objection-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 850px) {
+  .chat-history-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .chat-history-list {
+    max-height: 420px;
+  }
+
+  .stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .progress-kpis {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .item {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 700px) {
+  .wrap {
+    padding: 17px 12px 45px;
+  }
+
+  .card {
+    padding: 17px;
+    border-radius: 16px;
+  }
+
+  header {
+    margin-bottom: 17px;
+  }
+
+  .navbar {
+    gap: 5px;
+    padding: 6px;
+  }
+
+  .navbar button {
+    min-width: calc(50% - 5px);
+    min-height: 40px;
+    padding: 9px 7px;
+    font-size: 10px;
+  }
+
+  .chat-history-filters {
+    grid-template-columns: 1fr;
+  }
+
+  .progress-chart {
+    gap: 4px;
+    padding: 12px 4px;
+  }
+
+  .progress-day {
+    height: 175px;
+  }
+
+  .progress-bars {
+    height: 130px;
+  }
+
+  .ai-messages {
+    min-height: 300px;
+  }
+
+  .ai-msg {
+    max-width: 96%;
+  }
+
+  .ai-session-bar {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .ai-session-bar .col {
+    grid-column: 1 / -1;
+  }
+
+  .ai-session-bar button {
+    width: 100%;
+  }
+
+  .provider-key-row {
+    grid-template-columns: 1fr;
+  }
+
+  .provider-key-row button {
+    width: 100%;
+  }
+
+  .live-phone-buttons {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .reminder-banner {
+    align-items: flex-start;
+  }
+
+  .reminder-quick button {
+    flex: 1;
+  }
+}
+
+@media (max-width: 560px) {
+  .objection-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .objection-choice {
+    min-height: 58px;
+  }
+
+  .objection-detail {
+    padding: 13px;
+  }
+
+  .objection-detail-head {
+    align-items: flex-start;
+  }
+
+  .ai-compose {
+    grid-template-columns: 1fr;
+  }
+
+  .ai-compose button {
+    width: 100%;
+  }
+
+  .mode-switch button {
+    min-width: 100%;
+  }
+
+  .nav button {
+    min-width: calc(50% - 5px);
+  }
+
+  .progress-hero {
+    padding: 19px;
+  }
+
+  .progress-kpi {
+    padding: 13px;
+  }
+
+  .progress-kpi b {
+    font-size: 22px;
+  }
+
+  .tones {
+    flex-wrap: wrap;
+  }
+
+  .tone {
+    min-width: 30%;
+  }
+}
+
+@media (max-width: 380px) {
+  .stats {
+    gap: 8px;
+  }
+
+  .st {
+    padding: 13px;
+  }
+
+  .st b {
+    font-size: 23px;
+  }
+
+  .live-phone-buttons {
+    grid-template-columns: 1fr;
+  }
+
+  .progress-number {
+    font-size: 32px;
+  }
+
+  .progress-hero-head {
+    align-items: flex-start;
+  }
+}
+
+/* ===================== 28. ACCESSIBILITY ===================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -166,19 +2554,24 @@ h2{font-size:13px;margin-bottom:14px}
   <div class="nav">
     <button id="prev" disabled>◀ Zurück</button>
     <button class="p" id="analyze" disabled>Salon analysieren</button>
+    <button type="button" id="openReminder" class="reminder-open" disabled>⏰ Wiedervorlage</button>
     <button id="next" disabled>Weiter ▶</button>
+  </div>
+  <div id="reminderPanel" class="reminder-panel">
+    <strong>⏰ Wiedervorlage für diesen Salon</strong>
+    <div class="reminder-quick">
+      <button type="button" data-reminder-days="1">Morgen (+1 Tag)</button><button type="button" data-reminder-days="3">In 3 Tagen</button><button type="button" data-reminder-days="7">In 7 Tagen</button><button type="button" data-reminder-days="14">In 14 Tagen</button>
+    </div>
+    <div class="row"><div class="col"><label for="reminderDate">Fällig am</label><input id="reminderDate" type="date"></div><div class="col" style="flex:2"><label for="reminderTask">Was ist zu tun?</label><input id="reminderTask" type="text" maxlength="300" placeholder="z. B. Nach Demo-Link fragen, Chef nochmal anrufen"></div></div>
+    <div class="row" style="margin-top:10px"><button type="button" class="p" id="saveReminder">Erinnerung speichern</button><button type="button" id="closeReminder">Schließen</button></div>
   </div>
   <div class="cur" id="cur" hidden></div>
 </section>
 
 </div><div class="right"><section class="card">
-  <h2>3 · Verkaufs-Skripte</h2>
+  <h2>3 · Arbeitsbereich</h2>
   <div id="scripts"></div>
-  <details><summary>Häufige Einwände &amp; Antworten</summary>
-    <div class="obj"><b>„Wir brauchen keine Website.“</b>Das verstehe ich gut. Die meisten Kundinnen und Kunden suchen heute aber zuerst online nach Preisen, Öffnungszeiten und Terminen. Die Demo ist kostenlos und verpflichtet Sie zu nichts – schauen Sie einfach, ob sie Ihnen gefällt.</div>
-    <div class="obj"><b>„Das ist uns zu teuer.“</b>Genau deshalb habe ich die Demo schon kostenlos vorbereitet. Sie sehen zuerst, was Sie bekommen würden, und entscheiden danach in Ruhe – ohne Druck und ohne versteckte Kosten.</div>
-    <div class="obj"><b>„Wir haben aktuell keine Zeit.“</b>Kein Problem, Sie müssen nichts vorbereiten. Ich schicke Ihnen den Link, und Sie schauen rein, wenn es passt – das dauert etwa zwei Minuten. Wann darf ich mich noch einmal melden?</div>
-  </details>
+  <div id="aiChatMount"></div>
 </section></div></div>
 
 <section class="card">
@@ -197,12 +2590,13 @@ h2{font-size:13px;margin-bottom:14px}
 const $=s=>document.querySelector(s);
 /* Mehrseitige Oberfläche: vorhandene Originalbereiche werden nur umgeordnet. */
 const nav=document.createElement("nav");nav.className="navbar";nav.id="mainNav";
-const pageNames=[["page1","Akquise-Cockpit"],["page2","Analysierte Salons"],["page3","Einwand-Navigator"],["page4","Einstellungen & Daten"]];
+const pageNames=[["page1","Salons & Kontakt"],["page2","Gespeicherte Salons"],["page3","Antwort-Hilfe"],["page4","Einstellungen"],["page5","Chat-Verlauf (0)"],["page6","📊 Fortschritt"]];
 const pages={};
 const pagesHost=document.createElement("div");pagesHost.id="pages";
 pageNames.forEach(([id,label],i)=>{const p=document.createElement("section");p.id=id;p.className="page"+(i===0?" active":"");pages[id]=p;pagesHost.appendChild(p);
  const b=document.createElement("button");b.type="button";b.dataset.page=id;b.textContent=label;nav.appendChild(b)});
 const header=document.querySelector("header");header.after(nav,pagesHost);
+const reminderBanner=document.createElement("div");reminderBanner.id="reminderBanner";reminderBanner.className="reminder-banner";reminderBanner.innerHTML='<span id="reminderBannerText"></span><button type="button" id="goDueReminders">Jetzt erledigen</button>';nav.after(reminderBanner);
 const statsNode=$("#stats"),sourceNode=statsNode&&statsNode.nextElementSibling,workNode=document.querySelector(".work");
 const resultsNode=Array.from(document.querySelectorAll("section.card")).find(x=>x.querySelector("#cityF"));
 if(workNode)pages.page1.appendChild(workNode);
@@ -210,27 +2604,97 @@ if(statsNode)pages.page2.appendChild(statsNode);
 if(resultsNode)pages.page2.appendChild(resultsNode);
 if(sourceNode&&sourceNode!==workNode&&sourceNode!==resultsNode)pages.page4.appendChild(sourceNode);
 pages.page3.innerHTML=`<section class="card objection-card">
-  <h2>Einwand-Navigator</h2>
+  <h2>Antwort-Hilfe</h2>
   <p class="hint">Wähle die Reaktion des Saloninhabers. Du erhältst eine ruhige, unverbindliche Antwort mit dem Ziel, die kostenlose Demo zu zeigen.</p>
   <div id="objectionChoices" class="objection-grid"></div>
   <div id="objectionDetail" class="objection-detail"><div class="ph">Wähle oben einen Einwand aus, um eine passende Gesprächsantwort zu erhalten.</div></div>
 </section>`;
 const settings=document.createElement("section");settings.className="card";settings.innerHTML=
- '<h2>Einstellungen & Daten</h2><div class="settings-grid">'+
+ '<h2>Einstellungen</h2><div class="settings-grid">'+
  '<div class="setting-box"><h3>Persönliche Angaben</h3><div class="col"><label for="scriptName">Mein Name im Skript</label><input id="scriptName" type="text" value="[Ihr Name]" placeholder="[Ihr Name]"></div></div>'+
  '<div class="setting-box"><h3>CSV-Dateien dauerhaft speichern</h3><label for="masterCsvFile">Master-CSV (Stadt, Link)</label><div class="upload-row"><input id="masterCsvFile" type="file" accept=".csv,text/csv"></div><label for="cityCsvFile" style="display:block;margin-top:12px">Städte-CSV (Salondaten der ausgewählten Stadt)</label><div class="upload-row"><input id="cityCsvFile" type="file" accept=".csv,text/csv"></div><p class="hint">Die hochgeladenen CSV-Daten werden lokal in diesem Browser gespeichert.</p></div>'+
- '<div class="setting-box"><h3>Datensicherung</h3><p class="hint">Exportiert oder importiert Analysen, Einstellungen und gespeicherte CSV-Tabellen.</p><div class="upload-row"><button type="button" id="backupExport" class="p">Backup als JSON exportieren</button><input id="backupImportFile" type="file" accept=".json,application/json"></div></div></div>';
-pages.page4.appendChild(settings);
-nav.addEventListener("click",e=>{const b=e.target.closest("[data-page]");if(!b)return;Object.values(pages).forEach(p=>p.classList.toggle("active",p.id===b.dataset.page));nav.querySelectorAll("button").forEach(x=>x.classList.toggle("active",x===b));});
+ '<div class="setting-box"><h3>Datensicherung</h3><p class="hint">Exportiert oder importiert Analysen, Einstellungen und gespeicherte CSV-Tabellen.</p><div class="upload-row"><button type="button" id="backupExport" class="p">Backup als JSON exportieren</button><input id="backupImportFile" type="file" accept=".json,application/json"></div></div>'+
+ '<div class="setting-box"><h3>✨ KI-Anbieter &amp; API-Schlüssel</h3>'+
+ '<p class="ai-note">Trage einen oder mehrere API-Schlüssel ein. Alle Schlüssel werden direkt beim Tippen lokal in diesem Browser gespeichert.</p>'+
+ '<div class="provider-key-row"><div class="col"><label for="groqKey">Groq API-Key (gsk_...)</label><input id="groqKey" type="password" autocomplete="off" placeholder="gsk_..."></div><button type="button" id="toggleGroqKey">Anzeigen</button></div>'+
+ '<div class="provider-key-row"><div class="col"><label for="geminiKey">Google Gemini API-Key (AIza...)</label><input id="geminiKey" type="password" autocomplete="off" placeholder="AIza..."></div><button type="button" id="toggleGeminiKey">Anzeigen</button></div>'+
+ '<div class="provider-key-row"><div class="col"><label for="openrouterKey">OpenRouter API-Key (sk-or-...)</label><input id="openrouterKey" type="password" autocomplete="off" placeholder="sk-or-..."></div><button type="button" id="toggleOpenrouterKey">Anzeigen</button></div>'+
+ '<div class="col" style="margin-top:12px"><label for="preferredProvider">Bevorzugter KI-Anbieter</label><select id="preferredProvider"><option value="auto">Automatisch (alle hinterlegten Keys nutzen)</option><option value="groq">Nur Groq</option><option value="gemini">Nur Google Gemini</option><option value="openrouter">Nur OpenRouter</option></select></div>'+
+ '<div class="col" style="margin-top:12px"><label for="aiPersonality">KI-Gesprächsstil &amp; Verhalten</label><select id="aiPersonality"><option value="direct">Direkt &amp; Selbstbewusst</option><option value="friendly">Locker &amp; Freundlich</option><option value="cautious">Zurückhaltend &amp; Höflich (Vorsichtig)</option><option value="adaptive">Flexibel &amp; Beratend</option></select></div>'+
+ '<div class="col" style="margin-top:12px"><label for="groqModel">Groq-Modell</label><select id="groqModel"><option value="openai/gpt-oss-120b">openai/gpt-oss-120b</option><option value="openai/gpt-oss-20b">openai/gpt-oss-20b</option></select></div>'+
+ '<div class="provider-actions"><button type="button" id="saveProviderKeys" class="p">Speichern</button><button type="button" id="testGroq">Verbindung testen</button></div>'+
+ '<div id="providerSaveStatus" class="ai-status" role="status" aria-live="polite"></div><div id="groqTestStatus" class="ai-status" role="status" aria-live="polite"></div>'+
+ '<p class="ai-note">Bei automatischer Auswahl werden alle hinterlegten Anbieter der Reihe nach versucht, wenn ein Anbieter fehlschlägt oder ein Limit erreicht ist. API-Schlüssel sind vertraulich; auf gemeinsam genutzten Geräten nicht speichern.</p></div></div>';pages.page4.appendChild(settings);
+pages.page5.innerHTML=`<section class="card"><div class="shead"><div><h2>Chat-Verlauf aller Salons</h2><p class="hint">Alle gespeicherten KI-Unterhaltungen aus sämtlichen Städten. Wähle links einen Chat aus, um den vollständigen Verlauf zu lesen.</p></div><strong id="chatHistoryTotal">0 gespeicherte Chats</strong></div>
+<div class="chat-history-filters">
+ <div class="col"><label for="chatHistoryCity">Nach Stadt filtern</label><div class="chat-filter-control"><input id="chatHistoryCity" type="text" list="chatHistoryCities" placeholder="Stadt eingeben oder auswählen"><datalist id="chatHistoryCities"></datalist><button type="button" class="chat-filter-clear" id="clearChatHistoryCity" aria-label="Stadtfilter zurücksetzen">✕</button></div></div>
+ <div class="col"><label for="chatHistorySalon">Nach Salon suchen / auswählen</label><div class="chat-filter-control"><input id="chatHistorySalon" type="text" list="chatHistorySalons" placeholder="Salonname eingeben oder auswählen"><datalist id="chatHistorySalons"></datalist><button type="button" class="chat-filter-clear" id="clearChatHistorySalon" aria-label="Salonfilter zurücksetzen">✕</button></div></div>
+</div>
+<div class="chat-history-layout"><div><div class="chat-history-list" id="chatHistoryList"></div></div><div class="chat-history-detail" id="chatHistoryDetail"><div class="ph">Wähle links einen Chat-Verlauf aus, um alle Nachrichten anzuzeigen.</div></div></div></section>`;
+pages.page6.innerHTML=`<section class="card">
+ <div class="progress-hero">
+  <div class="progress-hero-head"><div><h2>Heutiges Tagesziel</h2><div class="progress-number" id="progressHeadline">0 / 15</div><div class="hint">Analysierte und gespeicherte Salons heute</div></div>
+   <div class="col progress-goal"><label for="dailyGoal">Tagesziel (Salons)</label><input id="dailyGoal" type="number" min="1" max="1000" step="1" value="15"></div>
+  </div>
+  <div class="progress-track" role="progressbar" aria-label="Tagesfortschritt" aria-valuemin="0" aria-valuemax="100" id="progressTrack"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="progress-message" id="progressMessage">Noch 15 Salons bis zum Tagesziel!</div>
+ </div>
+ <div class="progress-kpis" id="progressKpis"></div>
+ <h2>Aktivität der letzten 7 Tage</h2>
+ <div class="progress-chart" id="progressChart" aria-label="Balkendiagramm der täglichen Kontakte und Demos"></div>
+ <div class="progress-legend"><span>Kontaktiert</span><span class="demo-key">Demos gesendet</span></div>
+ <p class="hint">Die Statistik wird lokal in diesem Browser gespeichert. Ein aktiver Tag zählt, sobald mindestens eine Aktivität erfasst wurde.</p>
+</section>`;
+function activatePage(pageId){Object.values(pages).forEach(p=>p.classList.toggle("active",p.id===pageId));nav.querySelectorAll("button").forEach(x=>x.classList.toggle("active",x.dataset.page===pageId));if(pageId==="page5")renderGlobalChatHistory()}
+nav.addEventListener("click",e=>{const b=e.target.closest("[data-page]");if(!b)return;activatePage(b.dataset.page)});
 nav.querySelector('[data-page="page1"]').classList.add("active");
 
 const CATS=["Ohne Website","Nur Social Media","Unsichere Website (HTTP)","Externes Portal","Eigene Website (HTTPS)"];
-const STAT=["Zu kontaktieren","Demo gesendet","Angerufen","Keine Antwort","Ignoriert"];
+const STAT=["Zu kontaktieren","Demo gesendet","Angerufen","Keine Antwort","Ignoriert","Kontaktiert","Interessiert / Termin"];
 const PORTAL=/(prinz\.de|facebook\.com|fb\.com|instagram\.com|jameda|treatwell|gelbeseiten\.de|dasoertliche|meinestadt|yelp|google\.[a-z]+\/maps|goo\.gl|booksy|fresha|planity|wix\.com\/|linktr\.ee|11880|cylex|golocal|branchenbuch)/i;
-let cities=[],salons=[],idx=-1,tab="all",manualQueue=null,cityF="",vb=0,tone=0,objectionSelected=0,objectionVariant=0;
+let cities=[],salons=[],idx=-1,tab="all",manualQueue=null,cityF="",vb=0,tone=0,objectionSelected=0,objectionVariant=0,activeLiveObjection=null;
+let selectedGlobalChatId="";
 let db=load("gs_db",{}); // key -> {d:{...},cat,status,notes,ts}
+const AUDIT_ISSUES=["Keine Preisliste","Kein Online-Termin / WhatsApp","Nicht handyfreundlich","Veraltetes Design","Keine Öffnungszeiten / Karte"];
+function auditStore(){const value=load("gs_audits",{});return value&&typeof value==="object"?value:{}}
+function selectedAudits(s){if(!s)return[];const value=auditStore()[key(s)];return Array.isArray(value)?value.filter(x=>AUDIT_ISSUES.includes(x)):[]}
+function auditSentence(s){
+ const issues=selectedAudits(s);if(!issues.length)return"";
+ const phrases={"Keine Preisliste":"eine übersichtliche Preisliste","Kein Online-Termin / WhatsApp":"eine einfache Online-Terminmöglichkeit oder einen WhatsApp-Kontakt","Nicht handyfreundlich":"eine bessere Darstellung auf dem Smartphone","Veraltetes Design":"einen moderneren und zeitgemäßen Internetauftritt","Keine Öffnungszeiten / Karte":"gut sichtbare Öffnungszeiten und eine Karte mit dem Standort"};
+ const list=issues.map(x=>phrases[x]);
+ const joined=list.length===1?list[0]:list.length===2?list.join(" und "):list.slice(0,-1).join(", ")+" und "+list[list.length-1];
+ return "Beim Blick auf Ihren aktuellen Online-Auftritt sind mir mögliche Ansatzpunkte aufgefallen: "+joined+". Ich habe dazu eine kostenlose, unverbindliche Demo vorbereitet, in der Sie passende Bausteine selbst auswählen können.";
+}
+function renderAuditChips(){
+ const host=$("#auditChips");if(!host||idx<0||!salons[idx])return;
+ const active=selectedAudits(salons[idx]);
+ host.innerHTML='<div class="audit-title">Schnell-Audit (anklicken, was fehlt):</div><div class="audit-chips">'+AUDIT_ISSUES.map(x=>`<button type="button" class="audit-chip${active.includes(x)?" active":""}" data-audit-chip="${esc(x)}" aria-pressed="${active.includes(x)?"true":"false"}">${esc(x)}</button>`).join("")+'</div>';
+}
 function load(k,f){try{const v=localStorage.getItem(k);return v?JSON.parse(v):f}catch(e){return f}}
 function save(k,v){try{localStorage.setItem(k,typeof v=="string"?v:JSON.stringify(v))}catch(e){}}
+const ACTIVITY_KEY="gs_daily_activity",GOAL_KEY="gs_daily_goal";
+function activityStore(){const v=load(ACTIVITY_KEY,{});return v&&typeof v==="object"?v:{}}
+function recordActivity(type,amount=1){
+ const all=activityStore(),day=localISODate();if(!all[day])all[day]={analysiert:0,kontaktiert:0,demos:0,interessiert:0};
+ if(!Object.prototype.hasOwnProperty.call(all[day],type))return;
+ all[day][type]=Math.max(0,(+all[day][type]||0)+amount);save(ACTIVITY_KEY,all);renderProgress();
+}
+function recordStatusActivity(status){
+ if(status==="Angerufen"||status==="Kontaktiert")recordActivity("kontaktiert");
+ else if(status==="Demo gesendet")recordActivity("demos");
+ else if(status==="Interessiert / Termin")recordActivity("interessiert");
+}
+function localISODate(d=new Date()){const y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,"0"),day=String(d.getDate()).padStart(2,"0");return `${y}-${m}-${day}`}
+function addDaysISO(days){const d=new Date();d.setHours(12,0,0,0);d.setDate(d.getDate()+days);return localISODate(d)}
+function shiftISODate(date,days){const d=new Date((date||localISODate())+"T12:00:00");d.setDate(d.getDate()+days);return localISODate(d)}
+function dayDiff(date){if(!date)return null;const a=new Date(date+"T12:00:00"),b=new Date(localISODate()+"T12:00:00");return Math.round((a-b)/86400000)}
+function dateDE(date){if(!date)return"";const [y,m,d]=date.split("-");return `${d}.${m}.${y}`}
+function reminderState(record){if(!record||!record.dueDate||record.reminderDone)return"none";const n=dayDiff(record.dueDate);return n<=0?"due":"planned"}
+function reminderCounts(){const records=Object.values(db);return {due:records.filter(r=>reminderState(r)==="due").length,planned:records.filter(r=>reminderState(r)==="planned").length}}
+function refreshReminderBanner(){const c=reminderCounts(),b=$("#reminderBanner");if(!b)return;b.classList.toggle("show",c.due>0);$("#reminderBannerText").textContent=`🔔 Erinnerung: Heute stehen ${c.due} Wiedervorlagen an!`}
+function reminderBadge(r){if(!r||!r.dueDate)return"";if(r.reminderDone)return '<span class="reminder-badge reminder-done">✓ Erledigt</span>';const n=dayDiff(r.dueDate);if(n<0)return `<span class="reminder-badge reminder-overdue">Überfällig seit ${Math.abs(n)} ${Math.abs(n)===1?"Tag":"Tagen"} · ${dateDE(r.dueDate)}</span>`;if(n===0)return `<span class="reminder-badge reminder-due">Heute fällig! · ${dateDE(r.dueDate)}</span>`;return `<span class="reminder-badge reminder-future">In ${n} ${n===1?"Tag":"Tagen"} · ${dateDE(r.dueDate)}</span>`}
+function refreshReminderViews(){refreshReminderBanner();if(typeof render==="function")render()}
+
 function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
 function toast(m,err){const t=$("#toast");t.textContent=m;t.className="s"+(err?" e":"");clearTimeout(toast.t);toast.t=setTimeout(()=>t.className="",err?12000:3200)}
 function safeUrl(u){u=(u||"").trim();if(!u)return"";if(!/^https?:\/\//i.test(u))u="https://"+u;return u}
@@ -363,7 +2827,8 @@ function renderSalonSelect(){
     if(q&&!(s.name+" "+s.adresse).toLowerCase().includes(q)&&i!==idx)return;
     opts.push(`<option value="${i}"${i===idx?" selected":""}>${db[key(s)]?"✓ ":""}${esc(s.name)}${s.adresse?" – "+esc(s.adresse):""}</option>`)});
   sel.innerHTML=opts.join("");sel.disabled=false;upd()}
-function upd(){renderScripts();
+function upd(){
+  const reminderButton=$("#openReminder");if(reminderButton)reminderButton.disabled=!(idx>=0&&salons[idx]);renderScripts();
   const has=salons.length&&idx>=0;
   $("#prev").disabled=!has||idx<=0;$("#next").disabled=!has||idx>=salons.length-1;$("#analyze").disabled=!has;
   const cur=$("#cur");
@@ -379,7 +2844,9 @@ function upd(){renderScripts();
     <a class="act" href="https://www.google.com/search?q=${encodeURIComponent(v.Name+" "+v.Ort)}" target="_blank" rel="noopener noreferrer">🔍 Auf Google prüfen</a>
    </div>
    <div class="acts">${L(s.web,"🌐 Website")}${L(s.ig,"Instagram")}${L(s.fb,"Facebook")}${L(s.gs,"GelbeSeiten")}<button class="act" id="emailBtn">✉ E-Mail senden</button></div>
-    <div class="hint">Website-Status manuell korrigieren:</div><div class="cat-switch">${CATS.map((c,i)=>`<button type="button" data-cat="${i}" class="${(r?r.cat:classify(s))===i?"active":""}">${c}</button>`).join("")}</div>`}
+    <div class="hint">Website-Status manuell korrigieren:</div><div class="cat-switch">${CATS.map((c,i)=>`<button type="button" data-cat="${i}" class="${(r?r.cat:classify(s))===i?"active":""}">${c}</button>`).join("")}</div>
+    <div id="auditChips" class="audit-box"></div>
+    <div class="col" style="margin-top:14px"><label for="salonObservation">Eigene Beobachtung zum Salon (optional, für KI)</label><textarea id="salonObservation" rows="3" placeholder="z. B. Keine Preisliste auf Instagram; gute Fade-Fotos, aber kein Terminlink; nur Festnetz">${esc(load("gs_ai_observations",{})[key(s)]||"")}</textarea></div>`;renderAuditChips()}
 $("#q").oninput=renderSalonSelect;
 $("#salon").onchange=e=>{idx=+e.target.value;if(salons[idx])save("gs_last_selection",{city:salons[idx].stadt,index:idx,name:salons[idx].name});upd()};
 $("#prev").onclick=()=>{if(idx>0){idx--;renderSalonSelect()}};
@@ -397,35 +2864,57 @@ function classify(s){
 $("#analyze").onclick=()=>{
   if(idx<0)return;const s=salons[idx],k=key(s),old=db[k];
   db[k]={d:s,cat:classify(s),status:old?old.status:STAT[0],notes:old?old.notes:"",ts:Date.now()};
-  save("gs_db",db);renderSalonSelect();render();
+  save("gs_db",db);recordActivity("analysiert");renderSalonSelect();render();
   toast("Analysiert: "+CATS[db[k].cat])};
+
+/* ---------- Wiedervorlage ---------- */
+$("#openReminder").addEventListener("click",()=>{$("#reminderPanel").classList.toggle("open");if(idx>=0&&salons[idx]){const r=db[key(salons[idx])]||{};$("#reminderDate").value=r.dueDate||addDaysISO(1);$("#reminderTask").value=r.reminderTask||""}});
+$("#closeReminder").addEventListener("click",()=>$("#reminderPanel").classList.remove("open"));
+$("#reminderPanel").addEventListener("click",e=>{const b=e.target.closest("[data-reminder-days]");if(b)$("#reminderDate").value=addDaysISO(+b.dataset.reminderDays)});
+$("#saveReminder").addEventListener("click",()=>{if(idx<0||!salons[idx])return toast("Bitte zuerst einen Salon auswählen.",1);const d=$("#reminderDate").value,task=$("#reminderTask").value.trim();if(!d)return toast("Bitte ein Fälligkeitsdatum auswählen.",1);if(!task)return toast("Bitte eine Aufgabe eintragen.",1);const s=salons[idx],k=key(s),wasSaved=!!db[k],old=db[k]||{d:s,cat:classify(s),status:STAT[0],notes:"",ts:Date.now()};db[k]={...old,d:s,dueDate:d,reminderTask:task,reminderDone:false,reminderUpdatedAt:Date.now()};save("gs_db",db);if(!wasSaved)recordActivity("analysiert");$("#reminderPanel").classList.remove("open");render();refreshReminderBanner();toast("Wiedervorlage für "+s.name+" gespeichert.")});
+$("#goDueReminders").addEventListener("click",()=>{tab="reminder_due";cityF="";$("#cityF").value="";activatePage("page2");render()});
 
 /* ---------- Ergebnisse ---------- */
 function filtered(){let a=Object.entries(db).map(([k,v])=>({k,...v})).sort((x,y)=>y.ts-x.ts);
   if(cityF)a=a.filter(x=>x.d.stadt===cityF);
+  if(tab==="reminder_due")return a.filter(x=>reminderState(x)==="due");
+  if(tab==="reminder_planned")return a.filter(x=>reminderState(x)==="planned");
   return tab=="all"?a:a.filter(x=>x.cat==+tab)}
+function makeFollowupText(x){const d=x.d||{},name=d.name||"Ihnen",task=x.reminderTask||"unseren letzten Austausch";const demo=String(load("gs_demo","")||"").trim();return `Guten Tag liebes Team von ${name},\n\nich wollte mich freundlich noch einmal bei Ihnen melden. Ich hatte mir notiert: ${task}.\n\nFalls es für Sie weiterhin interessant ist, können Sie sich die vorbereitete Demo hier ganz in Ruhe ansehen${demo?":\n"+demo:"."}\n\nWenn Sie Fragen oder Änderungswünsche haben, freue ich mich über eine kurze Rückmeldung. Ganz unverbindlich natürlich.\n\nViele Grüße\n${String(load("gs_script_name","[Ihr Name]")||"[Ihr Name]").trim()}`}
+function openSavedSalon(k){const rec=db[k];if(!rec||!rec.d)return;const city=rec.d.stadt,cache=load("gs_salon_rows",{});if(Array.isArray(cache[city])){setSalons(cache[city],city);const found=salons.findIndex(x=>key(x)===k);if(found>=0)idx=found;else{salons=[rec.d];idx=0}}else{salons=[rec.d];idx=0;activeCityLoaded=city}$("#city").value=city;save("gs_last_selection",{city,index:idx,name:salons[idx]?.name||""});renderSalonSelect();upd();renderScripts();activatePage("page1");setWorkspaceMode("chat",false)}
 function render(){
-  renderStats();const cs=[...new Set(Object.values(db).map(x=>x.d.stadt))].sort((a,b)=>a.localeCompare(b,"de"));
+  renderStats();renderProgress();if(typeof renderGlobalChatHistory==="function")renderGlobalChatHistory();const cs=[...new Set(Object.values(db).map(x=>x.d.stadt))].sort((a,b)=>a.localeCompare(b,"de"));
   if(cityF&&!cs.includes(cityF))cityF="";
   $("#cityF").innerHTML='<option value="">Alle Städte</option>'+cs.map(c=>`<option value="${esc(c)}"${c===cityF?" selected":""}>${esc(c)}</option>`).join("");
   const all=Object.values(db).filter(x=>!cityF||x.d.stadt===cityF),cnt=i=>all.filter(x=>x.cat==i).length;
-  const navSalons=nav.querySelector('[data-page="page2"]');if(navSalons)navSalons.textContent="Analysierte Salons ("+Object.keys(db).length+")";
-  $("#tabs").innerHTML=[["all","Alle analysierten",all.length]].concat(CATS.map((c,i)=>[String(i),c,cnt(i)]))
-    .map(([id,l,n])=>`<button class="tab${tab==id?" on":""}" data-t="${id}">${l}<i>${n}</i></button>`).join("");
+  const navSalons=nav.querySelector('[data-page="page2"]');if(navSalons)navSalons.textContent="Gespeicherte Salons ("+Object.keys(db).length+")";
+  const rc=reminderCounts();
+  $("#tabs").innerHTML=[["all","Alle analysierten",all.length]].concat(CATS.map((c,i)=>[String(i),c,cnt(i)]),[["reminder_due","⏰ Heute / Überfällig fällig",rc.due],["reminder_planned","📅 Geplante Wiedervorlagen",rc.planned]])
+    .map(([id,l,n])=>`<button class="tab${tab==id?" on":""}${String(id).startsWith("reminder_")?" reminder-filter":""}" data-t="${id}">${l}<i>${n}</i></button>`).join("");
   const f=filtered();
   $("#list").innerHTML=f.length?f.map(x=>{const d=x.d,L=(u,t)=>u?`<a href="${esc(safeUrl(u))}" target="_blank" rel="noopener noreferrer">${t}</a>`:"";
     return`<div class="item"><div><h3>${esc(d.name)} <span class="badge b${x.cat}">${CATS[x.cat]}</span> <span class="badge s${STAT.indexOf(x.status)}">${esc(x.status)}</span></h3>
     <div class="meta">📍 ${esc(d.stadt)} · ${esc(d.adresse)||"–"}</div><div class="meta">📞 ${esc(d.tel)||"–"}${d.mail?" · ✉ "+esc(d.mail):""}</div>
-    <div class="links">${L(d.web,"Website")}${L(d.ig,"Instagram")}${L(d.fb,"Facebook")}${L(d.gs,"GelbeSeiten")}</div></div>
+    ${selectedAudits(d).length?`<div class="audit-tags" aria-label="Ausgewählte Audit-Mängel">${selectedAudits(d).map(a=>`<span class="audit-tag">${esc(a)}</span>`).join("")}</div>`:""}
+    ${x.dueDate?`<div>${reminderBadge(x)}</div><div class="reminder-task"><strong>Aufgabe:</strong> ${esc(x.reminderTask||"Keine Aufgabe hinterlegt")}</div><div class="reminder-actions"><button type="button" data-reminder-shift="1" data-k="${esc(x.k)}">+1 Tag</button><button type="button" data-reminder-shift="3" data-k="${esc(x.k)}">+3 Tage</button><button type="button" data-reminder-shift="7" data-k="${esc(x.k)}">+7 Tage</button><button type="button" data-reminder-done="${esc(x.k)}">Erledigt</button></div>`:""}
+    <div class="links">${L(d.web,"Website")}${L(d.ig,"Instagram")}${L(d.fb,"Facebook")}${L(d.gs,"GelbeSeiten")}</div>
+    <div class="reminder-actions"><button type="button" data-followup-open="${esc(x.k)}">✉️ Follow-Up Text anzeigen</button></div><div class="reminder-followup" id="followup-${esc(x.k)}"><textarea readonly>${esc(makeFollowupText(x))}</textarea><div class="reminder-actions"><button type="button" data-followup-copy="${esc(x.k)}" class="p">Text kopieren</button><button type="button" data-open-salon="${esc(x.k)}">Zum Salon &amp; KI-Chat</button></div></div></div>
     <div class="side"><select data-k="${esc(x.k)}" data-f="status">${STAT.map(s=>`<option${s==x.status?" selected":""}>${s}</option>`).join("")}</select>
     <input data-k="${esc(x.k)}" data-f="notes" maxlength="200" placeholder="Notizen" value="${esc(x.notes)}">
     <button class="x" data-del="${esc(x.k)}">Analyse entfernen</button></div></div>`}).join("")
     :'<div class="empty">Noch keine Salons in diesem Filter.</div>'}
 $("#cityF").onchange=e=>{cityF=e.target.value;render()};
 $("#tabs").onclick=e=>{const b=e.target.closest("[data-t]");if(b){tab=b.dataset.t;render()}};
-$("#list").addEventListener("change",e=>{const k=e.target.dataset.k;if(k&&db[k]){db[k][e.target.dataset.f]=e.target.value;save("gs_db",db);if(e.target.dataset.f==="status"){render();upd()}}});
+$("#list").addEventListener("change",e=>{const k=e.target.dataset.k;if(k&&db[k]){const field=e.target.dataset.f,previous=db[k][field];db[k][field]=e.target.value;save("gs_db",db);if(field==="status"&&previous!==e.target.value){recordStatusActivity(e.target.value);render();upd()}}});
 $("#list").addEventListener("input",e=>{const k=e.target.dataset.k;if(k&&db[k]&&e.target.dataset.f=="notes"){db[k].notes=e.target.value;save("gs_db",db)}});
-$("#list").onclick=e=>{const k=e.target.dataset.del;if(k&&confirm("Diese Analyse wirklich entfernen?")){delete db[k];save("gs_db",db);render();renderSalonSelect()}};
+$("#list").onclick=async e=>{
+ const del=e.target.dataset.del;if(del&&confirm("Diese Analyse wirklich entfernen?")){delete db[del];save("gs_db",db);render();renderSalonSelect();refreshReminderBanner();return}
+ const shift=e.target.closest("[data-reminder-shift]");if(shift){const k=shift.dataset.k,r=db[k];if(r){r.dueDate=shiftISODate(r.dueDate,+shift.dataset.reminderShift);r.reminderDone=false;save("gs_db",db);render();refreshReminderBanner()}return}
+ const done=e.target.closest("[data-reminder-done]");if(done){const r=db[done.dataset.reminderDone];if(r){r.reminderDone=true;r.reminderCompletedAt=Date.now();save("gs_db",db);render();refreshReminderBanner();toast("Wiedervorlage als erledigt markiert.")}return}
+ const follow=e.target.closest("[data-followup-open]");if(follow){$("#followup-"+CSS.escape(follow.dataset.followupOpen))?.classList.toggle("open");return}
+ const copy=e.target.closest("[data-followup-copy]");if(copy){const area=copy.closest(".reminder-followup")?.querySelector("textarea");if(area){await copyText(area.value);copy.textContent="✓ Kopiert!";setTimeout(()=>copy.textContent="Text kopieren",1600)}return}
+ const open=e.target.closest("[data-open-salon]");if(open){openSavedSalon(open.dataset.openSalon);return}
+};
 
 /* ---------- Export ---------- */
 $("#export").onclick=()=>{
@@ -671,7 +3160,8 @@ function genText(t,x,cat){
   const d=pick(CLOSE[t][toneIndex],Math.floor(seed/19)%5,t==="T"?3:t==="N"?4:1);
   const signature=t==="N"?"\n\nViele Grüße\n{Ihr Name}":t==="B"?"\n\nDemo ansehen: {Demo-Link}\n\nFreundliche Grüße\n{Ihr Name}":"";
   const linkLine=t==="N"?"\n\n":t==="B"?"\n\n":"\n\n";
-  return fill(a+"\n\n"+b+"\n\n"+c+linkLine+d+signature,svars(x));
+  const audit=auditSentence(x);
+  return fill(a+"\n\n"+b+(audit?"\n\n"+audit:"")+"\n\n"+c+linkLine+d+signature,svars(x));
 }
 /* ---------- Interaktiver Einwand-Navigator ---------- */
 const OBJECTIONS=[
@@ -740,6 +3230,35 @@ const OBJECTIONS=[
    three:"Wäre es hilfreich, wenn ich Ihnen den Link zusende, damit Sie ihn zusammen anschauen können?"}
  ]}
 ];
+
+/* Dieselben kurzen Telefonformulierungen werden auf Seite 1 und in Antwort-Hilfe verwendet. */
+const LIVE_PHONE_HELP=[
+ {id:"no-time",label:"⏳ Keine Zeit",title:"Ich habe gerade keine Zeit",prompt:"Der Saloninhaber sagt, dass er gerade keine Zeit hat.",make:(salon,name)=>`Verstehe ich, ${salon}; ich bin ${name} und halte Sie nicht länger auf. Ich habe eine kostenlose Demo vorbereitet, in der Sie später im einfachen Live-Konfigurator selbst auswählen können, was für Ihren Salon sinnvoll ist. Darf ich Ihnen den Link schicken, damit Sie in Ruhe hineinschauen können?`},
+ {id:"no-website",label:"🌐 Brauchen keine Website",title:"Wir brauchen keine Website",prompt:"Der Saloninhaber sagt, dass er keine Website braucht.",make:(salon,name)=>`Das verstehe ich, ${salon}; ich bin ${name}. Die kostenlose Demo zeigt unverbindlich, was möglich wäre, und im einfachen Live-Konfigurator wählen Sie selbst nur passende Funktionen aus. Darf ich Ihnen den Link schicken, damit Sie sich selbst ein Bild machen können?`},
+ {id:"too-expensive",label:"💸 Zu teuer",title:"Das ist uns bestimmt zu teuer",prompt:"Der Saloninhaber hält das Angebot für zu teuer.",make:(salon,name)=>`Das kann ich gut verstehen, ${salon}; ich bin ${name}. Zunächst geht es nur um eine kostenlose Demo; im einfachen Live-Konfigurator können Sie unverbindlich den Umfang selbst zusammenstellen. Wäre ein kostenloser Blick darauf für Sie in Ordnung?`},
+ {id:"social-portal",label:"📱 Instagram / Portal reicht",title:"Wir machen alles über Instagram / Facebook",prompt:"Der Saloninhaber sagt, Instagram, Facebook oder ein Portal reiche vollkommen aus.",make:(salon,name)=>`Das ist eine gute Basis, ${salon}; ich bin ${name}. Die kostenlose Demo soll Instagram oder Ihr Portal nicht ersetzen, sondern sinnvoll ergänzen; im einfachen Live-Konfigurator wählen Sie passende Funktionen selbst aus. Darf ich Ihnen den Link schicken?`},
+ {id:"already-have",label:"🤝 Haben schon jemanden",title:"Wir haben schon jemanden für unsere Seite",prompt:"Der Saloninhaber sagt, dass er bereits jemanden für seine Website hat.",make:(salon,name)=>`Das ist gut, ${salon}; ich bin ${name}. Meine kostenlose Demo ist nur eine unverbindliche Vergleichsidee, und im einfachen Live-Konfigurator lässt sich der gewünschte Umfang selbst zusammenstellen. Wäre der Link als Inspiration interessant?`},
+ {id:"send-email",label:"📧 Einfach per Mail schicken",title:"Schicken Sie mir einfach eine E-Mail",prompt:"Der Saloninhaber bittet darum, die Informationen einfach per E-Mail zu schicken.",make:(salon,name)=>`Sehr gern, ${salon}; ich bin ${name}. Ich sende Ihnen den Link zur kostenlosen Demo; darin können Sie den einfachen Live-Konfigurator ausprobieren und selbst passende Funktionen auswählen. An welche E-Mail-Adresse darf ich ihn schicken?`}
+];
+function livePhoneText(config,salon=salons[idx]){
+ const salonName=salon?.name||"Ihren Salon";
+ const savedName=String($("#scriptName")?.value||load("gs_script_name","[Ihr Name]")).trim()||"[Ihr Name]";
+ return config.make(salonName,savedName);
+}
+function renderLivePhoneCard(){
+ const root=$("#livePhoneCard");if(!root)return;
+ if(!activeLiveObjection){root.hidden=true;root.innerHTML="";return}
+ const config=LIVE_PHONE_HELP.find(x=>x.id===activeLiveObjection);if(!config){root.hidden=true;root.innerHTML="";return}
+ root.hidden=false;
+ root.innerHTML=`<div class="live-phone-card-label">Sofort vorlesbare Antwort · ${esc(config.label)}</div><div class="live-phone-card-text">${esc(livePhoneText(config))}</div><div class="live-phone-card-actions"><button type="button" class="live-deepen" data-live-deepen="${esc(config.id)}">💬 Im KI-Chat vertiefen</button><button type="button" class="live-close" data-live-close>✕ Schließen</button></div>`;
+}
+function renderLivePhoneHelp(){
+ const root=$("#livePhoneHelp");if(!root)return;
+ root.innerHTML=`<div class="live-phone-title">⚡ Live-Telefon-Hilfe (Sofort-Antworten)</div><div class="live-phone-buttons">${LIVE_PHONE_HELP.map(x=>`<button type="button" data-live-objection="${x.id}" class="${activeLiveObjection===x.id?"active":""}">${esc(x.label)}</button>`).join("")}</div><div id="livePhoneCard" class="live-phone-card" hidden></div>`;
+ renderLivePhoneCard();
+}
+function closeLivePhoneHelp(){activeLiveObjection=null;renderLivePhoneHelp()}
+
 function objectionVars(){
  const x=idx>=0&&salons[idx]?salons[idx]:{name:"Ihr Salon",adresse:"",stadt:$("#city")?.value||""};
  const v=svars(x);
@@ -752,7 +3271,9 @@ function renderObjection(){
  choices.innerHTML=OBJECTIONS.map((o,i)=>`<button type="button" class="objection-choice${i===objectionSelected?" selected":""}" data-objection="${i}" aria-pressed="${i===objectionSelected}"><span class="objection-number">${String(i+1).padStart(2,"0")}</span><span>${esc(o.title)}</span></button>`).join("");
  const o=OBJECTIONS[objectionSelected],v=o.variants[objectionVariant%o.variants.length],vars=objectionVars();
  const full=`${o.title}\n\nSchritt 1: Verständnis zeigen (Druck rausnehmen)\n${fill(v.one,vars)}\n\nSchritt 2: Deine Antwort (Demo + einfacher Konfigurator)\n${fill(v.two,vars)}\n\nSchritt 3: Abschlussfrage (Ziel: Demo-Link senden)\n${fill(v.three,vars)}\n\nViele Grüße\n${vars["Ihr Name"]}`;
+ const sharedLive=LIVE_PHONE_HELP.find(x=>x.title===o.title);
  detail.innerHTML=`<div class="objection-detail-head"><div><span class="meta">AUSGEWÄHLTER EINWAND</span><h3>${esc(o.title)}</h3></div><span class="variant-count">Variante ${objectionVariant+1} / ${o.variants.length}</span></div>
+  ${sharedLive?`<div class="live-shared-answer"><strong>⚡ Sofort-Antwort wie auf Seite 1</strong><p>${esc(livePhoneText(sharedLive))}</p></div>`:""}
   <div class="objection-step"><div class="step-label">SCHRITT 1</div><h4>Verständnis zeigen (Druck rausnehmen)</h4><p>${esc(fill(v.one,vars))}</p></div>
   <div class="objection-step"><div class="step-label">SCHRITT 2</div><h4>Deine Antwort (Demo + einfacher Konfigurator)</h4><p>${esc(fill(v.two,vars))}</p></div>
   <div class="objection-step"><div class="step-label">SCHRITT 3</div><h4>Abschlussfrage (Ziel: Demo-Link senden)</h4><p>${esc(fill(v.three,vars))}</p></div>
@@ -770,21 +3291,354 @@ renderObjection();
 
 function fit(t){t.style.height="auto";t.style.height=(t.scrollHeight+2)+"px"}
 function fitAll(){document.querySelectorAll("#scripts textarea").forEach(fit)}
-function renderStats(){const a=Object.values(db),c=k=>a.filter(x=>x.status===k).length;
+
+/* ---------- KI: Salonkontext, mehrere Anbieter, Skriptgenerator und Chat ---------- */
+ const GROQ_MODELS=["openai/gpt-oss-120b","openai/gpt-oss-20b"];
+ const PROVIDERS=["groq","gemini","openrouter"];
+ const PROVIDER_LABELS={groq:"Groq",gemini:"Google Gemini",openrouter:"OpenRouter"};
+ const PROVIDER_KEYS={groq:"gs_groq_key",gemini:"gs_gemini_key",openrouter:"gs_openrouter_key"};
+ let aiBusy=false,workspaceMode=load("gs_workspace_mode","manual");
+ function selectedSalonData(){
+   if(idx<0||!salons[idx])throw new Error("Bitte zuerst einen Salon auswählen.");
+   const x=salons[idx],r=db[key(x)]||null,v=svars(x),observations=load("gs_ai_observations",{});
+   const statusIndex=r&&Number.isInteger(+r.cat)?+r.cat:classify(x);
+   return {salonname:x.name||"",typ:x.typ||"",adresse_vollstaendig:x.adresse||"",strasse:v["Straße"]||"",ort:v.Ort||x.stadt||"",telefonnummer:x.tel||"",website_url:x.web||"",website_status:CATS[statusIndex]||"Nicht bestimmt",website_status_manuell_korrigiert:!!(r&&r.manualCat),gelbeseiten_link:x.gs||"",email:x.mail||"",facebook_url:x.fb||"",instagram_url:x.ig||"",eigene_beobachtung:observations[key(x)]||"",audit_maengel:selectedAudits(x),salon_notizen:r?.notes||"",ansprechpartner_name:$("#scriptName")?.value.trim()||"[Ihr Name]",demo_und_konfigurator_link:$("#demo")?.value.trim()||""};
+ }
+  const AI_PERSONALITIES={
+    direct:"Kurz, klar, ohne Umwege auf den Punkt kommen, selbstsicher aber höflich.",
+    friendly:"Sympathisch, entspannt, auf Augenhöhe wie ein netter Kollege.",
+    cautious:"Sehr respektvoll, ruhig, null Verkaufsdruck, betont mehrfach, dass alles völlig unverbindlich ist und man nicht stören möchte.",
+    adaptive:"Passt sich der Situation an, stellt offene Fragen und geht behutsam auf den Inhaber ein."
+  };
+  function aiSystemPrompt(data){
+    const personality=$("#aiPersonality")?.value||load("gs_ai_personality","direct");
+    const behavior=AI_PERSONALITIES[personality]||AI_PERSONALITIES.direct;
+    return `Du bist ein erfahrener, respektvoller deutschsprachiger Akquise- und Verkaufscoach für Friseursalons in Deutschland.
+ Analysiere vor jeder Antwort alle übergebenen Salon-Daten. Verwende ausschließlich ausdrücklich vorhandene Fakten. Erfinde keine Eigenschaften, Öffnungszeiten, Preise, Leistungen, Bewertungen, Probleme oder technischen Details. Unbekanntes weglassen oder neutral formulieren.
+ AUDIT-HINWEISE: Wenn im Feld audit_maengel konkrete Punkte aufgeführt sind, sprich diese passend zum gewählten Kanal natürlich und konkret an. Nenne ausschließlich tatsächlich ausgewählte Punkte, erfinde keine zusätzlichen Mängel und stelle sie nicht als technisch geprüfte Tatsachen dar. Wenn audit_maengel leer ist, erwähne keine Audit-Mängel.
+ Beziehe natürlich ein, dass eine kostenlose Demo-Webseite vorbereitet wurde, und erkläre den einfachen Live-Konfigurator: Der Saloninhaber kann per Klick gewünschte Bausteine wie Preisliste, WhatsApp-Terminbutton, Öffnungszeiten oder Galerie auswählen und nicht benötigte abwählen. Das sind Beispiele, keine bestätigten Saloninformationen.
+ Schreibe ausschließlich Deutsch, natürlich, konkret und ohne Druck- oder Täuschungstaktiken.
+ STRIKTE KANAL-TRENNUNG: Wenn der Nutzer einen Kanal wählt (Nur Telefon, Nur WhatsApp/IG, Nur E-Mail oder Nur Vor-Ort), schreibe AUSSCHLIESSLICH den Text für diesen einen Kanal! Gib niemals mehrere Kanäle gleichzeitig aus. Bei „Nur Telefon“ nur gesprochenen Dialog, bei „Nur WhatsApp / IG“ nur eine kurze Smartphone-Nachricht ohne Betreff, bei „Nur E-Mail“ zuerst „Betreff: ...“ und darunter den E-Mail-Text, bei „Nur Vor-Ort / Brief“ nur einen kurzen 15-Sekunden-Einstieg. Verwende weiterhin KEINE Markdown-Sternchen (**).
+ Gewählter KI-Gesprächsstil und verbindliche Verhaltensanweisung: ${behavior}
+ Verwende NIEMALS Markdown-Formatierungen wie **fett**, ### Überschriften oder Sternchen (*). Schreibe ausschließlich sauberen Klartext mit normalen Absätzen, damit der Text direkt in WhatsApp oder E-Mail kopiert werden kann.
+ Aktuelle Salon-Daten:
+ ${JSON.stringify(data,null,2)}`;
+  }
+  function cleanAIText(value){
+    return String(value??"").replace(/\*{1,2}/g,"").replace(/^\s*#{1,6}\s*/gm,"").trim();
+  }
+function readProviderKey(provider){
+   const id={groq:"groqKey",gemini:"geminiKey",openrouter:"openrouterKey"}[provider],field=$("#"+id),typed=String(field?.value??"").trim();
+   try{if(typed){localStorage.setItem(PROVIDER_KEYS[provider],typed);return typed;}return String(localStorage.getItem(PROVIDER_KEYS[provider])||"").trim();}catch(e){return typed;}
+ }
+ function providerPreference(){const v=$("#preferredProvider")?.value||load("gs_preferred_provider","auto");return ["auto",...PROVIDERS].includes(v)?v:"auto"}
+ function providerOrder(){const pref=providerPreference();return (pref==="auto"?PROVIDERS:[pref]).filter(p=>readProviderKey(p))}
+ function groqModel(){let m=GROQ_MODELS[0];try{m=String(localStorage.getItem("gs_groq_model")||GROQ_MODELS[0])}catch(e){}return GROQ_MODELS.includes(m)?m:GROQ_MODELS[0]}
+ async function providerRequest(provider,apiKey,messages,opts={}){
+   let response,body;
+   if(provider==="groq"){
+     const selected=groqModel(),models=[selected,...GROQ_MODELS.filter(x=>x!==selected)];let last;
+     for(const model of models){
+       try{response=await fetch("https://api.groq.com/openai/v1/chat/completions",{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+apiKey},body:JSON.stringify({model,messages,temperature:opts.temperature??0.7,max_tokens:opts.max_tokens??1000,...(opts.json?{response_format:{type:"json_object"}}:{})})})}
+       catch(err){throw new Error("Netzwerkfehler bei Groq: "+(err.message||String(err)))}
+       body=await response.json().catch(()=>null);
+       if(response.status===429){last=new Error("Groq HTTP 429: "+(body?.error?.message||"Nutzungslimit erreicht"));continue}
+       if(!response.ok)throw new Error("Groq HTTP "+response.status+": "+(body?.error?.message||response.statusText));
+       const content=body?.choices?.[0]?.message?.content;if(!content)throw new Error("Groq hat keine Textantwort zurückgegeben.");return {content,provider,model};
+     }
+     throw last||new Error("Kein Groq-Modell verfügbar.");
+   }
+   if(provider==="gemini"){
+     const prompt=messages.map(m=>(m.role==="system"?"Systemvorgabe":m.role==="assistant"?"Assistent":"Nutzer")+":\n"+m.content).join("\n\n");
+     try{response=await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key="+encodeURIComponent(apiKey),{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({contents:[{parts:[{text:prompt}]}],generationConfig:{temperature:opts.temperature??0.7,maxOutputTokens:opts.max_tokens??1000,...(opts.json?{responseMimeType:"application/json"}:{})}})})}
+     catch(err){throw new Error("Netzwerkfehler bei Gemini: "+(err.message||String(err)))}
+     body=await response.json().catch(()=>null);if(!response.ok)throw new Error("Gemini HTTP "+response.status+": "+(body?.error?.message||response.statusText));
+     const content=body?.candidates?.[0]?.content?.parts?.map(p=>p.text||"").join("");if(!content)throw new Error("Gemini hat keine Textantwort zurückgegeben.");return {content,provider,model:"gemini-2.5-flash"};
+   }
+   try{response=await fetch("https://openrouter.ai/api/v1/chat/completions",{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+apiKey,"HTTP-Referer":location.href,"X-Title":"Salon-Manager"},body:JSON.stringify({model:"meta-llama/llama-3.3-70b-instruct:free",messages,temperature:opts.temperature??0.7,max_tokens:opts.max_tokens??1000,...(opts.json?{response_format:{type:"json_object"}}:{})})})}
+   catch(err){throw new Error("Netzwerkfehler bei OpenRouter: "+(err.message||String(err)))}
+   body=await response.json().catch(()=>null);if(!response.ok)throw new Error("OpenRouter HTTP "+response.status+": "+(body?.error?.message||response.statusText));
+   const content=body?.choices?.[0]?.message?.content;if(!content)throw new Error("OpenRouter hat keine Textantwort zurückgegeben.");return {content,provider,model:body?.model||"meta-llama/llama-3.3-70b-instruct:free"};
+ }
+ async function aiRequest(messages,opts={}){
+   const order=providerOrder();if(!order.length)throw new Error("Bitte mindestens einen API-Key auf Seite 4 eintragen und speichern.");
+   const errors=[];
+   for(const provider of order){try{return await providerRequest(provider,readProviderKey(provider),messages,opts)}catch(err){errors.push(PROVIDER_LABELS[provider]+": "+err.message);if(providerPreference()!=="auto")throw err;}}
+   throw new Error("Alle hinterlegten KI-Anbieter sind fehlgeschlagen. "+errors.join(" | "));
+ }
+ function setAiStatus(message,type=""){const el=$("#groqTestStatus");if(el){el.textContent=message;el.className="ai-status"+(type?" "+type:"")}}
+ async function testGroqConnection(){
+   const order=providerOrder();if(!order.length){setAiStatus("Bitte mindestens einen API-Key eingeben.","err");return}
+   const b=$("#testGroq");b.disabled=true;b.textContent="Teste Verbindung …";setAiStatus("Die eingetragenen Schlüssel werden geprüft …");const errors=[];let successes=0;
+   try{
+     for(const provider of order){try{const result=await providerRequest(provider,readProviderKey(provider),[{role:"system",content:"Antworte kurz und ausschließlich auf Deutsch."},{role:"user",content:"Schreibe exakt: Verbindung funktioniert."}],{max_tokens:40});successes++;setAiStatus("Verbindung erfolgreich: "+PROVIDER_LABELS[provider]+" ("+result.model+").","ok");}
+       catch(err){errors.push(PROVIDER_LABELS[provider]+": "+err.message);if(providerPreference()!=="auto")throw err;}}
+     if(!successes)throw new Error(errors.join(" | "));
+     if(errors.length)setAiStatus(successes+" Anbieter erfolgreich. Andere Fehler: "+errors.join(" | "),"ok");else setAiStatus(successes+" Anbieter erfolgreich getestet.","ok");
+   }catch(err){setAiStatus(err.message,"err")}finally{b.disabled=false;b.textContent="Verbindung testen"}
+ }
+function chatStore(){return load("gs_ai_chats",{})}
+  const QUICK_PROMPTS=[
+   ["🔍 3-Punkte-Check vor Anruf","Prüfe die Salon-Daten und fasse in genau 3 kurzen Punkten zusammen, welche konkreten Informationen oder digitalen Bausteine dem Salon fehlen könnten. Unterscheide bestätigte Fakten von Vermutungen."],
+   ["⚙️ Konfigurator-Empfehlung","Empfiehl genau 2–3 passende Bausteine aus dem Live-Konfigurator für diesen Salon. Begründe jeden Vorschlag ausschließlich anhand der vorhandenen Salon-Daten und kennzeichne Annahmen."],
+   ["🔄 Follow-Up nach 3 Tagen","Formuliere eine freundliche, kurze Nachfrage drei Tage nach dem Versand des Demo-Links. Ohne Druck und mit einer einfachen Rückfrage."],
+   ["🛡️ Einwand / Ablehnung kontern","Hilf mir, auf den letzten Einwand oder die letzte Ablehnung des Salons respektvoll und überzeugend zu antworten. Wenn noch kein Einwand vorliegt, frage danach."]
+  ];
+  const START_ACTIONS=[
+   ["📞 Nur Telefon","Der Nutzer wählt ausdrücklich den Kanal Nur Telefon. Erstelle ausschließlich einen natürlichen, gesprochenen Telefon-Dialog für diesen Salon. Keine WhatsApp-Nachricht, keine E-Mail und keine Vor-Ort-Ansprache."],
+   ["💬 Nur WhatsApp / IG","Der Nutzer wählt ausdrücklich den Kanal Nur WhatsApp / IG. Erstelle ausschließlich eine kurze, natürliche Smartphone-Direktnachricht für WhatsApp oder Instagram ohne Betreff. Keine Telefon- oder E-Mail-Texte und keine Vor-Ort-Ansprache."],
+   ["✉️ Nur E-Mail","Der Nutzer wählt ausdrücklich den Kanal Nur E-Mail. Erstelle ausschließlich eine E-Mail. Beginne mit „Betreff: ...“ und schreibe darunter den E-Mail-Text. Keine Telefon-, WhatsApp- oder Vor-Ort-Texte."],
+   ["🚶 Nur Vor-Ort / Brief","Der Nutzer wählt ausdrücklich den Kanal Nur Vor-Ort / Brief. Erstelle ausschließlich einen kurzen, natürlich gesprochenen 15-Sekunden-Einstieg für einen Vor-Ort-Besuch oder eine kurze Übergabe. Keine Telefon-, WhatsApp- oder E-Mail-Texte."],
+   ["🔍 Erstmal 3-Punkte-Check","Erstelle zuerst einen präzisen 3-Punkte-Check dieses Salons. Nenne konkrete Chancen und fehlende Informationen, trenne Fakten klar von Annahmen und leite daraus sinnvolle nächste Schritte ab."]
+  ];
+  function newChatId(){return "chat_"+Date.now().toString(36)+"_"+Math.random().toString(36).slice(2,8)}
+  function sessionSalonMeta(session,salon){
+    if(!salon)return session;
+    delete session.title;
+    session.salonName=salon.name||"";
+    session.city=salon.stadt||"";
+    session.salonIndex=salons.findIndex(x=>key(x)===key(salon));
+    session.salonAddress=salon.adresse||"";
+    session.salonKey=key(salon);
+    if(!session.createdAt)session.createdAt=session.messages?.[0]?.ts||Date.now();
+    if(!Array.isArray(session.messages))session.messages=[];
+    return session;
+  }
+  function salonChatState(sk,salon=salons[idx]){
+    const all=chatStore();let st=all[sk];
+    if(Array.isArray(st)){
+      const old={id:newChatId(),createdAt:st[0]?.ts||Date.now(),messages:st};
+      sessionSalonMeta(old,salon);
+      st={sessions:st.length?[old]:[],activeId:st.length?old.id:""};
+    }
+    if(!st||!Array.isArray(st.sessions))st={sessions:[],activeId:""};
+    st.sessions=st.sessions.map(x=>sessionSalonMeta(x,salon));
+    if(!st.sessions.length){
+      const x=sessionSalonMeta({id:newChatId(),createdAt:Date.now(),messages:[]},salon);
+      st.sessions=[x];st.activeId=x.id;
+    }
+    let session=st.sessions.find(x=>x.id===st.activeId);
+    if(!session){session=st.sessions[0];st.activeId=session.id}
+    all[sk]=st;save("gs_ai_chats",all);return {state:st,session};
+  }
+  function saveSalonChatState(sk,st,salon=salons[idx]){
+    if(salon&&Array.isArray(st?.sessions))st.sessions.forEach(x=>sessionSalonMeta(x,salon));
+    const all=chatStore();all[sk]=st;save("gs_ai_chats",all);if($("#page5")?.classList.contains("active"))renderGlobalChatHistory();else{const navButton=nav.querySelector('[data-page="page5"]');if(navButton)navButton.textContent=`Chat-Verlauf (${globalChatEntries().length})`}
+  }
+  function globalChatEntries(){
+    const all=chatStore(),out=[];let migrated=false;
+    Object.entries(all).forEach(([sk,raw])=>{
+      if(Array.isArray(raw)){
+        const parts=String(sk).split("|");
+        const legacy={id:"legacy_"+encodeURIComponent(sk),createdAt:raw[0]?.ts||Date.now(),salonName:parts[1]||"Unbekannter Salon",city:parts[0]||"Unbekannte Stadt",salonAddress:parts.slice(2).join("|"),salonKey:sk,messages:raw};
+        all[sk]={sessions:raw.length?[legacy]:[],activeId:raw.length?legacy.id:""};migrated=true;
+      }
+      const sessions=Array.isArray(all[sk]?.sessions)?all[sk].sessions:[];
+      sessions.forEach(session=>{
+        if(!session||!Array.isArray(session.messages))return;
+        const parts=String(sk).split("|");
+        const salonName=session.salonName||parts[1]||"Unbekannter Salon";
+        const city=session.city||parts[0]||"Unbekannte Stadt";
+        out.push({sk,session,salonName,city,salonAddress:session.salonAddress||parts.slice(2).join("|")||"",createdAt:Number(session.createdAt)||Number(session.messages[0]?.ts)||0,messageCount:session.messages.length});
+      });
+    });
+    if(migrated)save("gs_ai_chats",all);
+    return out.sort((a,b)=>b.createdAt-a.createdAt);
+  }
+  function renderGlobalChatHistory(){
+    const entries=globalChatEntries(),cityInput=$("#chatHistoryCity"),salonInput=$("#chatHistorySalon");
+    if(!cityInput||!salonInput)return;
+    const citiesForChats=[...new Set(entries.map(x=>x.city).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"de"));
+    const salonsForChats=[...new Set(entries.map(x=>x.salonName).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"de"));
+    $("#chatHistoryCities").innerHTML=citiesForChats.map(x=>`<option value="${esc(x)}"></option>`).join("");
+    $("#chatHistorySalons").innerHTML=salonsForChats.map(x=>`<option value="${esc(x)}"></option>`).join("");
+    const navButton=nav.querySelector('[data-page="page5"]');if(navButton)navButton.textContent=`Chat-Verlauf (${entries.length})`;
+    $("#chatHistoryTotal").textContent=entries.length+` gespeicherte ${entries.length===1?"Unterhaltung":"Unterhaltungen"}`;
+    const cityQuery=cityInput.value.trim().toLocaleLowerCase("de-DE"),salonQuery=salonInput.value.trim().toLocaleLowerCase("de-DE");
+    const filteredEntries=entries.filter(x=>(!cityQuery||x.city.toLocaleLowerCase("de-DE").includes(cityQuery))&&(!salonQuery||x.salonName.toLocaleLowerCase("de-DE").includes(salonQuery)));
+    if(!filteredEntries.some(x=>x.sk+"::"+x.session.id===selectedGlobalChatId))selectedGlobalChatId=filteredEntries[0]?filteredEntries[0].sk+"::"+filteredEntries[0].session.id:"";
+    const list=$("#chatHistoryList");
+    list.innerHTML=filteredEntries.length?filteredEntries.map(x=>{
+      const id=x.sk+"::"+x.session.id,dt=x.createdAt?new Date(x.createdAt).toLocaleString("de-DE",{day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"}):"Datum unbekannt";
+      return `<div class="chat-history-card${id===selectedGlobalChatId?" selected":""}" data-global-chat="${esc(id)}" role="button" tabindex="0"><div class="chat-history-card-head"><strong>${esc(x.salonName)}</strong><span class="chat-history-city">${esc(x.city)}</span></div><div class="chat-history-meta">${dt} · ${x.messageCount} ${x.messageCount===1?"Nachricht":"Nachrichten"}</div><div class="chat-history-actions"><button type="button" class="go-chat" data-open-global-chat="${esc(id)}">💬 Zum Salon &amp; Chat</button><button type="button" class="delete-chat" data-delete-global-chat="${esc(id)}">🗑️ Löschen</button></div></div>`;
+    }).join(""):'<div class="empty">Keine gespeicherten Chats für diese Filter gefunden.</div>';
+    const selected=filteredEntries.find(x=>x.sk+"::"+x.session.id===selectedGlobalChatId),detail=$("#chatHistoryDetail");
+    if(!selected){detail.innerHTML='<div class="ph">Wähle links einen Chat-Verlauf aus, um alle Nachrichten anzuzeigen.</div>';return}
+    const dt=selected.createdAt?new Date(selected.createdAt).toLocaleString("de-DE",{day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"}):"Datum unbekannt";
+    detail.innerHTML=`<section class="card"><div class="shead"><div><h2>${esc(selected.salonName)} <span class="chat-history-city">${esc(selected.city)}</span></h2><div class="meta">${dt} · ${selected.messageCount} Nachrichten</div></div></div><div class="chat-history-messages">${selected.session.messages.map((m,i)=>`<div class="chat-history-message ${m.role==="user"?"user":"assistant"}"><div class="chat-history-message-top"><span>${m.role==="user"?"Deine Nachricht":"KI-Antwort"}${m.ts?" · "+new Date(m.ts).toLocaleString("de-DE",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"}):""}</span><button type="button" data-copy-global-message="${i}">📋 Text kopieren</button></div><div>${esc(cleanAIText(m.content))}</div></div>`).join("")}</div></section>`;
+  }
+  function splitGlobalChatId(id){const pos=String(id).lastIndexOf("::");return pos<0?null:{sk:id.slice(0,pos),sessionId:id.slice(pos+2)}}
+  async function openGlobalChat(id){
+    const parsed=splitGlobalChatId(id);if(!parsed)return;
+    const all=chatStore(),st=all[parsed.sk];if(!st||!Array.isArray(st.sessions))return toast("Dieser Chat ist nicht mehr vorhanden.",1);
+    const session=st.sessions.find(x=>x.id===parsed.sessionId);if(!session)return toast("Dieser Chat ist nicht mehr vorhanden.",1);
+    const metaCity=session.city||parsed.sk.split("|")[0],metaName=session.salonName||parsed.sk.split("|")[1],metaAddress=session.salonAddress||parsed.sk.split("|").slice(2).join("|");
+    const cache=load("gs_salon_rows",{});let rows=cache[metaCity];
+    if(!rows){const cityRecord=cities.find(x=>x.stadt.toLocaleLowerCase("de-DE")===metaCity.toLocaleLowerCase("de-DE"));if(cityRecord?.url){try{rows=await fetchCity(cityRecord.url)}catch(err){return toast("Salondaten konnten nicht geladen werden: "+err.message,1)}}}
+    if(!rows)return toast("Für diese Stadt sind keine gespeicherten Salondaten verfügbar. Bitte lade zuerst die passende Städte-CSV.",1);
+    $("#city").value=metaCity;activeCityLoaded=metaCity;setSalons(rows,metaCity);
+    let salonIndex=salons.findIndex(x=>key(x)===parsed.sk);
+    if(salonIndex<0)salonIndex=salons.findIndex(x=>x.name===metaName&&(!metaAddress||x.adresse===metaAddress));
+    if(salonIndex<0&&Number.isInteger(session.salonIndex)&&salons[session.salonIndex])salonIndex=session.salonIndex;
+    if(salonIndex<0)return toast("Der gespeicherte Salon wurde in den geladenen Stadtdaten nicht gefunden.",1);
+    idx=salonIndex;save("gs_last_selection",{city:metaCity,index:idx,name:salons[idx].name});
+    const current=salonChatState(parsed.sk,salons[idx]);current.state.activeId=parsed.sessionId;saveSalonChatState(parsed.sk,current.state,salons[idx]);
+    workspaceMode="chat";save("gs_workspace_mode",workspaceMode);
+    activatePage("page1");renderSalonSelect();upd();renderScripts();setWorkspaceMode("chat",false);
+    $(".right")?.scrollIntoView({behavior:"smooth",block:"start"});
+  }
+  function deleteGlobalChat(id){
+    const parsed=splitGlobalChatId(id);if(!parsed)return;
+    if(!confirm("Diesen gespeicherten Chat wirklich dauerhaft löschen? Diese Aktion kann nicht rückgängig gemacht werden."))return;
+    const all=chatStore(),st=all[parsed.sk];if(!st||!Array.isArray(st.sessions))return;
+    st.sessions=st.sessions.filter(x=>x.id!==parsed.sessionId);
+    if(!st.sessions.length)delete all[parsed.sk];else if(st.activeId===parsed.sessionId)st.activeId=st.sessions.slice().sort((a,b)=>(b.createdAt||0)-(a.createdAt||0))[0].id;
+    save("gs_ai_chats",all);if(selectedGlobalChatId===id)selectedGlobalChatId="";
+    renderGlobalChatHistory();toast("Chat dauerhaft gelöscht.");
+  }
+  $("#chatHistoryCity").addEventListener("input",renderGlobalChatHistory);
+  $("#chatHistorySalon").addEventListener("input",renderGlobalChatHistory);
+  $("#clearChatHistoryCity").addEventListener("click",()=>{$("#chatHistoryCity").value="";renderGlobalChatHistory()});
+  $("#clearChatHistorySalon").addEventListener("click",()=>{$("#chatHistorySalon").value="";renderGlobalChatHistory()});
+  $("#chatHistoryList").addEventListener("click",e=>{
+    const open=e.target.closest("[data-open-global-chat]");if(open){openGlobalChat(open.dataset.openGlobalChat);return}
+    const del=e.target.closest("[data-delete-global-chat]");if(del){deleteGlobalChat(del.dataset.deleteGlobalChat);return}
+    const card=e.target.closest("[data-global-chat]");if(card){selectedGlobalChatId=card.dataset.globalChat;renderGlobalChatHistory()}
+  });
+  $("#chatHistoryList").addEventListener("keydown",e=>{const card=e.target.closest("[data-global-chat]");if(card&&(e.key==="Enter"||e.key===" ")){e.preventDefault();selectedGlobalChatId=card.dataset.globalChat;renderGlobalChatHistory()}});
+  $("#chatHistoryDetail").addEventListener("click",async e=>{const b=e.target.closest("[data-copy-global-message]");if(!b)return;const parsed=splitGlobalChatId(selectedGlobalChatId);if(!parsed)return;const st=chatStore()[parsed.sk],session=st?.sessions?.find(x=>x.id===parsed.sessionId),msg=session?.messages?.[+b.dataset.copyGlobalMessage];if(!msg)return;await copyText(cleanAIText(msg.content));b.textContent="✓ Kopiert";setTimeout(()=>{if(b.isConnected)b.textContent="📋 Text kopieren"},1500)});
+  function greeting(s){
+    const v=svars(s),status=CATS[db[key(s)]?.cat??classify(s)]||"Nicht bestimmt";
+    return `Alle Daten für ${s.name} (${v.Ort||s.stadt||"Stadt unbekannt"}) sind geladen. Für welchen Kanal soll ich dir jetzt eine Nachricht erstellen?\n\nSalon: ${s.name}\nOrt: ${v.Ort||s.stadt||"Nicht angegeben"}\nWebsite-Status: ${status}\nWebsite: ${s.web||"Keine Website-Adresse hinterlegt"}`;
+  }
+  function currentSalonChat(){
+    if(!salons.length||idx<0)return null;
+    const salon=salons[idx],sk=key(salon),{state,session}=salonChatState(sk);
+    if(!session.messages.length){session.messages.push({role:"assistant",content:greeting(salon),ts:Date.now(),isGreeting:true});saveSalonChatState(sk,state,salon)}
+    return {salon,sk,state,session};
+  }
+  function sessionLabel(x){
+    const date=new Date(x.createdAt||Date.now()).toLocaleString("de-DE",{day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"});
+    return `${x.salonName||salons[idx]?.name||"Salon"} · ${x.city||salons[idx]?.stadt||"Stadt"} · ${date}`;
+  }
+  function renderAIChat(){
+    const mount=$("#aiChatMount");if(!mount)return;if(!salons.length||idx<0){mount.innerHTML="";return}
+    const c=currentSalonChat(),{salon,state,session}=c,history=session.messages;
+    const sessions=[...state.sessions].sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+    mount.innerHTML=`<section class="ai-chat"><div class="ai-chat-head"><h3>💬 KI-Chat &amp; Assistent</h3><span class="meta">${esc(salon.name)}</span></div>
+    <div class="ai-session-bar"><div class="col"><label for="aiChatHistory">Chat-Verlauf für diesen Salon</label><select id="aiChatHistory">${sessions.map(x=>`<option value="${esc(x.id)}"${x.id===session.id?" selected":""}>${esc(sessionLabel(x))}</option>`).join("")}</select></div><button type="button" class="p" id="newSalonChat">+ Neuer Chat</button><button type="button" id="deleteSalonChat" class="ai-delete-chat">Chat löschen</button></div>
+    <div class="ai-quick">${QUICK_PROMPTS.map((q,i)=>`<button type="button" data-ai-quick="${i}">${esc(q[0])}</button>`).join("")}</div>
+    <div class="ai-messages" id="aiMessages" aria-live="polite">${history.map((m,i)=>m.role==="assistant"?`<div class="ai-msg-wrap"><div class="ai-msg assistant">${esc(cleanAIText(m.content))}</div>${m.isGreeting?`<div class="ai-start-actions">${START_ACTIONS.map((a,j)=>`<button type="button" data-start-action="${j}">${esc(a[0])}</button>`).join("")}</div>`:`<div class="ai-message-actions"><button type="button" data-chat-copy="${i}">📋 Text kopieren</button><button type="button" data-chat-note="${i}">📌 In Salon-Notizen speichern</button></div>`}</div>`:`<div class="ai-msg user">${esc(m.content)}</div>`).join("")}</div>
+    <div class="ai-compose"><textarea id="aiChatInput" rows="4" placeholder="Schreibe hier frei mit der KI oder füge die Antwort des Salons ein..."></textarea><button type="button" class="p" id="aiChatSend">Senden</button></div>
+    <div class="ai-note" id="aiChatStatus">Dieser Chat wird getrennt für ${esc(salon.name)} gespeichert. Vor jeder Nachricht werden die aktuellen Daten dieses Salons mitgesendet.</div></section>`;
+    const box=$("#aiMessages");if(box)box.scrollTop=box.scrollHeight;
+  }
+  async function sendAIChat(prefill){
+    if(aiBusy)return;const input=$("#aiChatInput"),userText=String(prefill??input?.value??"").trim();if(!userText)return;
+    let data;try{data=selectedSalonData()}catch(e){const st=$("#aiChatStatus");if(st)st.textContent=e.message;return}
+    if(!providerOrder().length){const st=$("#aiChatStatus");if(st)st.textContent="Bitte zuerst mindestens einen KI-API-Key in den Einstellungen eintragen.";return}
+    const c=currentSalonChat();if(!c)return;const {sk,state,session}=c;
+    session.messages.push({role:"user",content:userText,ts:Date.now()});
+    saveSalonChatState(sk,state,c.salon);renderAIChat();aiBusy=true;
+    const btn=$("#aiChatSend");if(btn){btn.disabled=true;btn.textContent="Antwortet …"}const st=$("#aiChatStatus");if(st)st.textContent="KI prüft alle aktuellen Salon-Daten und formuliert eine Antwort …";
+    try{
+      const lastSix=session.messages.slice(-6).map(m=>({role:m.role,content:m.content})),result=await aiRequest([{role:"system",content:aiSystemPrompt(data)},...lastSix],{max_tokens:1500,temperature:0.7});
+      if(!salons[idx]||key(salons[idx])!==sk)throw new Error("Salon-Auswahl geändert. Antwort wurde nicht einem anderen Salon zugeordnet.");
+      const fresh=salonChatState(sk,c.salon),target=fresh.state.sessions.find(x=>x.id===session.id);if(!target)throw new Error("Dieser Chat wurde inzwischen gelöscht.");
+      target.messages.push({role:"assistant",content:cleanAIText(result.content),provider:result.provider,ts:Date.now()});saveSalonChatState(sk,fresh.state,c.salon);renderAIChat();const status=$("#aiChatStatus");if(status)status.textContent="Antwort von "+PROVIDER_LABELS[result.provider]+".";
+    }catch(err){const fresh=salonChatState(sk,c.salon),target=fresh.state.sessions.find(x=>x.id===session.id);if(target){target.messages.push({role:"assistant",content:"Fehler: "+err.message,ts:Date.now(),isError:true});saveSalonChatState(sk,fresh.state,c.salon)}renderAIChat()}
+    finally{aiBusy=false;const again=$("#aiChatSend");if(again){again.disabled=false;again.textContent="Senden"}}
+  }
+  function createSalonChat(){
+    if(!salons.length||idx<0)return;const sk=key(salons[idx]),{state}=salonChatState(sk);
+    const salon=salons[idx],now=Date.now();
+    const x=sessionSalonMeta({id:newChatId(),createdAt:now,messages:[{role:"assistant",content:greeting(salon),ts:now,isGreeting:true}]},salon);
+    state.sessions.push(x);state.activeId=x.id;saveSalonChatState(sk,state,salon);renderAIChat();
+  }
+  function deleteSalonChat(){
+    if(!salons.length||idx<0)return;const sk=key(salons[idx]),{state,session}=salonChatState(sk);
+    if(!confirm("Diesen Chat wirklich löschen? Der restliche Chat-Verlauf dieses Salons bleibt erhalten."))return;
+    state.sessions=state.sessions.filter(x=>x.id!==session.id);
+    if(!state.sessions.length){const salon=salons[idx],now=Date.now(),x=sessionSalonMeta({id:newChatId(),createdAt:now,messages:[{role:"assistant",content:greeting(salon),ts:now,isGreeting:true}]},salon);state.sessions=[x];state.activeId=x.id}
+    else state.activeId=state.sessions.slice().sort((a,b)=>(b.createdAt||0)-(a.createdAt||0))[0].id;
+    saveSalonChatState(sk,state,salons[idx]);renderAIChat();toast("Chat gelöscht.");
+  }
+  function setWorkspaceMode(mode,toggle=true){
+    const requested=mode==="chat"?"chat":"manual";
+    workspaceMode=toggle?(workspaceMode===requested?"none":requested):(mode==="chat"||mode==="manual"?mode:"none");
+    save("gs_workspace_mode",workspaceMode);
+    const right=document.querySelector(".right");
+    if(right){right.classList.toggle("chat-mode",workspaceMode==="chat");right.classList.toggle("workspace-empty",workspaceMode==="none");}
+    document.querySelectorAll("[data-workspace-mode]").forEach(b=>b.classList.toggle("active",b.dataset.workspaceMode===workspaceMode));
+  }
+  $("#scripts").addEventListener("click",e=>{const mode=e.target.closest("[data-workspace-mode]");if(mode)setWorkspaceMode(mode.dataset.workspaceMode)});
+$("#aiChatMount").addEventListener("change",e=>{
+    if(e.target.id==="aiChatHistory"&&salons[idx]){const sk=key(salons[idx]),{state}=salonChatState(sk);if(state.sessions.some(x=>x.id===e.target.value)){state.activeId=e.target.value;saveSalonChatState(sk,state);renderAIChat()}}
+  });
+ $("#aiChatMount").addEventListener("click",async e=>{
+    if(e.target.closest("#newSalonChat")){createSalonChat();return}
+    if(e.target.closest("#deleteSalonChat")){deleteSalonChat();return}
+    const start=e.target.closest("[data-start-action]");if(start){sendAIChat(START_ACTIONS[+start.dataset.startAction]?.[1]||"Bitte hilf mir mit diesem Salon.");return}
+    const quick=e.target.closest("[data-ai-quick]");if(quick){sendAIChat(QUICK_PROMPTS[+quick.dataset.aiQuick]?.[1]||"Bitte hilf mir mit diesem Salon.");return}
+    const copy=e.target.closest("[data-chat-copy]");if(copy){const c=currentSalonChat(),item=c?.session.messages[+copy.dataset.chatCopy];if(item){await copyText(cleanAIText(item.content));copy.textContent="✓ Kopiert!";setTimeout(()=>{if(copy.isConnected)copy.textContent="📋 Text kopieren"},1500)}return}
+    const note=e.target.closest("[data-chat-note]");if(note){const c=currentSalonChat(),item=c?.session.messages[+note.dataset.chatNote];if(item){const sk=key(salons[idx]),record=db[sk]||{d:salons[idx],cat:classify(salons[idx]),status:STAT[0],notes:"",ts:Date.now()};record.notes=(record.notes?record.notes+"\n\n":"")+cleanAIText(item.content);db[sk]=record;save("gs_db",db);toast("KI-Antwort in Salon-Notizen gespeichert.");render()}return}
+    if(e.target.closest("#aiChatSend"))sendAIChat();
+  });
+  $("#aiChatMount").addEventListener("keydown",e=>{if(e.target.id==="aiChatInput"&&e.key==="Enter"&&!e.shiftKey){e.preventDefault();sendAIChat()}});
+  function persistProviderKey(provider,value){const v=String(value??"").trim();try{if(v)localStorage.setItem(PROVIDER_KEYS[provider],v);else localStorage.removeItem(PROVIDER_KEYS[provider])}catch(e){}return v}
+ PROVIDERS.forEach(provider=>{
+   const id={groq:"groqKey",gemini:"geminiKey",openrouter:"openrouterKey"}[provider],field=$("#"+id);try{field.value=localStorage.getItem(PROVIDER_KEYS[provider])||""}catch(e){}
+   field.addEventListener("input",e=>persistProviderKey(provider,e.target.value));field.addEventListener("change",e=>persistProviderKey(provider,e.target.value));
+   const toggle=$("#"+({groq:"toggleGroqKey",gemini:"toggleGeminiKey",openrouter:"toggleOpenrouterKey"}[provider]));
+   toggle.addEventListener("click",()=>{const show=field.type==="password";field.type=show?"text":"password";toggle.textContent=show?"Verbergen":"Anzeigen"});
+ });
+ $("#groqModel").value=groqModel();$("#groqModel").addEventListener("change",e=>{if(GROQ_MODELS.includes(e.target.value))localStorage.setItem("gs_groq_model",e.target.value)});
+ $("#preferredProvider").value=load("gs_preferred_provider","auto");$("#preferredProvider").addEventListener("change",e=>save("gs_preferred_provider",e.target.value));
+  $("#aiPersonality").value=load("gs_ai_personality","direct");$("#aiPersonality").addEventListener("change",e=>save("gs_ai_personality",e.target.value));
+ $("#saveProviderKeys").addEventListener("click",()=>{PROVIDERS.forEach(p=>persistProviderKey(p,$("#"+({groq:"groqKey",gemini:"geminiKey",openrouter:"openrouterKey"}[p])).value));const status=$("#providerSaveStatus");status.textContent="Alle eingegebenen Schlüssel wurden gespeichert.";status.className="ai-status ok";const b=$("#saveProviderKeys");b.textContent="Gespeichert!";setTimeout(()=>{if(b.isConnected)b.textContent="Speichern"},1800)});
+ $("#testGroq").addEventListener("click",testGroqConnection);
+ function renderProgress(){
+  const all=activityStore(),today=localISODate(),a=all[today]||{analysiert:0,kontaktiert:0,demos:0,interessiert:0},goal=Math.max(1,Math.min(1000,+load(GOAL_KEY,15)||15));
+  const done=+a.analysiert||0,pct=Math.min(100,Math.round(done/goal*100)),remaining=Math.max(0,goal-done);
+  const navProgress=nav.querySelector('[data-page="page6"]');if(navProgress)navProgress.textContent=`📊 Fortschritt (${done}/${goal})`;
+  const host=$("#progressKpis");if(!host)return;
+  $("#dailyGoal").value=goal;$("#progressHeadline").textContent=`${done} / ${goal}`;
+  $("#progressFill").style.width=pct+"%";$("#progressTrack").setAttribute("aria-valuenow",String(pct));
+  $("#progressMessage").textContent=remaining?`Noch ${remaining} ${remaining===1?"Salon":"Salons"} bis zum Tagesziel!`:(done===goal?"Tagesziel erreicht – stark gemacht!":`Tagesziel übertroffen! ${done-goal} ${done-goal===1?"Salon":"Salons"} mehr als geplant.`);
+  const streak=(()=>{let n=0,d=today;while(all[d]&&Object.values(all[d]).some(v=>+v>0)){n++;d=shiftISODate(d,-1)}return n})();
+  const kpis=[["Heute kontaktiert",a.kontaktiert||0],["Demos gesendet",a.demos||0],["Interessiert / Termine",a.interessiert||0],["Aktive Tage in Folge / Streak",streak]];
+  host.innerHTML=kpis.map(([label,value])=>`<div class="progress-kpi"><b>${+value||0}</b><span>${label}</span></div>`).join("");
+  const days=Array.from({length:7},(_,i)=>shiftISODate(today,i-6)),max=Math.max(1,...days.flatMap(d=>[+(all[d]?.kontaktiert||0),+(all[d]?.demos||0)]));
+  $("#progressChart").innerHTML=days.map(d=>{const c=+(all[d]?.kontaktiert||0),dm=+(all[d]?.demos||0),dayLabel=new Date(d+"T12:00:00").toLocaleDateString("de-DE",{weekday:"short"});return `<div class="progress-day"><div class="progress-bars"><div class="progress-bar contact" title="Kontaktiert: ${c}" style="height:${c?Math.max(3,c/max*100):0}%"></div><div class="progress-bar demo" title="Demos: ${dm}" style="height:${dm?Math.max(3,dm/max*100):0}%"></div></div><strong>${c} / ${dm}</strong><small>${dayLabel}<br>${dateDE(d).slice(0,5)}</small></div>`}).join("");
+ }
+ $("#dailyGoal").addEventListener("change",e=>{const value=Math.max(1,Math.min(1000,Math.floor(+e.target.value||15)));save(GOAL_KEY,value);renderProgress()});
+ function renderStats(){const a=Object.values(db),c=k=>a.filter(x=>x.status===k).length;
   $("#stats").innerHTML=[["Analysiert gesamt",a.length,""],["Zu kontaktieren",c(STAT[0]),"t1"],["Demo gesendet",c(STAT[1]),"t2"],["Angerufen",c(STAT[2]),"t3"]]
    .map(([l,n,k])=>`<div class="st ${k}"><b>${n}</b><span>${l}</span></div>`).join("")}
+let liveHelpSalonKey="";
 function renderScripts(){
   const el=$("#scripts");if(!el)return;
-  if(!salons.length||idx<0){el.innerHTML='<div class="ph">Bitte zuerst einen Salon auswählen – die Skripte werden dann automatisch personalisiert.</div>';return}
+  if(!salons.length||idx<0){activeLiveObjection=null;liveHelpSalonKey="";el.innerHTML='<div class="ph">Bitte zuerst einen Salon auswählen – die Skripte werden dann automatisch personalisiert.</div>';renderAIChat();return}
   const x=salons[idx],r=db[key(x)],cat=r?r.cat:classify(x),v=svars(x);
-  el.innerHTML=`<div class="shead"><div><div class="cn">${esc(x.name)}</div><span class="badge b${cat}">${CATS[cat]}</span>${r?"":' <span class="meta">(noch nicht analysiert)</span>'}</div>
-    <button class="p" data-regen="1">🔄 Andere Formulierung generieren</button></div>
+  if(liveHelpSalonKey!==key(x)){activeLiveObjection=null;liveHelpSalonKey=key(x)}
+  el.innerHTML=`<div class="shead"><div><div class="cn">${esc(x.name)}</div><span class="badge b${cat}">${CATS[cat]}</span>${r?"":' <span class="meta">(noch nicht analysiert)</span>'}</div></div>
+    <div id="livePhoneHelp" class="live-phone-help"></div>
+    <div class="mode-switch"><button type="button" data-workspace-mode="manual">📝 Vorlagen (Manuell)</button><button type="button" data-workspace-mode="chat">💬 KI-Chat &amp; Assistent</button></div>
+    <div class="manual-content"><div class="row" style="margin:8px 0"><button class="p" data-regen="1">🔄 Andere Formulierung generieren</button></div>
     <div class="tones">${TONES.map((t,i)=>`<button class="tone${i===tone?" on":""}" data-tone="${i}">${t}</button>`).join("")}</div>
     <div class="vars">{Name} = ${esc(v.Name)} · {Straße} = ${esc(v["Straße"])||"–"} · {Ort} = ${esc(v.Ort)} · {Website} = ${esc(x.web)||"–"}</div>
-    <div class="scol">${CARDS.map(([t,l])=>`<div class="sc"><h3>${l}</h3><textarea data-t="${t}" spellcheck="false">${esc(genText(t,x,cat))}</textarea><button class="p big" data-copy="1">Text kopieren</button></div>`).join("")}</div>`;
-  fitAll()}
+    <div class="scol">${CARDS.map(([t,l])=>`<div class="sc"><h3>${l}</h3><textarea data-t="${t}" spellcheck="false">${esc(genText(t,x,cat))}</textarea><button class="p big" data-copy="1">Text kopieren</button></div>`).join("")}</div></div>`;
+  renderLivePhoneHelp();fitAll();renderAIChat();setWorkspaceMode(workspaceMode,false)
+}
 async function copyText(t){try{await navigator.clipboard.writeText(t)}catch(e){const a=document.createElement("textarea");a.value=t;document.body.appendChild(a);a.select();try{document.execCommand("copy")}catch(_){}a.remove()}}
 $("#scripts").addEventListener("click",async e=>{
+  const liveChoice=e.target.closest("[data-live-objection]");
+  if(liveChoice){const id=liveChoice.dataset.liveObjection;activeLiveObjection=activeLiveObjection===id?null:id;renderLivePhoneHelp();return}
+  if(e.target.closest("[data-live-close]")){closeLivePhoneHelp();return}
+  const deepen=e.target.closest("[data-live-deepen]");
+  if(deepen){const config=LIVE_PHONE_HELP.find(x=>x.id===deepen.dataset.liveDeepen);if(config&&salons[idx]){const prompt=`${config.prompt}
+
+Bitte formuliere eine respektvolle, natürliche und kurze gesprochene Telefonantwort für ${salons[idx].name}. Verwende meinen gespeicherten Namen (${String($("#scriptName")?.value||"[Ihr Name]").trim()}) sowie die kostenlose Demo und den einfachen Live-Konfigurator. Maximal 2–3 kurze Sätze, ausschließlich Deutsch, ohne Markdown und ohne andere Kanäle.`;setWorkspaceMode("chat",false);sendAIChat(prompt)}return}
   const tb=e.target.closest("[data-tone]");if(tb){tone=+tb.dataset.tone;save("gs_tone",String(tone));renderScripts();return}
   if(e.target.closest("[data-regen]")){vb++;renderScripts();return}
   const b=e.target.closest("[data-copy]");if(!b)return;
@@ -792,18 +3646,33 @@ $("#scripts").addEventListener("click",async e=>{
   b.textContent="✓ Kopiert!";b.classList.add("ok");
   setTimeout(()=>{b.textContent="Text kopieren";b.classList.remove("ok")},1800)});
 $("#scripts").addEventListener("input",e=>{if(e.target.tagName=="TEXTAREA")fit(e.target)});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&activeLiveObjection){closeLivePhoneHelp();e.preventDefault()}});
 window.addEventListener("resize",fitAll);
+$("#cur").addEventListener("input",e=>{
+  if(e.target.id!=="salonObservation"||idx<0||!salons[idx])return;
+  const all=load("gs_ai_observations",{});all[key(salons[idx])]=e.target.value;save("gs_ai_observations",all);
+});
 $("#cur").addEventListener("click",e=>{
   if(idx<0)return;
   const x=salons[idx],k=key(x);
+  if(e.target.closest('a[href^="tel:"]'))recordActivity("kontaktiert");
+  const auditBtn=e.target.closest("[data-audit-chip]");
+  if(auditBtn){
+    const all=auditStore(),selected=selectedAudits(x),issue=auditBtn.dataset.auditChip;
+    const next=selected.includes(issue)?selected.filter(v=>v!==issue):selected.concat(issue);
+    if(next.length)all[k]=next;else delete all[k];
+    save("gs_audits",all);renderAuditChips();renderScripts();render();return;
+  }
   const catBtn=e.target.closest("[data-cat]");
-  if(catBtn){const old=db[k];db[k]={d:x,cat:+catBtn.dataset.cat,status:old?old.status:STAT[0],notes:old?old.notes:"",ts:old?old.ts:Date.now()};save("gs_db",db);upd();render();toast("Website-Kategorie aktualisiert: "+CATS[+catBtn.dataset.cat]);return;}
+  if(catBtn){const old=db[k];db[k]={d:x,cat:+catBtn.dataset.cat,manualCat:true,status:old?old.status:STAT[0],notes:old?old.notes:"",ts:old?old.ts:Date.now()};save("gs_db",db);recordActivity("analysiert");upd();render();toast("Website-Kategorie aktualisiert: "+CATS[+catBtn.dataset.cat]);return;}
   if(e.target.closest("#emailBtn")){
+    recordActivity("kontaktiert");
     const ta=document.querySelector('#scripts textarea[data-t="N"]'),txt=ta?ta.value:genText("N",x,db[k]?db[k].cat:classify(x));
     const subject="Anfrage zu "+x.name+" – kostenlose Website-Demo";
     window.location.href="mailto:"+encodeURI(x.mail||"")+"?subject="+encodeURIComponent(subject)+"&body="+encodeURIComponent(txt);return;
   }
   if(e.target.closest("#waBtn")){
+    recordActivity("kontaktiert");
     const ta=document.querySelector('#scripts textarea[data-t="N"]'),r=db[k];
     const txt=ta?ta.value:genText("N",x,r?r.cat:classify(x));
     window.open("https://wa.me/"+waNum(x.tel)+"?text="+encodeURIComponent(txt),"_blank","noopener");
@@ -816,11 +3685,11 @@ $("#scriptName").addEventListener("input",e=>{save("gs_script_name",e.target.val
 function readCSVFile(file,done){const rd=new FileReader();rd.onload=()=>{try{done(parseCSV(String(rd.result||"")))}catch(err){toast("CSV konnte nicht verarbeitet werden",1)}};rd.onerror=()=>toast("Datei konnte nicht gelesen werden",1);rd.readAsText(file,"UTF-8")}
 $("#masterCsvFile").addEventListener("change",e=>{const f=e.target.files[0];if(!f)return;readCSVFile(f,rows=>{if(!rows.length)return toast("Die CSV-Datei ist leer",1);setCities(rows);save("gs_master_csv_name",f.name);toast("Master-CSV gespeichert: "+cities.length+" Städte")});e.target.value=""});
 $("#cityCsvFile").addEventListener("change",e=>{const f=e.target.files[0];if(!f)return;const selected=$("#city").value.trim(),cityName=selected||f.name.replace(/\.csv$/i,"");readCSVFile(f,rows=>{if(!rows.length)return toast("Die CSV-Datei ist leer",1);setSalons(rows,cityName);$("#city").value=cityName;if(!cities.some(c=>c.stadt.toLocaleLowerCase("de-DE")===cityName.toLocaleLowerCase("de-DE")))$("#staedte-datalist").insertAdjacentHTML("beforeend",`<option value="${esc(cityName)}"></option>`);activeCityLoaded=cityName;save("gs_last_selection",{city:cityName,index:idx,name:salons[idx]?.name||""});render();upd();toast("Städte-CSV gespeichert: "+salons.length+" Salons")});e.target.value=""});
-$("#backupExport").addEventListener("click",()=>{const keys=["gs_db","gs_master","gs_demo","gs_tone","gs_theme","gs_city_rows","gs_salon_rows","gs_last_selection","gs_script_name"];const data={format:"salon-manager-backup",version:1,created:new Date().toISOString(),data:{}};keys.forEach(k=>{try{const v=localStorage.getItem(k);if(v!==null)data.data[k]=v}catch(e){}});const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="salon-manager-backup.json";a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);toast("JSON-Backup wurde erstellt")});
-$("#backupImportFile").addEventListener("change",e=>{const f=e.target.files[0];if(!f)return;const rd=new FileReader();rd.onload=()=>{try{const b=JSON.parse(rd.result);if(!b||b.format!=="salon-manager-backup"||!b.data)throw new Error("Ungültiges Backup-Format");Object.entries(b.data).forEach(([k,v])=>{if(["gs_db","gs_master","gs_demo","gs_tone","gs_theme","gs_city_rows","gs_salon_rows","gs_last_selection","gs_script_name"].includes(k))localStorage.setItem(k,String(v))});toast("Backup importiert. Die App wird neu geladen.");setTimeout(()=>location.reload(),700)}catch(err){toast("Backup konnte nicht importiert werden: "+err.message,1)}};rd.readAsText(f);e.target.value=""});
+$("#backupExport").addEventListener("click",()=>{const keys=["gs_db","gs_master","gs_demo","gs_tone","gs_theme","gs_city_rows","gs_salon_rows","gs_last_selection","gs_script_name","gs_groq_key","gs_groq_model","gs_gemini_key","gs_openrouter_key","gs_preferred_provider","gs_ai_personality","gs_workspace_mode","gs_ai_observations","gs_ai_chats","gs_audits","gs_daily_activity","gs_daily_goal"];const data={format:"salon-manager-backup",version:1,created:new Date().toISOString(),data:{}};keys.forEach(k=>{try{const v=localStorage.getItem(k);if(v!==null)data.data[k]=v}catch(e){}});const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="salon-manager-backup.json";a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);toast("JSON-Backup wurde erstellt")});
+$("#backupImportFile").addEventListener("change",e=>{const f=e.target.files[0];if(!f)return;const rd=new FileReader();rd.onload=()=>{try{const b=JSON.parse(rd.result);if(!b||b.format!=="salon-manager-backup"||!b.data)throw new Error("Ungültiges Backup-Format");Object.entries(b.data).forEach(([k,v])=>{if(["gs_db","gs_master","gs_demo","gs_tone","gs_theme","gs_city_rows","gs_salon_rows","gs_last_selection","gs_script_name","gs_groq_key","gs_groq_model","gs_gemini_key","gs_openrouter_key","gs_preferred_provider","gs_ai_personality","gs_workspace_mode","gs_ai_observations","gs_ai_chats","gs_audits","gs_daily_activity","gs_daily_goal"].includes(k))localStorage.setItem(k,String(v))});toast("Backup importiert. Die App wird neu geladen.");setTimeout(()=>location.reload(),700)}catch(err){toast("Backup konnte nicht importiert werden: "+err.message,1)}};rd.readAsText(f);e.target.value=""});
 /* ---------- Start ---------- */
 try{const m=localStorage.getItem("gs_master");if(m)$("#master").value=m;const d=localStorage.getItem("gs_demo");if(d)$("#demo").value=d;const tn=+localStorage.getItem("gs_tone");if(tn>=0&&tn<3)tone=tn}catch(e){}
-render();renderScripts();
+render();renderProgress();refreshReminderBanner();renderScripts();renderGlobalChatHistory();
   (async()=>{
     const savedCities=load("gs_city_rows",null);
     if(savedCities&&savedCities.length)setCities(savedCities);
