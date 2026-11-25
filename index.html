@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Salon-Manager · Akquise-Cockpit</title>
+<style>
+:root{--bg:#f4f6fb;--card:#fff;--tx:#1b2333;--mu:#6b7690;--bd:#e2e7f0;--ac:#4f46e5;--ac2:#eef0ff;--ok:#16a34a;--wa:#d97706;--er:#dc2626;--sh:0 1px 3px rgba(20,30,60,.08),0 8px 24px rgba(20,30,60,.05)}
+:root[data-theme=dark]{--bg:#0f1420;--card:#171e2d;--tx:#e8ecf5;--mu:#8e9ab3;--bd:#27314a;--ac:#818cf8;--ac2:#222a4a;--sh:0 1px 3px rgba(0,0,0,.4)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:1400px;margin:0 auto;padding:24px 16px 60px}
+header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+h1{font-size:22px;margin:0}h1 small{display:block;font-size:13px;font-weight:400;color:var(--mu)}
+h2{font-size:15px;margin:0 0 12px;text-transform:uppercase;letter-spacing:.05em;color:var(--mu)}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:18px;margin-bottom:18px;box-shadow:var(--sh)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end}
+.col{display:flex;flex-direction:column;gap:4px;flex:1;min-width:200px}
+label{font-size:12px;font-weight:600;color:var(--mu)}
+input,select,textarea{font:inherit;color:var(--tx);background:var(--bg);border:1px solid var(--bd);border-radius:9px;padding:9px 11px;width:100%}
+input:focus,select:focus{outline:2px solid var(--ac);outline-offset:-1px}
+.city-input-wrap{display:flex;align-items:stretch;gap:6px;width:100%}
+.city-input-wrap input{min-width:0;flex:1}
+.city-clear{flex:0 0 40px;width:40px;padding:0;font-size:17px;line-height:1;color:var(--mu);background:var(--bg);border:1px solid var(--bd);border-radius:9px}
+.city-clear:hover{color:var(--tx);border-color:var(--ac);background:var(--ac2)}
+.city-input-wrap input::-webkit-calendar-picker-indicator{cursor:pointer}
+
+button{font:inherit;cursor:pointer;border-radius:9px;border:1px solid var(--bd);background:var(--card);color:var(--tx);padding:9px 14px;font-weight:600}
+button:hover{border-color:var(--ac)}button:disabled{opacity:.45;cursor:not-allowed}
+button.p{background:var(--ac);border-color:var(--ac);color:#fff}
+.nav{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}.nav .p{flex:1;min-width:180px}
+.cur{margin-top:14px;padding:14px;border:1px dashed var(--bd);border-radius:10px;background:var(--ac2)}
+.cur b{font-size:16px}.cur div{color:var(--mu);font-size:13px}
+.badge{display:inline-block;padding:2px 10px;border-radius:99px;font-size:12px;font-weight:700;background:var(--ac2);color:var(--ac);border:1px solid var(--ac)}
+.b0{color:var(--er);border-color:var(--er)}.b1{color:var(--wa);border-color:var(--wa)}.b2{color:var(--wa);border-color:var(--wa)}.b3{color:var(--mu);border-color:var(--mu)}.b4{color:var(--ok);border-color:var(--ok)}
+.ph{border:2px dashed var(--bd);border-radius:12px;padding:34px 16px;text-align:center;color:var(--mu);font-weight:600}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.tab{border-radius:99px;font-size:13px;padding:6px 13px}
+.tab.on{background:var(--ac);border-color:var(--ac);color:#fff}
+.tab i{font-style:normal;margin-left:6px;opacity:.85;background:rgba(127,127,127,.25);padding:0 7px;border-radius:99px}
+.item{border:1px solid var(--bd);border-radius:12px;padding:14px;margin-bottom:12px;display:grid;grid-template-columns:1fr 260px;gap:14px}
+@media(max-width:760px){.item{grid-template-columns:1fr}}
+.item h3{margin:0 0 4px;font-size:16px}.meta{color:var(--mu);font-size:13px}
+.links{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.links a{font-size:12px;font-weight:600;text-decoration:none;color:var(--ac);border:1px solid var(--bd);padding:4px 10px;border-radius:7px}
+.links a:hover{border-color:var(--ac)}
+.side{display:flex;flex-direction:column;gap:8px}
+.x{font-size:12px;background:none;border:none;color:var(--mu);padding:0;text-align:left;font-weight:400;text-decoration:underline}
+.empty{text-align:center;color:var(--mu);padding:30px}
+#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--tx);color:var(--bg);padding:10px 18px;border-radius:10px;opacity:0;transition:.25s;pointer-events:none;z-index:9}
+#toast{max-width:min(92vw,760px);word-break:break-all;line-height:1.4}#toast.s{opacity:1}#toast.e{background:var(--er);color:#fff;pointer-events:auto;user-select:text}
+.hint{font-size:12px;color:var(--mu);margin-top:8px}
+.sgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:14px;margin-top:14px}
+.sc{border:1px solid var(--bd);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px}
+.sc h3{margin:0;font-size:15px}.sc textarea{min-height:250px;resize:vertical;line-height:1.55}
+.big{padding:13px;font-size:15px;width:100%}.big.ok{background:var(--ok);border-color:var(--ok);color:#fff}
+details{margin-top:16px;border:1px solid var(--bd);border-radius:12px;padding:12px 14px}
+details summary{cursor:pointer;font-weight:700}
+.obj{margin-top:10px;padding:10px 12px;border-left:3px solid var(--ac);background:var(--ac2);border-radius:6px;white-space:pre-wrap}
+.obj b{display:block;margin-bottom:2px}
+
+:root{--c0:#dc2626;--c1:#b45309;--c2:#a16207;--c3:#475569;--c4:#15803d;--c9:#64748b;--s0:#2563eb;--s1:#7c3aed;--s2:#0f766e;--s3:#475569;--s4:#be123c;--mu:#55607a}
+:root[data-theme=dark]{--c0:#f87171;--c1:#fbbf24;--c2:#facc15;--c3:#94a3b8;--c4:#4ade80;--c9:#94a3b8;--s0:#60a5fa;--s1:#a78bfa;--s2:#2dd4bf;--s3:#94a3b8;--s4:#fb7185;--mu:#9aa6c0}
+body{font-size:16px;letter-spacing:.005em}
+h2{font-size:13px;margin-bottom:14px}
+.card{border-radius:16px;padding:22px}
+.badge{border-radius:99px;padding:3px 11px;font-size:12px;font-weight:700;background:color-mix(in srgb,currentColor 13%,transparent);border:1px solid color-mix(in srgb,currentColor 38%,transparent)}
+.b0{color:var(--c0)}.b1{color:var(--c1)}.b2{color:var(--c2)}.b3{color:var(--c3)}.b4{color:var(--c4)}.b9{color:var(--c9)}
+.s0{color:var(--s0)}.s1{color:var(--s1)}.s2{color:var(--s2)}.s3{color:var(--s3)}.s4{color:var(--s4)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
+@media(max-width:700px){.stats{grid-template-columns:repeat(2,1fr)}}
+.st{background:var(--card);border:1px solid var(--bd);border-left:5px solid var(--ac);border-radius:14px;padding:14px 18px;box-shadow:var(--sh)}
+.st b{display:block;font-size:30px;line-height:1.1}.st span{color:var(--mu);font-size:13px;font-weight:600}
+.st.t1{border-left-color:var(--s0)}.st.t2{border-left-color:var(--s1)}.st.t3{border-left-color:var(--s2)}
+.work{display:grid;grid-template-columns:minmax(360px,440px) 1fr;gap:18px;align-items:start}
+.work .card{margin-bottom:0}.left{position:sticky;top:12px}
+@media(max-width:1000px){.work{grid-template-columns:1fr}.left{position:static}.right{margin-top:0}}
+.cur{background:var(--ac2);border:1px solid var(--bd);border-radius:12px;padding:16px}
+.cur div{color:var(--tx);font-size:14px}.cur .cn{font-size:19px;font-weight:700;line-height:1.3}
+.cur .meta{color:var(--mu);font-size:13px}
+.cn{font-size:19px;font-weight:700;line-height:1.3}
+.dl{display:grid;grid-template-columns:24px 1fr;gap:4px 6px;margin:10px 0}
+.acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.act{font:inherit;font-size:13px;font-weight:700;text-decoration:none;color:var(--tx);background:var(--card);border:1px solid var(--bd);padding:9px 13px;border-radius:9px;cursor:pointer;display:inline-block}
+.act:hover{border-color:var(--ac)}.act.pr{background:var(--ac);color:#fff;border-color:var(--ac)}
+.act.wa{background:#16a34a;color:#fff;border-color:#16a34a}.act.off{opacity:.4;cursor:not-allowed}
+.shead{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}
+.vars{font-size:12px;color:var(--mu);margin-top:8px}
+.scol{display:flex;flex-direction:column;gap:16px;margin-top:14px}
+.sc{padding:18px}.sc h3{font-size:16px}
+.sc textarea{min-height:0;resize:none;overflow:hidden;font-size:16px;line-height:1.65;padding:14px}
+.item h3{font-size:17px}
+.tones{display:flex;margin-top:14px;border:1px solid var(--bd);border-radius:10px;overflow:hidden}
+.tone{flex:1;border:none;border-radius:0;background:var(--card);padding:11px 8px;font-size:14px}
+.tone+.tone{border-left:1px solid var(--bd)}.tone.on{background:var(--ac);color:#fff}
+
+.navbar{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 20px;padding:7px;background:var(--card);border:1px solid var(--bd);border-radius:14px;box-shadow:var(--sh)}
+.navbar button{flex:1;min-width:150px;border:0;background:transparent;padding:12px 14px;color:var(--mu);white-space:nowrap}
+.navbar button.active{background:var(--ac);color:#fff}
+.page{display:none}.page.active{display:block}
+.settings-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.setting-box{border:1px solid var(--bd);border-radius:12px;padding:16px;background:var(--card)}
+.setting-box h3{font-size:15px;margin:0 0 12px}
+.upload-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:10px}
+.upload-row input[type=file]{max-width:100%;font-size:13px}
+.cat-switch{display:flex;gap:7px;flex-wrap:wrap;margin-top:14px}
+.cat-switch button{font-size:12px;padding:8px 10px}
+.cat-switch button.active{background:var(--ac);border-color:var(--ac);color:#fff}
+#page1 .work{margin-top:0}
+#page2 .stats{margin-bottom:18px}
+.sc textarea{max-height:none;overflow-y:hidden}
+@media(max-width:650px){.navbar button{min-width:calc(50% - 8px)}.wrap{padding:16px 10px 40px}}
+
+
+/* Einwand-Navigator */
+.objection-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:18px 0 20px}
+.objection-choice{display:flex;align-items:center;gap:11px;text-align:left;min-height:76px;padding:13px;border:1px solid var(--bd);border-radius:13px;background:var(--card);color:var(--tx);font:inherit;font-weight:650;cursor:pointer;transition:border-color .16s,background .16s,transform .16s}
+.objection-choice:hover{border-color:var(--ac);transform:translateY(-1px)}
+.objection-choice.selected{border-color:var(--ac);background:var(--ac2);box-shadow:inset 0 0 0 1px var(--ac)}
+.objection-number{display:grid;place-items:center;flex:0 0 34px;height:34px;border-radius:10px;background:var(--bg);color:var(--mu);font-size:12px;font-weight:800}
+.objection-choice.selected .objection-number{background:var(--ac);color:white}
+.objection-detail{border:1px solid var(--bd);border-radius:15px;padding:18px;background:var(--card)}
+.objection-detail-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+.objection-detail-head h3{margin:5px 0 0;font-size:19px}
+.variant-count{font-size:12px;color:var(--mu);white-space:nowrap}
+.objection-step{padding:15px 16px;border:1px solid var(--bd);border-radius:12px;margin:10px 0;background:var(--bg)}
+.objection-step h4{margin:4px 0 8px;font-size:15px}
+.objection-step p{margin:0;line-height:1.65;white-space:normal}
+.step-label{font-size:10px;font-weight:850;letter-spacing:.1em;color:var(--ac)}
+.objection-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:15px}
+.objection-actions button{min-height:46px}
+@media(max-width:950px){.objection-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.objection-grid{grid-template-columns:1fr}.objection-choice{min-height:60px}.objection-detail{padding:12px}.objection-detail-head{align-items:flex-start}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>Salon-Manager<small>Friseursalons in Deutschland analysieren und filtern</small></h1>
+  <button id="theme" title="Design wechseln">🌓 Design</button>
+</header>
+<div class="stats" id="stats"></div>
+
+<section class="card">
+  <h2>1 · Datenquelle</h2>
+  <div class="row">
+    <div class="col" style="flex:3"><label for="master">Master-Tabelle Link (GelbeSeiten)</label>
+      <input id="master" type="url" placeholder="https://docs.google.com/spreadsheets/d/…"></div>
+    <div class="col" style="flex:2 1 260px"><label for="demo">Mein Demo- &amp; Konfigurator-Link</label><input id="demo" type="url" placeholder="https://…"></div>
+    <button class="p" id="loadCities">Städte laden</button>
+    <button id="csvBtn">CSV manuell hochladen</button>
+    <input type="file" id="csvFile" accept=".csv,text/csv" hidden>
+  </div>
+  <div class="hint" id="srcInfo">Die Tabelle muss für „Jeder mit dem Link“ freigegeben sein. Beim manuellen Upload wähle zuerst die Master-CSV (Stadt, Link), danach pro Stadt die Salon-CSV.</div>
+</section>
+
+<div class="work"><div class="left"><section class="card">
+  <h2>2 · Salon auswählen und analysieren</h2>
+  <div class="row">
+    <div class="col"><label for="city">Stadt auswählen</label><div class="city-input-wrap"><input id="city" type="text" list="staedte-datalist" autocomplete="off" placeholder="Stadt eintippen oder auswählen …" aria-label="Stadt auswählen"><datalist id="staedte-datalist"><option value="– Bitte Städte laden –"></datalist><button type="button" id="clearCity" class="city-clear" aria-label="Stadtfeld leeren" title="Eingabe leeren">✕</button></div></div>
+    <div class="col"><label for="q">Salon suchen</label><input id="q" type="search" placeholder="Name oder Adresse eingeben …"></div>
+  </div>
+  <div class="row" style="margin-top:10px">
+    <div class="col"><label for="salon">Salon direkt auswählen</label><select id="salon" disabled><option value="">– Zuerst Stadt wählen –</option></select></div>
+  </div>
+  <div class="nav">
+    <button id="prev" disabled>◀ Zurück</button>
+    <button class="p" id="analyze" disabled>Salon analysieren</button>
+    <button id="next" disabled>Weiter ▶</button>
+  </div>
+  <div class="cur" id="cur" hidden></div>
+</section>
+
+</div><div class="right"><section class="card">
+  <h2>3 · Verkaufs-Skripte</h2>
+  <div id="scripts"></div>
+  <details><summary>Häufige Einwände &amp; Antworten</summary>
+    <div class="obj"><b>„Wir brauchen keine Website.“</b>Das verstehe ich gut. Die meisten Kundinnen und Kunden suchen heute aber zuerst online nach Preisen, Öffnungszeiten und Terminen. Die Demo ist kostenlos und verpflichtet Sie zu nichts – schauen Sie einfach, ob sie Ihnen gefällt.</div>
+    <div class="obj"><b>„Das ist uns zu teuer.“</b>Genau deshalb habe ich die Demo schon kostenlos vorbereitet. Sie sehen zuerst, was Sie bekommen würden, und entscheiden danach in Ruhe – ohne Druck und ohne versteckte Kosten.</div>
+    <div class="obj"><b>„Wir haben aktuell keine Zeit.“</b>Kein Problem, Sie müssen nichts vorbereiten. Ich schicke Ihnen den Link, und Sie schauen rein, wenn es passt – das dauert etwa zwei Minuten. Wann darf ich mich noch einmal melden?</div>
+  </details>
+</section></div></div>
+
+<section class="card">
+  <h2>4 · Analysierte Salons</h2>
+  <div class="row" style="margin-bottom:12px"><div class="col" style="max-width:320px"><label for="cityF">Nach Stadt filtern</label><select id="cityF"><option value="">Alle Städte</option></select></div></div>
+  <div class="tabs" id="tabs"></div>
+  <div id="list"></div>
+  <div class="row" style="margin-top:8px"><button id="export">CSV exportieren (Aktueller Filter)</button></div>
+</section>
+</div>
+<div id="toast"></div>
+
+<script>
+(()=>{
+
+const $=s=>document.querySelector(s);
+/* Mehrseitige Oberfläche: vorhandene Originalbereiche werden nur umgeordnet. */
+const nav=document.createElement("nav");nav.className="navbar";nav.id="mainNav";
+const pageNames=[["page1","Akquise-Cockpit"],["page2","Analysierte Salons"],["page3","Einwand-Navigator"],["page4","Einstellungen & Daten"]];
+const pages={};
+const pagesHost=document.createElement("div");pagesHost.id="pages";
+pageNames.forEach(([id,label],i)=>{const p=document.createElement("section");p.id=id;p.className="page"+(i===0?" active":"");pages[id]=p;pagesHost.appendChild(p);
+ const b=document.createElement("button");b.type="button";b.dataset.page=id;b.textContent=label;nav.appendChild(b)});
+const header=document.querySelector("header");header.after(nav,pagesHost);
+const statsNode=$("#stats"),sourceNode=statsNode&&statsNode.nextElementSibling,workNode=document.querySelector(".work");
+const resultsNode=Array.from(document.querySelectorAll("section.card")).find(x=>x.querySelector("#cityF"));
+if(workNode)pages.page1.appendChild(workNode);
+if(statsNode)pages.page2.appendChild(statsNode);
+if(resultsNode)pages.page2.appendChild(resultsNode);
+if(sourceNode&&sourceNode!==workNode&&sourceNode!==resultsNode)pages.page4.appendChild(sourceNode);
+pages.page3.innerHTML=`<section class="card objection-card">
+  <h2>Einwand-Navigator</h2>
+  <p class="hint">Wähle die Reaktion des Saloninhabers. Du erhältst eine ruhige, unverbindliche Antwort mit dem Ziel, die kostenlose Demo zu zeigen.</p>
+  <div id="objectionChoices" class="objection-grid"></div>
+  <div id="objectionDetail" class="objection-detail"><div class="ph">Wähle oben einen Einwand aus, um eine passende Gesprächsantwort zu erhalten.</div></div>
+</section>`;
+const settings=document.createElement("section");settings.className="card";settings.innerHTML=
+ '<h2>Einstellungen & Daten</h2><div class="settings-grid">'+
+ '<div class="setting-box"><h3>Persönliche Angaben</h3><div class="col"><label for="scriptName">Mein Name im Skript</label><input id="scriptName" type="text" value="[Ihr Name]" placeholder="[Ihr Name]"></div></div>'+
+ '<div class="setting-box"><h3>CSV-Dateien dauerhaft speichern</h3><label for="masterCsvFile">Master-CSV (Stadt, Link)</label><div class="upload-row"><input id="masterCsvFile" type="file" accept=".csv,text/csv"></div><label for="cityCsvFile" style="display:block;margin-top:12px">Städte-CSV (Salondaten der ausgewählten Stadt)</label><div class="upload-row"><input id="cityCsvFile" type="file" accept=".csv,text/csv"></div><p class="hint">Die hochgeladenen CSV-Daten werden lokal in diesem Browser gespeichert.</p></div>'+
+ '<div class="setting-box"><h3>Datensicherung</h3><p class="hint">Exportiert oder importiert Analysen, Einstellungen und gespeicherte CSV-Tabellen.</p><div class="upload-row"><button type="button" id="backupExport" class="p">Backup als JSON exportieren</button><input id="backupImportFile" type="file" accept=".json,application/json"></div></div></div>';
+pages.page4.appendChild(settings);
+nav.addEventListener("click",e=>{const b=e.target.closest("[data-page]");if(!b)return;Object.values(pages).forEach(p=>p.classList.toggle("active",p.id===b.dataset.page));nav.querySelectorAll("button").forEach(x=>x.classList.toggle("active",x===b));});
+nav.querySelector('[data-page="page1"]').classList.add("active");
+
+const CATS=["Ohne Website","Nur Social Media","Unsichere Website (HTTP)","Externes Portal","Eigene Website (HTTPS)"];
+const STAT=["Zu kontaktieren","Demo gesendet","Angerufen","Keine Antwort","Ignoriert"];
+const PORTAL=/(prinz\.de|facebook\.com|fb\.com|instagram\.com|jameda|treatwell|gelbeseiten\.de|dasoertliche|meinestadt|yelp|google\.[a-z]+\/maps|goo\.gl|booksy|fresha|planity|wix\.com\/|linktr\.ee|11880|cylex|golocal|branchenbuch)/i;
+let cities=[],salons=[],idx=-1,tab="all",manualQueue=null,cityF="",vb=0,tone=0,objectionSelected=0,objectionVariant=0;
+let db=load("gs_db",{}); // key -> {d:{...},cat,status,notes,ts}
+function load(k,f){try{const v=localStorage.getItem(k);return v?JSON.parse(v):f}catch(e){return f}}
+function save(k,v){try{localStorage.setItem(k,typeof v=="string"?v:JSON.stringify(v))}catch(e){}}
+function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function toast(m,err){const t=$("#toast");t.textContent=m;t.className="s"+(err?" e":"");clearTimeout(toast.t);toast.t=setTimeout(()=>t.className="",err?12000:3200)}
+function safeUrl(u){u=(u||"").trim();if(!u)return"";if(!/^https?:\/\//i.test(u))u="https://"+u;return u}
+
+/* ---------- Design ---------- */
+(function(){let t=null;try{t=localStorage.getItem("gs_theme")}catch(e){}
+if(!t)t=matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light";
+document.documentElement.dataset.theme=t;
+$("#theme").onclick=()=>{t=t=="dark"?"light":"dark";document.documentElement.dataset.theme=t;save("gs_theme",t)}})();
+
+/* ---------- Laden ---------- */
+function cleanUrl(u){const m=String(u||"").match(/https?:\/\/[^\s"'<>]+/i);return m?m[0]:String(u||"").trim()}
+function sheetId(u){const m=String(u||"").match(/\/d\/([a-zA-Z0-9_-]+)/);return m?m[1]:null}
+function sheetGid(u){const m=String(u||"").match(/[#&?]gid=(\d+)/);return m?m[1]:null}
+function jsonp(id,gid){return new Promise((res,rej)=>{
+  const cb="cb_"+Date.now()+"_"+Math.floor(Math.random()*1e6),s=document.createElement("script");
+  let fin=false;
+  const done=()=>{fin=true;clearTimeout(t);try{delete window[cb]}catch(e){window[cb]=undefined}s.remove()};
+  const t=setTimeout(()=>{if(!fin){done();rej(new Error("Zeitüberschreitung (keine Antwort von Google)"))}},15000);
+  window[cb]=r=>{done();
+    if(r&&r.status==="error"){const er=(r.errors&&r.errors[0])||{};return rej(new Error("Google-Fehler: "+(er.detailed_message||er.message||er.reason||"unbekannt")))}
+    if(!r||!r.table)return rej(new Error("Ungültige Antwort von Google"));
+    res(r.table.rows.map(row=>(row.c||[]).map(c=>c?(c.f!=null?c.f:(c.v!=null?String(c.v):"")):"")))};
+  s.onerror=()=>{if(!fin){done();rej(new Error("Antwort ist keine Daten-Antwort (Tabelle evtl. nicht freigegeben oder keine native Google-Tabelle)"))}};
+  let url="https://docs.google.com/spreadsheets/d/"+id+"/gviz/tq?tqx=responseHandler:"+cb;
+  if(gid)url+="&gid="+gid;
+  s.src=url;document.head.appendChild(s)})}
+async function csvFetch(id,gid){
+  const r=await fetch("https://docs.google.com/spreadsheets/d/"+id+"/gviz/tq?tqx=out:csv"+(gid?"&gid="+gid:""));
+  if(!r.ok)throw new Error("HTTP "+r.status);return parseCSV(await r.text())}
+async function fetchSheet(url){
+  const id=sheetId(url);if(!id)throw new Error("Ungültiger Google-Sheets-Link");
+  const gid=sheetGid(url);
+  try{return await jsonp(id,gid)}catch(e1){
+    try{return await csvFetch(id,gid)}catch(e2){
+      throw new Error("Tabelle konnte nicht geladen werden. Bitte Freigabe („Jeder mit dem Link“) prüfen oder CSV manuell hochladen.")}}}
+async function fetchCity(raw){
+  const url=cleanUrl(raw),id=sheetId(url),gid=sheetGid(url);
+  const info=` [Gelesene URL aus Spalte B: „${raw||"(leer)"}“ · ID: ${id||"nicht gefunden"} · gid: ${gid||"keine"}]`;
+  if(!id)throw new Error("Keine Sheet-ID im Link gefunden."+info);
+  try{return await jsonp(id,gid)}catch(e){throw new Error(e.message+info)}}
+function parseCSV(t){const out=[];let r=[],c="",q=false;t=t.replace(/^\uFEFF/,"");
+  const sep=(t.split("\n")[0].match(/;/g)||[]).length>(t.split("\n")[0].match(/,/g)||[]).length?";":",";
+  for(let i=0;i<t.length;i++){const ch=t[i];
+    if(q){if(ch=='"'){if(t[i+1]=='"'){c+='"';i++}else q=false}else c+=ch}
+    else if(ch=='"')q=true;else if(ch==sep){r.push(c);c=""}
+    else if(ch=="\n"||ch=="\r"){if(ch=="\r"&&t[i+1]=="\n")i++;r.push(c);c="";out.push(r);r=[]}
+    else c+=ch}
+  if(c||r.length){r.push(c);out.push(r)}return out.filter(x=>x.some(v=>v.trim()))}
+async function csvFetch(id,gid){
+  const r=await fetch(`https://docs.google.com/spreadsheets/d/${id}/gviz/tq?tqx=out:csv${gid?"&gid="+gid:""}`);
+  if(!r.ok)throw new Error("HTTP "+r.status);return parseCSV(await r.text())}
+async function fetchSheet(url){
+  const id=sheetId(url);if(!id)throw new Error("Ungültiger Google-Sheets-Link");
+  const gid=sheetGid(url);
+  try{return await jsonp(id,gid)}catch(e1){
+    try{return await csvFetch(id,gid)}catch(e2){
+      throw new Error("Tabelle konnte nicht geladen werden. Bitte Freigabe („Jeder mit dem Link“) prüfen oder CSV manuell hochladen.")}}}
+
+function setCities(rows){
+  save("gs_city_rows",rows);
+  cities=rows.filter(r=>r[0]&&r[0].trim()&&!/^stadt$/i.test(r[0].trim())).map(r=>({stadt:r[0].trim(),url:String(r[1]||"").trim()}));
+  const list=$("#staedte-datalist");
+  list.innerHTML=cities.map(c=>`<option value="${esc(c.stadt)}"></option>`).join("");
+  const current=$("#city").value.trim();
+  if(current&&!cities.some(c=>c.stadt.toLocaleLowerCase("de-DE")===current.toLocaleLowerCase("de-DE")))$("#city").value="";
+  $("#srcInfo").textContent=cities.length+" Städte geladen.";
+  toast(cities.length+" Städte geladen")}
+function setSalons(rows,stadt){
+  const cache=load("gs_salon_rows",{});cache[stadt]=rows;save("gs_salon_rows",cache);
+  salons=rows.filter(r=>(r[0]||"").trim()&&!/^name des salons/i.test(r[0].trim())).map(r=>{
+    r=r.concat(Array(9).fill("")).slice(0,9).map(v=>(v||"").trim());
+    return{name:r[0],typ:r[1],adresse:r[2],tel:r[3],web:r[4],gs:r[5],mail:r[6],fb:r[7],ig:r[8],stadt}});
+  idx=salons.length?0:-1;
+  const last=load("gs_last_selection",null);
+  if(last&&last.city===stadt){
+    if(Number.isInteger(last.index)&&salons[last.index])idx=last.index;
+    if(last.name){const found=salons.findIndex(x=>x.name===last.name);if(found>=0)idx=found;}
+  }
+  renderSalonSelect();
+  toast(salons.length+" Salons in "+stadt+" geladen")}
+
+$("#loadCities").onclick=async()=>{
+  const u=$("#master").value.trim();
+  if(!u)return toast("Bitte Master-Link einfügen",1);
+  save("gs_master",u);const b=$("#loadCities");b.disabled=true;b.textContent="Lädt …";
+  try{setCities(await fetchSheet(u))}catch(e){toast(e.message,1)}
+  b.disabled=false;b.textContent="Städte laden"};
+$("#csvBtn").onclick=()=>$("#csvFile").click();
+$("#csvFile").onchange=e=>{
+  const f=e.target.files[0];if(!f)return;
+  const rd=new FileReader();rd.onload=()=>{
+    const rows=parseCSV(rd.result);
+    const head=(rows[0]||[]).map(x=>x.toLowerCase());
+    if(head[0]=="stadt"||(rows[0]&&/^https?:\/\/docs\.google/i.test(rows[0][1]||""))){setCities(rows)}
+    else{const nm=f.name.replace(/\.csv$/i,"");setSalons(rows,nm);
+      $("#city").value=nm;
+      if(!cities.some(c=>c.stadt.toLocaleLowerCase("de-DE")===nm.toLocaleLowerCase("de-DE")))$("#staedte-datalist").insertAdjacentHTML("beforeend",`<option value="${esc(nm)}"></option>`);
+      save("gs_last_selection",{city:nm,index:idx,name:salons[idx]?.name||""})}
+    e.target.value=""};
+  rd.onerror=()=>toast("Datei konnte nicht gelesen werden",1);rd.readAsText(f)};
+let activeCityLoaded="";
+async function chooseCityByName(rawName){
+  const typed=String(rawName||"").trim();
+  if(!typed)return;
+  const c=cities.find(x=>x.stadt.toLocaleLowerCase("de-DE")===typed.toLocaleLowerCase("de-DE"));
+  if(!c)return; // Teil-Eingaben wie „Mün“ bleiben Suchtext und lösen keinen Ladevorgang aus.
+  $("#city").value=c.stadt;
+  if(activeCityLoaded===c.stadt&&salons.length&&salons[0]?.stadt===c.stadt)return;
+  activeCityLoaded=c.stadt;
+  save("gs_last_selection",{city:c.stadt,index:0,name:""});
+  const cache=load("gs_salon_rows",{});
+  if(!c.url&&!cache[c.stadt]){activeCityLoaded="";return toast("Für diese Stadt ist kein Link hinterlegt",1)}
+  $("#salon").disabled=true;$("#salon").innerHTML="<option>Lädt …</option>";
+  try{if(cache[c.stadt])setSalons(cache[c.stadt],c.stadt);else setSalons(await fetchCity(c.url),c.stadt)}
+  catch(err){activeCityLoaded="";toast(err.message,1);renderSalonSelect()}
+}
+$("#city").addEventListener("input",e=>chooseCityByName(e.target.value));
+$("#city").addEventListener("change",e=>chooseCityByName(e.target.value));
+$("#city").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();chooseCityByName(e.target.value)}});
+$("#clearCity").addEventListener("click",()=>{$("#city").value="";activeCityLoaded="";$("#city").focus()});
+
+/* ---------- Auswahl ---------- */
+function key(s){return s.stadt+"|"+s.name+"|"+s.adresse}
+function renderSalonSelect(){
+  if(salons.length&&idx>=0){const old=load("gs_last_selection",{});save("gs_last_selection",{city:salons[idx].stadt,index:idx,name:salons[idx].name});}
+  const sel=$("#salon"),q=$("#q").value.trim().toLowerCase();
+  if(!salons.length){sel.innerHTML="<option value=''>– Keine Salons –</option>";sel.disabled=true;upd();return}
+  const opts=[];salons.forEach((s,i)=>{
+    if(q&&!(s.name+" "+s.adresse).toLowerCase().includes(q)&&i!==idx)return;
+    opts.push(`<option value="${i}"${i===idx?" selected":""}>${db[key(s)]?"✓ ":""}${esc(s.name)}${s.adresse?" – "+esc(s.adresse):""}</option>`)});
+  sel.innerHTML=opts.join("");sel.disabled=false;upd()}
+function upd(){renderScripts();
+  const has=salons.length&&idx>=0;
+  $("#prev").disabled=!has||idx<=0;$("#next").disabled=!has||idx>=salons.length-1;$("#analyze").disabled=!has;
+  const cur=$("#cur");
+  if(!has){cur.hidden=true;return}
+  const s=salons[idx],r=db[key(s)],v=svars(s);cur.hidden=false;
+  const tel=waNum(s.tel),L=(u,t)=>u?`<a class="act" href="${esc(safeUrl(u))}" target="_blank" rel="noopener noreferrer">${t}</a>`:"";
+  cur.innerHTML=`<div class="cn">${esc(s.name)}</div><div class="meta">Salon ${idx+1} von ${salons.length}${s.typ?" · "+esc(s.typ):""}</div>
+   <div style="margin:10px 0">${r?`<span class="badge b${r.cat}">${CATS[r.cat]}</span> <span class="badge s${STAT.indexOf(r.status)}">${esc(r.status)}</span>`:'<span class="badge b9">Noch nicht analysiert</span>'}</div>
+   <div class="dl"><span>📍</span><span>${v["Straße"]?esc(v["Straße"])+", ":""}${esc(v.Ort)}</span><span>📞</span><span>${esc(s.tel)||"–"}</span>${s.mail?`<span>✉</span><span>${esc(s.mail)}</span>`:""}</div>
+   <div class="acts">
+    ${tel?`<a class="act pr" href="tel:+${tel}">📞 Anrufen</a>`:'<span class="act off">📞 Anrufen</span>'}
+    ${tel?'<button class="act wa" id="waBtn">💬 WhatsApp öffnen</button>':'<span class="act off">💬 WhatsApp öffnen</span>'}
+    <a class="act" href="https://www.google.com/search?q=${encodeURIComponent(v.Name+" "+v.Ort)}" target="_blank" rel="noopener noreferrer">🔍 Auf Google prüfen</a>
+   </div>
+   <div class="acts">${L(s.web,"🌐 Website")}${L(s.ig,"Instagram")}${L(s.fb,"Facebook")}${L(s.gs,"GelbeSeiten")}<button class="act" id="emailBtn">✉ E-Mail senden</button></div>
+    <div class="hint">Website-Status manuell korrigieren:</div><div class="cat-switch">${CATS.map((c,i)=>`<button type="button" data-cat="${i}" class="${(r?r.cat:classify(s))===i?"active":""}">${c}</button>`).join("")}</div>`}
+$("#q").oninput=renderSalonSelect;
+$("#salon").onchange=e=>{idx=+e.target.value;if(salons[idx])save("gs_last_selection",{city:salons[idx].stadt,index:idx,name:salons[idx].name});upd()};
+$("#prev").onclick=()=>{if(idx>0){idx--;renderSalonSelect()}};
+$("#next").onclick=()=>{if(idx<salons.length-1){idx++;renderSalonSelect()}};
+
+/* ---------- Analyse ---------- */
+function classify(s){
+  const w=s.web.trim();
+  if(!w)return(s.fb||s.ig)?1:0;
+  if(PORTAL.test(w))return 3;
+  if(/^http:\/\//i.test(w))return 2;
+  if(/^https:\/\//i.test(w))return 4;
+  return 2; // ohne Protokoll: HTTPS nicht bestätigt
+}
+$("#analyze").onclick=()=>{
+  if(idx<0)return;const s=salons[idx],k=key(s),old=db[k];
+  db[k]={d:s,cat:classify(s),status:old?old.status:STAT[0],notes:old?old.notes:"",ts:Date.now()};
+  save("gs_db",db);renderSalonSelect();render();
+  toast("Analysiert: "+CATS[db[k].cat])};
+
+/* ---------- Ergebnisse ---------- */
+function filtered(){let a=Object.entries(db).map(([k,v])=>({k,...v})).sort((x,y)=>y.ts-x.ts);
+  if(cityF)a=a.filter(x=>x.d.stadt===cityF);
+  return tab=="all"?a:a.filter(x=>x.cat==+tab)}
+function render(){
+  renderStats();const cs=[...new Set(Object.values(db).map(x=>x.d.stadt))].sort((a,b)=>a.localeCompare(b,"de"));
+  if(cityF&&!cs.includes(cityF))cityF="";
+  $("#cityF").innerHTML='<option value="">Alle Städte</option>'+cs.map(c=>`<option value="${esc(c)}"${c===cityF?" selected":""}>${esc(c)}</option>`).join("");
+  const all=Object.values(db).filter(x=>!cityF||x.d.stadt===cityF),cnt=i=>all.filter(x=>x.cat==i).length;
+  const navSalons=nav.querySelector('[data-page="page2"]');if(navSalons)navSalons.textContent="Analysierte Salons ("+Object.keys(db).length+")";
+  $("#tabs").innerHTML=[["all","Alle analysierten",all.length]].concat(CATS.map((c,i)=>[String(i),c,cnt(i)]))
+    .map(([id,l,n])=>`<button class="tab${tab==id?" on":""}" data-t="${id}">${l}<i>${n}</i></button>`).join("");
+  const f=filtered();
+  $("#list").innerHTML=f.length?f.map(x=>{const d=x.d,L=(u,t)=>u?`<a href="${esc(safeUrl(u))}" target="_blank" rel="noopener noreferrer">${t}</a>`:"";
+    return`<div class="item"><div><h3>${esc(d.name)} <span class="badge b${x.cat}">${CATS[x.cat]}</span> <span class="badge s${STAT.indexOf(x.status)}">${esc(x.status)}</span></h3>
+    <div class="meta">📍 ${esc(d.stadt)} · ${esc(d.adresse)||"–"}</div><div class="meta">📞 ${esc(d.tel)||"–"}${d.mail?" · ✉ "+esc(d.mail):""}</div>
+    <div class="links">${L(d.web,"Website")}${L(d.ig,"Instagram")}${L(d.fb,"Facebook")}${L(d.gs,"GelbeSeiten")}</div></div>
+    <div class="side"><select data-k="${esc(x.k)}" data-f="status">${STAT.map(s=>`<option${s==x.status?" selected":""}>${s}</option>`).join("")}</select>
+    <input data-k="${esc(x.k)}" data-f="notes" maxlength="200" placeholder="Notizen" value="${esc(x.notes)}">
+    <button class="x" data-del="${esc(x.k)}">Analyse entfernen</button></div></div>`}).join("")
+    :'<div class="empty">Noch keine Salons in diesem Filter.</div>'}
+$("#cityF").onchange=e=>{cityF=e.target.value;render()};
+$("#tabs").onclick=e=>{const b=e.target.closest("[data-t]");if(b){tab=b.dataset.t;render()}};
+$("#list").addEventListener("change",e=>{const k=e.target.dataset.k;if(k&&db[k]){db[k][e.target.dataset.f]=e.target.value;save("gs_db",db);if(e.target.dataset.f==="status"){render();upd()}}});
+$("#list").addEventListener("input",e=>{const k=e.target.dataset.k;if(k&&db[k]&&e.target.dataset.f=="notes"){db[k].notes=e.target.value;save("gs_db",db)}});
+$("#list").onclick=e=>{const k=e.target.dataset.del;if(k&&confirm("Diese Analyse wirklich entfernen?")){delete db[k];save("gs_db",db);render();renderSalonSelect()}};
+
+/* ---------- Export ---------- */
+$("#export").onclick=()=>{
+  const f=filtered();if(!f.length)return toast("Keine Daten zum Exportieren",1);
+  const H=["Stadt","Name des Salons","Typ","Adresse","Telefonnummer","Website-URL","GelbeSeiten Link","Email","Facebook","Instagram","Kategorie","Status","Notizen"];
+  const q=v=>'"'+String(v??"").replace(/"/g,'""')+'"';
+  const rows=f.map(x=>{const d=x.d;return[d.stadt,d.name,d.typ,d.adresse,d.tel,d.web,d.gs,d.mail,d.fb,d.ig,CATS[x.cat],x.status,x.notes].map(q).join(";")});
+  const blob=new Blob(["\uFEFF"+[H.map(q).join(";")].concat(rows).join("\r\n")],{type:"text/csv;charset=utf-8"});
+  const a=document.createElement("a");a.href=URL.createObjectURL(blob);
+  a.download="salons_"+(tab=="all"?"alle":CATS[+tab].replace(/[^\wäöüÄÖÜ]+/g,"_"))+".csv";
+  document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+  toast(f.length+" Salons exportiert")};
+
+/* ---------- Verkaufs-Skripte: große, kombinierbare Textbibliothek ---------- */
+const TONES=["Locker & Direkt","Professionell & Ruhig","Kurz & Neugierig"];
+const CARDS=[["T","📞 Telefon-Skript"],["N","💬 Direktnachricht (WhatsApp / Instagram / E-Mail)"],["B","🏪 Vor-Ort-Besuch / Kurzbrief mit QR-Code"]];
+
+const OPEN={
+ T:[
+  [
+   "Hallo, hier ist {Ihr Name} – spreche ich mit dem Team von {Name}?",
+   "Hi, {Ihr Name} hier. Passt es gerade für eine kurze Frage?",
+   "Guten Tag, {Ihr Name} am Apparat. Ich mache es ganz kurz.",
+   "Hallo! Mein Name ist {Ihr Name}. Ich habe etwas Kleines für {Name} vorbereitet.",
+   "Hallo, {Ihr Name} hier – erwische ich gerade einen ruhigen Moment?"
+  ],
+  [
+   "Guten Tag, mein Name ist {Ihr Name}. Spreche ich mit der zuständigen Person für den Salonauftritt?",
+   "Guten Tag, hier spricht {Ihr Name}. Darf ich Ihnen kurz den Anlass meines Anrufs nennen?",
+   "Guten Tag, mein Name ist {Ihr Name}. Ich melde mich mit einer unverbindlichen Idee für {Name}.",
+   "Guten Tag, {Ihr Name} hier. Haben Sie einen kurzen Moment für eine vorbereitete Ansicht Ihres Salons?",
+   "Guten Tag, ich bin {Ihr Name}. Ich möchte Ihnen gern etwas zeigen, das ich für {Name} vorbereitet habe."
+  ],
+  [
+   "Hallo, {Ihr Name} hier – eine kurze Idee für {Name}.",
+   "Guten Tag, {Ihr Name}. Darf ich Ihnen etwas zeigen?",
+   "Hallo, hier ist {Ihr Name}. Haben Sie eine halbe Minute?",
+   "Hallo, {Ihr Name} hier. Eine kurze Frage zu Ihrem Salon:",
+   "Guten Tag, {Ihr Name} hier – darf ich neugierig machen?"
+  ]
+ ],
+ N:[
+  [
+   "Hallo liebes Team von {Name}! 😊 Ich bin {Ihr Name} und habe eine kleine Überraschung für Sie.",
+   "Hi zusammen! {Ihr Name} hier – ich schreibe Ihnen ganz unverbindlich wegen {Name}.",
+   "Hallo {Name}-Team, ich hoffe, Sie haben einen angenehmen Tag! Mein Name ist {Ihr Name}.",
+   "Guten Tag aus der Nachbarschaft! Hier ist {Ihr Name} mit einer Idee für Ihren Salon.",
+   "Hallo! Ich bin {Ihr Name}. Ich habe mir {Name} angesehen und etwas vorbereitet."
+  ],
+  [
+   "Guten Tag, liebes Team von {Name}. Mein Name ist {Ihr Name}; ich möchte Ihnen eine unverbindliche Idee vorstellen.",
+   "Guten Tag, ich schreibe Ihnen als {Ihr Name} mit einer bereits vorbereiteten Demo für Ihren Salon.",
+   "Sehr geehrtes Team von {Name}, ich bin {Ihr Name}. Darf ich Ihnen eine kurze Möglichkeit vorstellen?",
+   "Guten Tag nach {Ort}. Mein Name ist {Ihr Name}; ich habe etwas für Ihren Salon vorbereitet.",
+   "Guten Tag, liebes {Name}-Team. Ich möchte Ihnen gern eine vorbereitete Ansicht Ihres Salonauftritts zeigen."
+  ],
+  [
+   "Hallo {Name}-Team, {Ihr Name} hier – darf ich Ihnen etwas zeigen?",
+   "Hi! Ich bin {Ihr Name}. Eine kurze Idee für {Name}:",
+   "Hallo, {Ihr Name} hier. Schon neugierig auf Ihre Demo?",
+   "Guten Tag! Ich habe etwas für {Name} vorbereitet – darf ich es schicken?",
+   "Hallo zusammen, kurze Nachricht von {Ihr Name}:"
+  ]
+ ],
+ B:[
+  [
+   "Hallo zusammen, ich bin {Ihr Name}. Ich möchte Sie nur ganz kurz besuchen und etwas zeigen.",
+   "Hi, {Ihr Name} hier – ich habe eine kleine Demo für {Name} dabei.",
+   "Guten Tag! Ich bin {Ihr Name}. Passt es, wenn ich Ihnen in einer Minute etwas zeige?",
+   "Hallo, ich bin {Ihr Name}. Ich habe etwas vorbereitet, das Sie direkt auf dem Handy ansehen können.",
+   "Schön, dass ich kurz vorbeischauen darf. Mein Name ist {Ihr Name}."
+  ],
+  [
+   "Guten Tag, mein Name ist {Ihr Name}. Vielen Dank, dass Sie sich kurz Zeit nehmen.",
+   "Guten Tag, ich bin {Ihr Name}. Ich möchte Ihnen eine unverbindlich vorbereitete Demo für {Name} übergeben.",
+   "Guten Tag. Mein Name ist {Ihr Name}; ich würde Ihnen gern eine kurze Vorschau Ihres möglichen Webauftritts zeigen.",
+   "Sehr geehrtes Team von {Name}, ich bin {Ihr Name}. Darf ich Ihnen kurz etwas vorstellen?",
+   "Guten Tag, {Ihr Name} hier. Ich halte es kurz und überlasse Ihnen anschließend gern den QR-Code."
+  ],
+  [
+   "Hallo, {Ihr Name} hier – darf ich Ihnen etwas auf dem Handy zeigen?",
+   "Guten Tag! Eine Minute für eine Idee zu {Name}?",
+   "Hallo zusammen, ich habe eine Vorschau für Sie dabei.",
+   "Hi, ich bin {Ihr Name}. Darf ich den QR-Code kurz dalassen?",
+   "Guten Tag, {Ihr Name} hier – neugierig auf eine Demo?"
+  ]
+ ]
+};
+
+/* Pro Website-Kategorie fünf eigenständige Anknüpfungspunkte. */
+const REASONS=[
+ [
+  "Mir ist aufgefallen, dass {Name} in {Ort} derzeit keine eigene Website verlinkt hat.",
+  "Wer nach einem Salon in {Ort} sucht, findet online nicht sofort eine eigene Internetseite von {Name}.",
+  "Viele Menschen schauen vor einem Besuch kurz nach Preisen, Leistungen und Öffnungszeiten. Eine eigene Seite könnte diese Informationen für {Name} bündeln.",
+  "Für einen Salon wie {Name} wäre eine feste Anlaufstelle im Internet hilfreich – unabhängig davon, wann jemand sucht.",
+  "Ich habe für {Name} noch keinen eigenen Webauftritt gefunden und dachte, eine passende Vorschau könnte interessant sein."
+ ],
+ [
+  "Ihr Social-Media-Auftritt ist ein guter Anfang. Eine eigene Website könnte die wichtigsten Informationen zusätzlich an einem festen Ort bündeln.",
+  "Beiträge auf Instagram oder Facebook rutschen schnell nach unten. Eine eigene Seite hält Preise, Öffnungszeiten und Kontakt dauerhaft sichtbar.",
+  "Nicht alle Interessierten nutzen soziale Netzwerke. Eine eigene Website macht {Name} auch unabhängig von einem Social-Media-Konto auffindbar.",
+  "Ihre Profile zeigen bereits Einblicke in den Salon. Eine ergänzende Website könnte daraus einen übersichtlichen nächsten Schritt zum Kontakt machen.",
+  "Ich habe gesehen, dass {Name} vor allem über soziale Medien präsent ist. Eine eigene Seite würde diese Kanäle sinnvoll ergänzen."
+ ],
+ [
+  "Beim Aufruf von {Website} wird noch eine unverschlüsselte HTTP-Adresse verwendet. Eine sichere HTTPS-Verbindung wäre für Besucher vertrauenswürdiger.",
+  "Der Browser kann bei einer HTTP-Seite einen Sicherheitshinweis anzeigen. Das könnte manche Besucher verunsichern, bevor sie Kontakt aufnehmen.",
+  "Eine HTTPS-Adresse ist heute der übliche Standard. Bei {Name} wäre es sinnvoll, die sichere Verbindung und den gesamten Auftritt einmal zu prüfen.",
+  "Mir ist bei {Website} aufgefallen, dass die Verbindung nicht über HTTPS läuft. Ich habe deshalb eine moderne, sichere Demo-Ansicht vorbereitet.",
+  "Wer auf dem Handy eine Sicherheitswarnung sieht, springt möglicherweise ab. Eine sichere Website kann diesen ersten Eindruck verbessern."
+ ],
+ [
+  "Ich habe {Name} über ein externes Portal gefunden. Eine eigene Website könnte Ihren Salon zusätzlich unabhängig präsentieren.",
+  "Auf einem Portal stehen viele Anbieter direkt nebeneinander. Eine eigene Seite gibt {Name} mehr Raum für den eigenen Stil und die eigenen Leistungen.",
+  "Portale sind praktisch, aber die Darstellung und der Ablauf werden dort teilweise vom Anbieter vorgegeben. Eine eigene Website ergänzt das um einen eigenen Auftritt.",
+  "Eine eigene Seite könnte Interessierte direkt zu Ihren Informationen und Kontaktmöglichkeiten führen, statt sie ausschließlich über ein Portal zu leiten.",
+  "Ich habe gesehen, dass {Name} online über ein Portal vertreten ist. Eine eigene Internetseite könnte diese Präsenz sinnvoll erweitern."
+ ],
+ [
+  "Ihre Website ist bereits über HTTPS erreichbar. Ich habe mir überlegt, wie man wichtige Saloninformationen noch schneller sichtbar machen könnte.",
+  "Ihr Webauftritt ist schon vorhanden. Eine kleine, übersichtliche Ergänzung könnte den Weg von der Information zur Terminanfrage vereinfachen.",
+  "Mir ist aufgefallen, dass man Preisliste, Öffnungszeiten und Kontakt auf dem Handy möglichst schnell finden sollte. Dazu habe ich eine alternative Demo vorbereitet.",
+  "Eine bestehende Website muss nicht ersetzt werden. Vielleicht ist eine schlanke Ergänzung mit den wichtigsten Funktionen für {Name} interessant.",
+  "Ihr Salon hat bereits eine eigene Website. Meine Demo zeigt eine mögliche, besonders einfache Darstellung für mobile Besucher."
+ ]
+];
+
+const DEMO_TEXT=[
+ [
+  "Ich habe deshalb schon eine kostenlose Demo-Webseite für {Name} vorbereitet – inklusive einem ganz einfachen Live-Konfigurator. Sie klicken selbst an, was Sie möchten, zum Beispiel Preisliste, WhatsApp-Terminbutton, Öffnungszeiten oder Galerie. Was Sie gerade nicht brauchen, lassen Sie einfach ausgeschaltet.",
+  "Damit Sie nicht nur eine Idee hören, gibt es bereits eine kostenlose Demo für {Name}. Im Live-Konfigurator wählen Sie mit wenigen Klicks selbst die gewünschten Bausteine aus – etwa Preise, Öffnungszeiten, Galerie oder WhatsApp-Terminbutton – und alles Unnötige bleibt draußen.",
+  "Ich habe eine kostenlose Vorschau für {Name} erstellt. Dazu gehört ein einfacher Konfigurator: Funktion anklicken, wenn Sie sie möchten, und abwählen, wenn Sie sie nicht brauchen. Preisliste, Öffnungszeiten, Galerie und WhatsApp-Terminbutton sind Beispiele.",
+  "Für {Name} steht bereits eine kostenlose Demo bereit. Sie können darin selbst zusammenstellen, was auf der Website erscheinen soll: zum Beispiel eine Preisliste, Öffnungszeiten, eine Galerie oder ein WhatsApp-Terminbutton. Sie entscheiden ganz in Ruhe.",
+  "Ich wollte Ihnen etwas Konkretes statt eines Verkaufsgesprächs zeigen: eine kostenlose Demo-Webseite für {Name} mit einem Live-Konfigurator. Per Klick bestimmen Sie, welche Funktionen Sie nutzen möchten und welche vorerst wegbleiben."
+ ],
+ [
+  "Ich habe bereits eine kostenlose Demo-Webseite für {Name} vorbereitet. Der integrierte Live-Konfigurator ist bewusst einfach gehalten: Sie wählen per Klick die gewünschten Funktionen wie Preisliste, WhatsApp-Terminbutton, Öffnungszeiten oder Galerie aus und lassen nicht benötigte Elemente weg.",
+  "Als unverbindliche Anschauung habe ich eine kostenlose Demo für {Name} erstellt. Über einen leicht verständlichen Live-Konfigurator können Sie selbst festlegen, welche Funktionen aktuell sinnvoll sind und welche Sie nicht benötigen – beispielsweise Preisübersicht, Öffnungszeiten, Galerie oder WhatsApp-Terminbutton.",
+  "Die Demo-Webseite für {Name} ist bereits vorbereitet und kostenlos anzusehen. Mit dem einfachen Konfigurator entscheiden Sie selbst per Klick über die gewünschten Inhalte. Funktionen, die derzeit keinen Mehrwert bieten, können Sie einfach abwählen.",
+  "Ich möchte Ihnen gern eine kostenlose Demo zeigen, die ich bereits für {Name} vorbereitet habe. Der Live-Konfigurator ermöglicht eine unkomplizierte Auswahl der gewünschten Funktionen, etwa Preisliste, Öffnungszeiten, Galerie und WhatsApp-Terminbutton – ohne dass Sie technische Kenntnisse benötigen.",
+  "Für {Name} habe ich eine kostenlose Demo-Webseite vorbereitet. Darin können Sie über einen einfachen Live-Konfigurator eigenständig auswählen, welche Funktionen aufgenommen werden sollen und worauf Sie aktuell verzichten möchten."
+ ],
+ [
+  "Für {Name} gibt es schon eine kostenlose Demo. Im Klick-Konfigurator wählen Sie selbst: Preisliste, WhatsApp-Terminbutton, Öffnungszeiten, Galerie – ja oder nein.",
+  "Ich habe eine kostenlose Demo vorbereitet. Ein einfacher Konfigurator lässt Sie per Klick auswählen, was auf die Seite soll und was nicht.",
+  "Die Demo ist kostenlos und schon fertig vorbereitet. Funktionen wie Preise, Öffnungszeiten, Galerie und WhatsApp-Terminbutton können Sie selbst an- oder abwählen.",
+  "Für {Name} liegt eine kostenlose Vorschau bereit – mit einem Konfigurator, in dem Sie die gewünschten Funktionen einfach anklicken.",
+  "Eine kostenlose Demo plus einfacher Live-Konfigurator: Sie bestimmen mit wenigen Klicks, was Ihre Website können soll und was Sie nicht brauchen."
+ ]
+];
+
+const CLOSE={
+ T:[
+  [
+   "Wenn Sie mögen, schicke ich Ihnen den Link. Sie können ganz in Ruhe schauen – es gibt keinerlei Verpflichtung.",
+   "Soll ich Ihnen die Demo einfach per WhatsApp oder E-Mail senden? Dann sehen Sie sie an, wann es bei Ihnen passt.",
+   "Mich würde nur interessieren, ob Ihnen die Richtung gefällt. Darf ich Ihnen den Link schicken?",
+   "Sie müssen jetzt nichts entscheiden. Wäre ein unverbindlicher Blick auf die Demo interessant?",
+   "Wenn es für Sie passt, sende ich Ihnen den Link und Sie geben mir irgendwann eine kurze Rückmeldung."
+  ],
+  [
+   "Gern sende ich Ihnen den Link zur Ansicht. Sie können die Demo in Ihrem eigenen Tempo prüfen; daraus entsteht keinerlei Verpflichtung.",
+   "Darf ich Ihnen die Vorschau unverbindlich per E-Mail oder WhatsApp zukommen lassen?",
+   "Wenn Sie möchten, übermittle ich Ihnen den Link. Eine Rückmeldung ist selbstverständlich freiwillig.",
+   "Ich würde mich freuen, wenn Sie einen kurzen Blick darauf werfen. Soll ich Ihnen die Demo zusenden?",
+   "Sie können sich alles in Ruhe ansehen und anschließend selbst entscheiden, ob ein weiterer Austausch sinnvoll ist."
+  ],
+  [
+   "Soll ich Ihnen den Link schicken?",
+   "Ein kurzer Blick – wäre das interessant?",
+   "Darf ich die Demo zusenden?",
+   "Neugierig? Ich schicke Ihnen gern den Link.",
+   "Einfach ansehen und selbst entscheiden?"
+  ]
+ ],
+ N:[
+  [
+   "Wenn Sie möchten, können Sie hier direkt hineinschauen: {Demo-Link}. Ganz ohne Druck – ich freue mich einfach über Ihr Feedback.",
+   "Hier ist der Zugang zur Vorschau: {Demo-Link}. Schauen Sie gern dann hinein, wenn Sie einen ruhigen Moment haben.",
+   "Die Demo können Sie hier öffnen: {Demo-Link}. Wenn Ihnen etwas nicht gefällt oder fehlt, ist das ebenfalls hilfreiches Feedback.",
+   "Hier geht es zur kostenlosen Demo: {Demo-Link}. Sie müssen nichts buchen oder entscheiden; erst einmal geht es nur ums Anschauen.",
+   "Ich lasse Ihnen den Link direkt hier: {Demo-Link}. Vielleicht ist die Idee interessant für Sie – wenn nicht, ist das natürlich auch in Ordnung."
+  ],
+  [
+   "Hier können Sie die kostenlose Demo öffnen: {Demo-Link}. Über eine kurze Rückmeldung freue ich mich; eine Verpflichtung entsteht nicht.",
+   "Den direkten Zugang finden Sie hier: {Demo-Link}. Sehen Sie sich die Vorschau gern unverbindlich an.",
+   "Hier ist der Link zur vorbereiteten Ansicht: {Demo-Link}. Wenn Sie Fragen haben, beantworte ich diese gern.",
+   "Die Demo steht Ihnen unter folgendem Link zur Verfügung: {Demo-Link}. Sie entscheiden anschließend in Ruhe, ob weitere Schritte interessant sind.",
+   "Gern können Sie die Vorschau hier aufrufen: {Demo-Link}. Vielen Dank, wenn Sie sich einen kurzen Blick darauf gönnen."
+  ],
+  [
+   "Hier geht's zur Demo: {Demo-Link}. Wie gefällt sie Ihnen?",
+   "Neugierig? Hier ist der Link: {Demo-Link}.",
+   "Einfach anklicken und ansehen: {Demo-Link}.",
+   "Ihre Demo wartet hier: {Demo-Link}. Ein kurzes Feedback wäre toll!",
+   "Hier können Sie direkt reinschauen: {Demo-Link}."
+  ]
+ ],
+ B:[
+  [
+   "Ich lasse Ihnen den QR-Code mit dem Demo-Link hier. Einfach scannen, wenn es zeitlich passt. Sie müssen nichts entscheiden.",
+   "Wenn Sie möchten, scannen Sie den QR-Code und sehen sich die Demo später in Ruhe auf dem Handy an.",
+   "Auf dem QR-Code finden Sie die kostenlose Vorschau. Schauen Sie einfach hinein, wenn gerade weniger los ist.",
+   "Ich überlasse Ihnen gern diesen QR-Code. Ein Scan genügt, und Sie können die Demo jederzeit ansehen.",
+   "Vielleicht haben Sie später zwei Minuten: Der QR-Code führt direkt zur Demo. Ganz unverbindlich."
+  ],
+  [
+   "Den QR-Code zur kostenlosen Demo lasse ich Ihnen gern hier. Sie können die Vorschau zu einem passenden Zeitpunkt unverbindlich aufrufen.",
+   "Über den QR-Code gelangen Sie direkt zur vorbereiteten Website. Eine Entscheidung ist damit selbstverständlich nicht verbunden.",
+   "Ich überreiche Ihnen gern den QR-Code mit dem direkten Zugang. Prüfen Sie die Demo einfach dann, wenn es in Ihren Ablauf passt.",
+   "Der QR-Code führt zur kostenlosen Vorschau inklusive Konfigurator. Sie können die Funktionen dort selbst auswählen und alles in Ruhe ansehen.",
+   "Vielen Dank für Ihre Zeit. Den QR-Code lasse ich Ihnen hier, damit Sie die Demo ohne Termin und ohne Verpflichtung öffnen können."
+  ],
+  [
+   "Hier ist der QR-Code – scannen und Demo ansehen, wann immer Sie möchten.",
+   "Einfach später scannen: Die kostenlose Vorschau ist direkt erreichbar.",
+   "Zwei Minuten? QR-Code scannen und selbst ausprobieren.",
+   "Ich lasse Ihnen den Zugang hier. Ein Scan genügt.",
+   "Die Demo ist nur einen Scan entfernt – ganz ohne Verpflichtung."
+  ]
+ ]
+};
+
+function hashText(s){let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0}
+function waNum(t){const x=String(t||"").split(/[;|\n]/)[0].replace(/\(0\)/g,""),pl=/^\s*\+/.test(x),d=x.replace(/\D/g,"");
+  if(!d)return"";if(pl)return d;if(d.startsWith("00"))return d.slice(2);if(d.startsWith("0"))return"49"+d.slice(1);if(d.startsWith("49"))return d;return"49"+d}
+function svars(x){
+  const raw=String(x.adresse||"").trim(),parts=raw.split(",").map(v=>v.trim()).filter(Boolean);
+  const first=parts[0]||"",street=/^\d{5}\b/.test(first)?"":first;
+  const cityMatch=raw.match(/\b\d{5}\s+([^,]+)/);
+  const ort=(cityMatch?cityMatch[1].trim():parts.find(v=>/\b\d{5}\b/.test(v))?.replace(/\b\d{5}\b/,"").trim())||x.stadt||"";
+  const dm=$("#demo").value.trim();
+  return{Name:(x.name.split(",")[0]||x.name).trim(),"Ihr Name":($("#scriptName")?.value.trim()||"[Ihr Name]"),"Straße":street,Ort:ort,Stadt:x.stadt,Website:x.web||"Ihre Website","Demo-Link":dm||"Ihr persönlicher Demo-Link"};
+}
+function fill(t,v){return t.replace(/\{([^}]+)\}/g,(m,k)=>v[k]!=null?v[k]:m)}
+function pick(arr,seed,offset){return arr[(seed+offset)%arr.length]}
+function genText(t,x,cat){
+  const toneIndex=Math.max(0,Math.min(2,tone)),seed=hashText(x.stadt+"|"+x.name+"|"+x.adresse+"|"+idx+"|"+vb+"|"+cat);
+  const a=pick(OPEN[t][toneIndex],seed%5,0);
+  const b=pick(REASONS[cat],Math.floor(seed/7)%5,t==="T"?1:t==="N"?2:3);
+  const c=pick(DEMO_TEXT[toneIndex],Math.floor(seed/13)%5,t==="T"?2:t==="N"?3:4);
+  const d=pick(CLOSE[t][toneIndex],Math.floor(seed/19)%5,t==="T"?3:t==="N"?4:1);
+  const signature=t==="N"?"\n\nViele Grüße\n{Ihr Name}":t==="B"?"\n\nDemo ansehen: {Demo-Link}\n\nFreundliche Grüße\n{Ihr Name}":"";
+  const linkLine=t==="N"?"\n\n":t==="B"?"\n\n":"\n\n";
+  return fill(a+"\n\n"+b+"\n\n"+c+linkLine+d+signature,svars(x));
+}
+/* ---------- Interaktiver Einwand-Navigator ---------- */
+const OBJECTIONS=[
+ {title:"Wir brauchen keine Website",variants:[
+  {one:"Das kann ich gut verstehen. Wenn bisher alles funktioniert, soll auch nichts unnötig verändert werden.",
+   two:"Genau deshalb ist die Demo nur ein Vorschlag und kein fertiges Paket, das Sie übernehmen müssen. Im einfachen Konfigurator klicken Sie nur die Dinge an, die für Ihren Salon wirklich sinnvoll sind – zum Beispiel Öffnungszeiten oder eine Preisliste. Wenn Sie während des Schneidens weniger Telefon-Unterbrechungen möchten, könnten klare Informationen und ein WhatsApp-Kontaktbutton helfen. Alles, was Sie nicht brauchen, lassen Sie einfach weg.",
+   three:"Wäre es in Ordnung, wenn ich Ihnen den Demo-Link schicke, damit Sie unverbindlich sehen können, ob etwas Nützliches dabei ist?"},
+  {one:"Natürlich – eine Website ist nicht für jeden Salon im Moment die höchste Priorität.",
+   two:"Die vorbereitete Demo soll Ihnen lediglich zeigen, was möglich wäre. Im Konfigurator bestimmen Sie selbst per Klick den Umfang: vielleicht nur Öffnungszeiten und Kontakt, vielleicht zusätzlich Preise oder Galerie. Sie müssen keine Funktionen nehmen, die keinen Nutzen bringen. Gut auffindbare Informationen können außerdem wiederkehrende Fragen am Telefon reduzieren, während Sie gerade Kundinnen und Kunden bedienen.",
+   three:"Darf ich Ihnen den Link senden? Dann können Sie ganz in Ruhe entscheiden, ob die Idee überhaupt zu Ihrem Salon passt."}
+ ]},
+ {title:"Wir sind schon komplett ausgebucht",variants:[
+  {one:"Das klingt erst einmal nach einer guten Situation – Glückwunsch zu der Auslastung. Dann möchte ich Ihnen natürlich keine zusätzlichen Anfragen aufdrängen.",
+   two:"Die Demo lässt sich genau auf das beschränken, was Sie aktuell brauchen. Vielleicht geht es gar nicht um mehr Kundschaft, sondern nur darum, bestehende Informationen wie Öffnungszeiten, Preise oder Hinweise zu Terminen übersichtlich bereitzustellen. Im Konfigurator wählen Sie selbst aus, was hilfreich ist, und lassen alles andere weg. So können Kundinnen und Kunden einfache Fragen nachlesen, statt während eines Haarschnitts anzurufen.",
+   three:"Wäre ein kurzer Blick auf die Demo trotzdem interessant, um zu prüfen, ob sie Ihnen im Alltag Arbeit abnehmen könnte?"},
+  {one:"Verstehe ich – wenn Ihr Kalender voll ist, ist zusätzliche Nachfrage wahrscheinlich gerade nicht das Ziel.",
+   two:"Dann können Sie den Konfigurator bewusst klein halten. Sie entscheiden selbst, ob beispielsweise nur Öffnungszeiten, Preisliste oder wichtige Hinweise angezeigt werden. Eine Website muss nicht auf mehr Buchungen ausgelegt sein: Sie kann auch helfen, häufige Fragen vorab zu beantworten und Unterbrechungen beim Schneiden zu vermeiden.",
+   three:"Soll ich Ihnen die Demo einfach schicken? Dann können Sie selbst beurteilen, ob sie trotz voller Termine einen praktischen Nutzen hat."}
+ ]},
+ {title:"Wir machen alles über Instagram / Facebook",variants:[
+  {one:"Das ist nachvollziehbar. Social Media ist eine gute Möglichkeit, Bilder zu zeigen und mit Kundinnen und Kunden in Kontakt zu bleiben.",
+   two:"Die Demo soll Ihre Profile nicht ersetzen, sondern ergänzen. Im Konfigurator wählen Sie nur die Bausteine, die Ihnen fehlen – etwa eine feste Preisliste, Öffnungszeiten, eine Galerie oder einen WhatsApp-Terminbutton. So finden auch Menschen die wichtigsten Informationen, die nicht regelmäßig Instagram oder Facebook nutzen. Nicht benötigte Funktionen bleiben einfach ausgeschaltet.",
+   three:"Darf ich Ihnen den Demo-Link schicken? Dann können Sie sehen, ob eine kleine Ergänzung zu Ihren Social-Media-Profilen Sinn ergibt."},
+  {one:"Das ist eine gute Basis – und wenn Ihre Kundschaft dort aktiv ist, sollten Sie das natürlich weiter nutzen.",
+   two:"Eine eigene Seite kann als zentrale Informationsstelle dienen, auf die Sie in Ihren Profilen verlinken. Sie wählen im Live-Konfigurator selbst, was darauf erscheinen soll. Vielleicht reichen Öffnungszeiten und Preise; vielleicht möchten Sie auch Galerie oder WhatsApp-Kontakt. Sie müssen nicht alles übernehmen. Gut sichtbare Antworten auf Standardfragen können auch weniger Anrufe mitten im Kundentermin bedeuten.",
+   three:"Wäre es hilfreich, wenn ich Ihnen die vorbereitete Demo unverbindlich per Link sende?"}
+ ]},
+ {title:"Das ist uns bestimmt zu teuer",variants:[
+  {one:"Das verstehe ich. Sie möchten natürlich vorher wissen, ob sich eine Ausgabe überhaupt lohnt.",
+   two:"Deshalb geht es im ersten Schritt nur um eine kostenlose Demo – nicht um eine Kaufentscheidung. Im Konfigurator wählen Sie selbst nur die Funktionen, die Sie tatsächlich brauchen. Ein kleiner Umfang mit Öffnungszeiten und Kontakt ist genauso denkbar wie eine Variante mit Preisliste oder Galerie. So sehen Sie erst einmal, was für Ihren Alltag sinnvoll wäre, statt für unnötige Funktionen zu planen.",
+   three:"Darf ich Ihnen die kostenlose Demo schicken? Danach können Sie in Ruhe entscheiden, ob Sie überhaupt über Kosten sprechen möchten."},
+  {one:"Völlig berechtigter Punkt. Niemand sollte etwas beauftragen, ohne vorher den Nutzen und den Umfang zu kennen.",
+   two:"Sie können die Demo zunächst unverbindlich ansehen. Der Konfigurator macht den Umfang transparent: Sie klicken nur die gewünschten Elemente an und lassen alles weg, was Sie nicht benötigen. Vielleicht genügt eine einfache Seite, auf der Öffnungszeiten, Preise und Kontakt schnell zu finden sind – und die häufige Rückfragen während der Arbeit reduziert.",
+   three:"Wäre ein kostenloser Blick auf die Demo für Sie in Ordnung? Dann haben Sie erst einmal eine konkrete Grundlage."}
+ ]},
+ {title:"Wir haben schon jemanden für unsere Seite",variants:[
+  {one:"Das ist gut – dann haben Sie bereits jemanden, der sich darum kümmert. Ich möchte mich da auch nicht dazwischenstellen.",
+   two:"Meine Demo ist lediglich eine unverbindliche Vergleichsidee. Vielleicht entdecken Sie einen kleinen Ansatz, den Sie mit Ihrer bisherigen Betreuung besprechen können. Im Konfigurator lässt sich zeigen, welche Funktionen für Ihren Salon wichtig sind und welche nicht. Es geht nicht darum, jemanden zu ersetzen, sondern um eine einfache Übersicht möglicher Inhalte.",
+   three:"Wäre es trotzdem interessant, den Demo-Link als Inspiration zu erhalten? Sie können ihn natürlich auch einfach an Ihre bisherige Ansprechperson weitergeben."},
+  {one:"Verstanden. Wenn die Zusammenarbeit gut läuft, ist das natürlich erst einmal die richtige Anlaufstelle.",
+   two:"Dann könnte die vorbereitete Demo höchstens als zweite Meinung oder Ideensammlung dienen. Sie können im Konfigurator selbst auswählen, ob Preise, Öffnungszeiten, Galerie oder WhatsApp-Kontakt für Sie relevant sind. So lässt sich ganz konkret zeigen, was Sie sich wünschen – ohne dass Sie etwas ändern oder beauftragen müssen.",
+   three:"Soll ich Ihnen die Vorschau trotzdem schicken, damit Sie bei Gelegenheit einen Vergleich haben?"}
+ ]},
+ {title:"Schicken Sie mir einfach eine E-Mail",variants:[
+  {one:"Sehr gern – dann können Sie sich alles ansehen, wenn es bei Ihnen passt.",
+   two:"Ich sende Ihnen nicht einfach eine allgemeine Werbung, sondern den Link zu der bereits vorbereiteten kostenlosen Demo. Darin können Sie den Konfigurator direkt ausprobieren und selbst anklicken, welche Funktionen Sie möchten. Nicht benötigte Dinge bleiben draußen. So sehen Sie konkret, ob zum Beispiel Preise, Öffnungszeiten oder WhatsApp-Kontakt Ihren Alltag erleichtern könnten.",
+   three:"An welche E-Mail-Adresse darf ich den Demo-Link schicken?"},
+  {one:"Natürlich, das mache ich gern. Ich halte die Nachricht kurz und übersichtlich.",
+   two:"In der E-Mail finden Sie die Demo und den einfachen Live-Konfigurator. Sie bestimmen dort per Klick, was Ihre Seite enthalten soll – und was Sie aktuell nicht brauchen. Beispielsweise könnten Öffnungszeiten und eine Preisliste viele Standardfragen beantworten, sodass Sie beim Schneiden seltener unterbrochen werden.",
+   three:"Ist die E-Mail-Adresse, über die ich Sie erreicht habe, die richtige für den Link? Dann sende ich Ihnen die Demo direkt zu."}
+ ]},
+ {title:"Ich habe gerade keine Zeit",variants:[
+  {one:"Kein Problem – ich möchte Sie auf keinen Fall bei der Arbeit aufhalten.",
+   two:"Sie müssen jetzt nichts erklären oder vorbereiten. Ich kann Ihnen einfach den Link zur kostenlosen Demo senden. Wenn Sie später Zeit haben, klicken Sie im Konfigurator nur die Funktionen an, die Sie wirklich brauchen. Gerade Öffnungszeiten, Preise oder Kontaktinformationen können einfache Rückfragen beantworten und dadurch Unterbrechungen während eines Haarschnitts verringern.",
+   three:"Wäre es am einfachsten, wenn ich Ihnen den Link schicke und Sie bei Gelegenheit selbst hineinschauen?"},
+  {one:"Natürlich, ich sehe, dass Sie beschäftigt sind. Ich fasse mich ganz kurz.",
+   two:"Die Demo ist bereits vorbereitet und lässt sich jederzeit ansehen. Der Konfigurator ist bewusst einfach: gewünschte Funktionen anklicken, nicht benötigte weglassen. Sie brauchen dafür keinen Termin und müssen sich jetzt nicht damit beschäftigen.",
+   three:"Darf ich Ihnen den Link per WhatsApp oder E-Mail senden, damit Sie ihn später öffnen können?"}
+ ]},
+ {title:"Muss ich mit meinem Partner / meiner Frau besprechen",variants:[
+  {one:"Auf jeden Fall – bei Entscheidungen für den Salon ist es sinnvoll, wenn alle Beteiligten einbezogen werden.",
+   two:"Dann ist die Demo eine gute Grundlage für das Gespräch. Sie können gemeinsam den Konfigurator öffnen und per Klick auswählen, welche Funktionen wirklich gebraucht werden. Vielleicht sind es nur Öffnungszeiten und Preise, vielleicht zusätzlich eine Galerie oder WhatsApp-Kontakt. Was keinen Nutzen hat, bleibt einfach draußen. So besprechen Sie etwas Konkretes statt einer abstrakten Idee.",
+   three:"Soll ich Ihnen den Demo-Link schicken, damit Sie ihn gemeinsam in Ruhe ansehen können?"},
+  {one:"Das verstehe ich gut. Sie sollen das natürlich gemeinsam entscheiden können.",
+   two:"Ich kann Ihnen eine kostenlose Vorschau senden, die Sie weiterleiten können. Der Live-Konfigurator zeigt ganz einfach, welche Elemente möglich sind. Sie beide entscheiden selbst, was für Ihren Salon passt und was aktuell nicht gebraucht wird. Eine kleine Auswahl kann schon reichen, um Informationen bereitzustellen und wiederkehrende Telefonfragen zu reduzieren.",
+   three:"Wäre es hilfreich, wenn ich Ihnen den Link zusende, damit Sie ihn zusammen anschauen können?"}
+ ]}
+];
+function objectionVars(){
+ const x=idx>=0&&salons[idx]?salons[idx]:{name:"Ihr Salon",adresse:"",stadt:$("#city")?.value||""};
+ const v=svars(x);
+ if(!v["Ihr Name"])v["Ihr Name"]="[Ihr Name]";
+ return v;
+}
+function renderObjection(){
+ const choices=$("#objectionChoices"),detail=$("#objectionDetail");
+ if(!choices||!detail)return;
+ choices.innerHTML=OBJECTIONS.map((o,i)=>`<button type="button" class="objection-choice${i===objectionSelected?" selected":""}" data-objection="${i}" aria-pressed="${i===objectionSelected}"><span class="objection-number">${String(i+1).padStart(2,"0")}</span><span>${esc(o.title)}</span></button>`).join("");
+ const o=OBJECTIONS[objectionSelected],v=o.variants[objectionVariant%o.variants.length],vars=objectionVars();
+ const full=`${o.title}\n\nSchritt 1: Verständnis zeigen (Druck rausnehmen)\n${fill(v.one,vars)}\n\nSchritt 2: Deine Antwort (Demo + einfacher Konfigurator)\n${fill(v.two,vars)}\n\nSchritt 3: Abschlussfrage (Ziel: Demo-Link senden)\n${fill(v.three,vars)}\n\nViele Grüße\n${vars["Ihr Name"]}`;
+ detail.innerHTML=`<div class="objection-detail-head"><div><span class="meta">AUSGEWÄHLTER EINWAND</span><h3>${esc(o.title)}</h3></div><span class="variant-count">Variante ${objectionVariant+1} / ${o.variants.length}</span></div>
+  <div class="objection-step"><div class="step-label">SCHRITT 1</div><h4>Verständnis zeigen (Druck rausnehmen)</h4><p>${esc(fill(v.one,vars))}</p></div>
+  <div class="objection-step"><div class="step-label">SCHRITT 2</div><h4>Deine Antwort (Demo + einfacher Konfigurator)</h4><p>${esc(fill(v.two,vars))}</p></div>
+  <div class="objection-step"><div class="step-label">SCHRITT 3</div><h4>Abschlussfrage (Ziel: Demo-Link senden)</h4><p>${esc(fill(v.three,vars))}</p></div>
+  <div class="objection-actions"><button type="button" class="p" data-objection-next>🔄 Andere Antwort-Variante</button><button type="button" class="p big" data-objection-copy>Antwort kopieren</button></div>`;
+ detail.dataset.copyText=full;
+}
+pages.page3.addEventListener("click",async e=>{
+ const choice=e.target.closest("[data-objection]");
+ if(choice){objectionSelected=+choice.dataset.objection;objectionVariant=0;renderObjection();return}
+ if(e.target.closest("[data-objection-next]")){objectionVariant=(objectionVariant+1)%OBJECTIONS[objectionSelected].variants.length;renderObjection();return}
+ const copy=e.target.closest("[data-objection-copy]");
+ if(copy){await copyText($("#objectionDetail").dataset.copyText||"");copy.textContent="✓ Kopiert!";copy.classList.add("ok");setTimeout(()=>{copy.textContent="Antwort kopieren";copy.classList.remove("ok")},1800)}
+});
+renderObjection();
+
+function fit(t){t.style.height="auto";t.style.height=(t.scrollHeight+2)+"px"}
+function fitAll(){document.querySelectorAll("#scripts textarea").forEach(fit)}
+function renderStats(){const a=Object.values(db),c=k=>a.filter(x=>x.status===k).length;
+  $("#stats").innerHTML=[["Analysiert gesamt",a.length,""],["Zu kontaktieren",c(STAT[0]),"t1"],["Demo gesendet",c(STAT[1]),"t2"],["Angerufen",c(STAT[2]),"t3"]]
+   .map(([l,n,k])=>`<div class="st ${k}"><b>${n}</b><span>${l}</span></div>`).join("")}
+function renderScripts(){
+  const el=$("#scripts");if(!el)return;
+  if(!salons.length||idx<0){el.innerHTML='<div class="ph">Bitte zuerst einen Salon auswählen – die Skripte werden dann automatisch personalisiert.</div>';return}
+  const x=salons[idx],r=db[key(x)],cat=r?r.cat:classify(x),v=svars(x);
+  el.innerHTML=`<div class="shead"><div><div class="cn">${esc(x.name)}</div><span class="badge b${cat}">${CATS[cat]}</span>${r?"":' <span class="meta">(noch nicht analysiert)</span>'}</div>
+    <button class="p" data-regen="1">🔄 Andere Formulierung generieren</button></div>
+    <div class="tones">${TONES.map((t,i)=>`<button class="tone${i===tone?" on":""}" data-tone="${i}">${t}</button>`).join("")}</div>
+    <div class="vars">{Name} = ${esc(v.Name)} · {Straße} = ${esc(v["Straße"])||"–"} · {Ort} = ${esc(v.Ort)} · {Website} = ${esc(x.web)||"–"}</div>
+    <div class="scol">${CARDS.map(([t,l])=>`<div class="sc"><h3>${l}</h3><textarea data-t="${t}" spellcheck="false">${esc(genText(t,x,cat))}</textarea><button class="p big" data-copy="1">Text kopieren</button></div>`).join("")}</div>`;
+  fitAll()}
+async function copyText(t){try{await navigator.clipboard.writeText(t)}catch(e){const a=document.createElement("textarea");a.value=t;document.body.appendChild(a);a.select();try{document.execCommand("copy")}catch(_){}a.remove()}}
+$("#scripts").addEventListener("click",async e=>{
+  const tb=e.target.closest("[data-tone]");if(tb){tone=+tb.dataset.tone;save("gs_tone",String(tone));renderScripts();return}
+  if(e.target.closest("[data-regen]")){vb++;renderScripts();return}
+  const b=e.target.closest("[data-copy]");if(!b)return;
+  await copyText(b.parentNode.querySelector("textarea").value);
+  b.textContent="✓ Kopiert!";b.classList.add("ok");
+  setTimeout(()=>{b.textContent="Text kopieren";b.classList.remove("ok")},1800)});
+$("#scripts").addEventListener("input",e=>{if(e.target.tagName=="TEXTAREA")fit(e.target)});
+window.addEventListener("resize",fitAll);
+$("#cur").addEventListener("click",e=>{
+  if(idx<0)return;
+  const x=salons[idx],k=key(x);
+  const catBtn=e.target.closest("[data-cat]");
+  if(catBtn){const old=db[k];db[k]={d:x,cat:+catBtn.dataset.cat,status:old?old.status:STAT[0],notes:old?old.notes:"",ts:old?old.ts:Date.now()};save("gs_db",db);upd();render();toast("Website-Kategorie aktualisiert: "+CATS[+catBtn.dataset.cat]);return;}
+  if(e.target.closest("#emailBtn")){
+    const ta=document.querySelector('#scripts textarea[data-t="N"]'),txt=ta?ta.value:genText("N",x,db[k]?db[k].cat:classify(x));
+    const subject="Anfrage zu "+x.name+" – kostenlose Website-Demo";
+    window.location.href="mailto:"+encodeURI(x.mail||"")+"?subject="+encodeURIComponent(subject)+"&body="+encodeURIComponent(txt);return;
+  }
+  if(e.target.closest("#waBtn")){
+    const ta=document.querySelector('#scripts textarea[data-t="N"]'),r=db[k];
+    const txt=ta?ta.value:genText("N",x,r?r.cat:classify(x));
+    window.open("https://wa.me/"+waNum(x.tel)+"?text="+encodeURIComponent(txt),"_blank","noopener");
+  }});
+$("#demo").addEventListener("input",e=>{save("gs_demo",e.target.value.trim());renderScripts()});
+
+/* ---------- Erweiterte Einstellungen, CSV-Speicher und Backup ---------- */
+$("#scriptName").value=load("gs_script_name","[Ihr Name]")||"[Ihr Name]";
+$("#scriptName").addEventListener("input",e=>{save("gs_script_name",e.target.value);renderScripts()});
+function readCSVFile(file,done){const rd=new FileReader();rd.onload=()=>{try{done(parseCSV(String(rd.result||"")))}catch(err){toast("CSV konnte nicht verarbeitet werden",1)}};rd.onerror=()=>toast("Datei konnte nicht gelesen werden",1);rd.readAsText(file,"UTF-8")}
+$("#masterCsvFile").addEventListener("change",e=>{const f=e.target.files[0];if(!f)return;readCSVFile(f,rows=>{if(!rows.length)return toast("Die CSV-Datei ist leer",1);setCities(rows);save("gs_master_csv_name",f.name);toast("Master-CSV gespeichert: "+cities.length+" Städte")});e.target.value=""});
+$("#cityCsvFile").addEventListener("change",e=>{const f=e.target.files[0];if(!f)return;const selected=$("#city").value.trim(),cityName=selected||f.name.replace(/\.csv$/i,"");readCSVFile(f,rows=>{if(!rows.length)return toast("Die CSV-Datei ist leer",1);setSalons(rows,cityName);$("#city").value=cityName;if(!cities.some(c=>c.stadt.toLocaleLowerCase("de-DE")===cityName.toLocaleLowerCase("de-DE")))$("#staedte-datalist").insertAdjacentHTML("beforeend",`<option value="${esc(cityName)}"></option>`);activeCityLoaded=cityName;save("gs_last_selection",{city:cityName,index:idx,name:salons[idx]?.name||""});render();upd();toast("Städte-CSV gespeichert: "+salons.length+" Salons")});e.target.value=""});
+$("#backupExport").addEventListener("click",()=>{const keys=["gs_db","gs_master","gs_demo","gs_tone","gs_theme","gs_city_rows","gs_salon_rows","gs_last_selection","gs_script_name"];const data={format:"salon-manager-backup",version:1,created:new Date().toISOString(),data:{}};keys.forEach(k=>{try{const v=localStorage.getItem(k);if(v!==null)data.data[k]=v}catch(e){}});const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="salon-manager-backup.json";a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);toast("JSON-Backup wurde erstellt")});
+$("#backupImportFile").addEventListener("change",e=>{const f=e.target.files[0];if(!f)return;const rd=new FileReader();rd.onload=()=>{try{const b=JSON.parse(rd.result);if(!b||b.format!=="salon-manager-backup"||!b.data)throw new Error("Ungültiges Backup-Format");Object.entries(b.data).forEach(([k,v])=>{if(["gs_db","gs_master","gs_demo","gs_tone","gs_theme","gs_city_rows","gs_salon_rows","gs_last_selection","gs_script_name"].includes(k))localStorage.setItem(k,String(v))});toast("Backup importiert. Die App wird neu geladen.");setTimeout(()=>location.reload(),700)}catch(err){toast("Backup konnte nicht importiert werden: "+err.message,1)}};rd.readAsText(f);e.target.value=""});
+/* ---------- Start ---------- */
+try{const m=localStorage.getItem("gs_master");if(m)$("#master").value=m;const d=localStorage.getItem("gs_demo");if(d)$("#demo").value=d;const tn=+localStorage.getItem("gs_tone");if(tn>=0&&tn<3)tone=tn}catch(e){}
+render();renderScripts();
+  (async()=>{
+    const savedCities=load("gs_city_rows",null);
+    if(savedCities&&savedCities.length)setCities(savedCities);
+    else{const master=$("#master").value.trim();if(master){try{setCities(await fetchSheet(master))}catch(e){/* manuell geladene Daten bleiben verfügbar */}}}
+    const last=load("gs_last_selection",null);
+    if(last&&cities.length){
+      let ci=cities.findIndex(c=>c.stadt===last.city);
+      if(ci>=0){$("#city").value=cities[ci].stadt;activeCityLoaded=cities[ci].stadt;const cache=load("gs_salon_rows",{});try{const rows=cache[last.city]||await fetchCity(cities[ci].url);setSalons(rows,last.city);if(last.name){const ni=salons.findIndex(x=>x.name===last.name);if(ni>=0)idx=ni;}else if(Number.isInteger(last.index)&&salons[last.index])idx=last.index;renderSalonSelect();upd();}catch(e){activeCityLoaded="";toast("Gespeicherte Stadt konnte nicht geladen werden: "+e.message,1)}}
+    }
+    render();upd();
+  })();
+})();
+</script>
+</body>
+</html>
